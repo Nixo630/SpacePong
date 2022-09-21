@@ -12,7 +12,7 @@ Pour l'instant, seules les fonctionnalités basiques sont implémentées : 2 raq
 ## Instructions
 
 Dans les instructions ci-dessous, il faut remplacer `myteam` par
-- soit le nom de votre équipe dans gaufre, si le dépôt a été forké au nom de votre équipe,
+- soit le nom de votre équipe dans gaufre, si le dépôt a été forké au nom de votre équipe, la meilleure équipe
 - soit le login du membre de votre equipe qui a forké le dépôt pour tout le monde,
 - soit `cproj2022`, si vous voulez cloner directement le dépôt de l'équipe enseignante.
 
