@@ -93,7 +93,7 @@ public class Court {
         }
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
-            ballSpeedX = -ballSpeedX;
+            ballSpeedX = -(ballSpeedX+50);//mettre à jour la vitesse de la balle après avoir touchée la raquette
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
             return true;
