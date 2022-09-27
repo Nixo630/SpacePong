@@ -28,7 +28,7 @@ public class App extends Application {
                 case Z:
                     playerA.state = RacketController.State.GOING_UP;
                     break;
-                case S:
+                case X:
                     playerA.state = RacketController.State.GOING_DOWN;
                     break;
                 case UP:
@@ -44,7 +44,7 @@ public class App extends Application {
                 case Z:
                     if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
                     break;
-                case S:
+                case X:
                     if (playerA.state == RacketController.State.GOING_DOWN) playerA.state = RacketController.State.IDLE;
                     break;
                 case UP:
