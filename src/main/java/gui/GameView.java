@@ -12,10 +12,11 @@ public class GameView {
     private final Court court;
     private final Pane gameRoot; // main node of the game
     private final double scale;
-    private final double xMargin = 50.0, racketThickness = 10.0; // pixels
+    private final double xMargin = 50.0, racketThickness = 10.0,
+    		murThinkness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB;
+    private final Rectangle racketA, racketB, murA, murB;
     private final Circle ball;
 
     /**
@@ -53,22 +54,37 @@ public class GameView {
 
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
-
-        gameRoot.getChildren().addAll(racketA, racketB, ball);
-
-
+        
+        // Modifié par Evan le 27/09/2022 : matérialisation d'un mur
+        murA = new Rectangle();
+        murA.setWidth(court.getWidth() * scale);
+        murA.setHeight(murThinkness);
+        murA.setFill(Color.BLACK);
+        murA.setX(xMargin);
+        murA.setY(0);
+        
+        murB = new Rectangle();
+        murB.setWidth(court.getWidth() * scale);
+        murB.setHeight(murThinkness);
+        murB.setFill(Color.BLACK);
+        murB.setX(xMargin);
+        murB.setY(court.getHeight());
+        
+        gameRoot.getChildren().addAll(racketA, racketB, ball, murA, murB);
     }
-
+    
     public void animate() {
         new AnimationTimer() {
-            long last = 0;
-
+        	long last = 0;     
+        	
             @Override
             public void handle(long now) {
+            	
                 if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
                 }
+                                                
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);

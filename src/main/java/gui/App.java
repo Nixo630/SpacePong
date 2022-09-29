@@ -37,6 +37,8 @@ public class App extends Application {
                 case DOWN:
                     playerB.state = RacketController.State.GOING_DOWN;
                     break;
+                default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
+                	break;
             }
         });
         gameScene.setOnKeyReleased(ev -> {
@@ -53,6 +55,8 @@ public class App extends Application {
                 case DOWN:
                     if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
                     break;
+                default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
+                	break;
             }
         });
         var court = new Court(playerA, playerB, 1000, 600);

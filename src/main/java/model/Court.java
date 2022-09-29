@@ -1,5 +1,10 @@
 package model;
 
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.JOptionPane;
+
 public class Court {
     // instance parameters
     private final RacketController playerA, playerB;
@@ -12,6 +17,7 @@ public class Court {
     private double racketB; // m
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m
+    
 
     public Court(RacketController playerA, RacketController playerB, double width, double height) {
         this.playerA = playerA;
@@ -48,10 +54,9 @@ public class Court {
     public double getBallY() {
         return ballY;
     }
-
+    
     public void update(double deltaT) {
-
-        switch (playerA.getState()) {
+    	switch (playerA.getState()) {
             case GOING_UP:
                 racketA -= racketSpeed * deltaT;
                 if (racketA < 0.0) racketA = 0.0;
@@ -75,10 +80,10 @@ public class Court {
                 if (racketB + racketSize > height) racketB = height - racketSize;
                 break;
         }
+        
         if (updateBall(deltaT)) reset();
     }
-
-
+       
     /**
      * @return true if a player lost
      */
@@ -87,33 +92,59 @@ public class Court {
         double nextBallX = ballX + deltaT * ballSpeedX;
         double nextBallY = ballY + deltaT * ballSpeedY;
         // next, see if the ball would meet some obstacle
-        if (nextBallY < 0 || nextBallY > height) {
+        if (nextBallY < 10 || nextBallY > height - 10) { // 10 correspond à la taille des murs
             ballSpeedY = -ballSpeedY;
             nextBallY = ballY + deltaT * ballSpeedY;
         }
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
-            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX+25);}//mettre à jour la vitesse de la balle après avoir touchée la raquette
-            else {ballSpeedX = -(ballSpeedX-25);}//mise à jour de gauche à droite quand la vitesse est dans le négatif
+            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
+            else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {ballSpeedY += 25;}
             else {ballSpeedY -= 25;}
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
+        	playerLost();
             return true;
+            
         } else if (nextBallX > width) {
+        	playerLost();
             return true;
         }
         ballX = nextBallX;
         ballY = nextBallY;
         return false;
     }
-
+    
+    /* Ajouté par Evan le 27/09/2022 : méthode permettant d'informer que le joueur
+     * a perdu, par le biais d'un son et d'un message. */
+    public void playerLost() {
+    	
+    	// On joue le son
+    	try
+        {
+    		Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/lost.wav")));
+            clip.start();
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
+    	
+    	// On affiche une boîte de dialogue
+    	int rep = JOptionPane.showConfirmDialog(null,
+                "Vous avez perdu... voulez-vous rejouer ?", "Perdu !",
+                JOptionPane.YES_NO_OPTION);
+    	if (rep == JOptionPane.NO_OPTION) System.exit(0);	
+    }
+        
     public double getBallRadius() {
         return ballRadius;
     }
 
     void reset() {
-        this.racketA = height / 2;
+    	this.racketA = height / 2;
         this.racketB = height / 2;
         this.ballSpeedX = 200.0;
         this.ballSpeedY = 200.0;
