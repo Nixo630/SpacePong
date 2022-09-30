@@ -16,7 +16,7 @@ public class GameView {
     		murThinkness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB, murA, murB;
+    private final Rectangle racketA, racketB, murA, murB, murC, murD;
     private final Circle ball;
 
     /**
@@ -57,20 +57,34 @@ public class GameView {
         
         // Modifié par Evan le 27/09/2022 : matérialisation d'un mur
         murA = new Rectangle();
-        murA.setWidth(court.getWidth() * scale);
+        murA.setWidth(court.getWidth() * scale + 2 * xMargin);
         murA.setHeight(murThinkness);
         murA.setFill(Color.BLACK);
-        murA.setX(xMargin);
+        murA.setX(0);
         murA.setY(0);
         
         murB = new Rectangle();
-        murB.setWidth(court.getWidth() * scale);
+        murB.setWidth(court.getWidth() * scale + 2 * xMargin);
         murB.setHeight(murThinkness);
         murB.setFill(Color.BLACK);
-        murB.setX(xMargin);
+        murB.setX(0);
         murB.setY(court.getHeight());
         
-        gameRoot.getChildren().addAll(racketA, racketB, ball, murA, murB);
+        murC = new Rectangle();
+        murC.setWidth(murThinkness);
+        murC.setHeight(court.getHeight() * scale);
+        murC.setFill(Color.BLACK);
+        murC.setX(0);
+        murC.setY(0);
+        
+        murD = new Rectangle();
+        murD.setWidth(murThinkness);
+        murD.setHeight(court.getHeight() * scale + murThinkness);
+        murD.setFill(Color.BLACK);
+        murD.setX(court.getWidth() * scale + 2 * xMargin);
+        murD.setY(0);
+        
+        gameRoot.getChildren().addAll(racketA, racketB, ball, murA, murB, murC, murD);
     }
     
     public void animate() {
