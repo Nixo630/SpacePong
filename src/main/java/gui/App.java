@@ -1,6 +1,11 @@
 package gui;
 
 
+import java.io.File;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -9,10 +14,22 @@ import model.Court;
 import model.RacketController;
 
 public class App extends Application {
+	
+	private static Stage guiStage;
+    public static Stage getStage() {
+        return guiStage;
+    }
+	
     @Override
     public void start(Stage primaryStage) {
+    	guiStage = primaryStage;
+    	
         var root = new Pane();
         var gameScene = new Scene(root);
+        
+        var lost = new Pane();
+        var lostScene = new Scene(lost);
+        
         class Player implements RacketController {
             State state = State.IDLE;
 
@@ -59,10 +76,26 @@ public class App extends Application {
                 	break;
             }
         });
-        var court = new Court(playerA, playerB, 1000, 600);
+               
+        var court = new Court(playerA, playerB, 1000, 600, lostScene);
         var gameView = new GameView(court, root, 1.0);
+        var gameLost = new GameLost(lost, 1.0, 1000, 600, gameScene, gameView);
+        
+        try
+        {
+    		Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/starting.wav")));
+            clip.start();
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
+        
         primaryStage.setScene(gameScene);
         primaryStage.show();
+        
         gameView.animate();
     }
+    
 }

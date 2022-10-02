@@ -18,6 +18,8 @@ public class GameView {
     // children of the game main node
     private final Rectangle racketA, racketB, murA, murB, murC, murD;
     private final Circle ball;
+    
+    private static AnimationTimer aTimer;
 
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
@@ -55,7 +57,6 @@ public class GameView {
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
         
-        // Modifié par Evan le 27/09/2022 : matérialisation d'un mur
         murA = new Rectangle();
         murA.setWidth(court.getWidth() * scale + 2 * xMargin);
         murA.setHeight(murThinkness);
@@ -85,16 +86,17 @@ public class GameView {
         murD.setY(0);
         
         gameRoot.getChildren().addAll(racketA, racketB, ball, murA, murB, murC, murD);
+            
     }
     
     public void animate() {
-        new AnimationTimer() {
-        	long last = 0;     
-        	
-            @Override
-            public void handle(long now) {
-            	
-                if (last == 0) { // ignore the first tick, just compute the first deltaT
+    	aTimer = new AnimationTimer() {
+    		long last = 0;
+			@Override
+			public void handle(long now) {
+				// TODO Auto-generated method stub
+				
+				if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
                 }
@@ -105,7 +107,17 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
-            }
-        }.start();
+			}
+    		
+    	};
+    	aTimer.start();
+    }
+    
+    public static void stopAnimation() {
+    	aTimer.stop();
+    }
+    
+    public void startAnimation() {
+    	animate();
     }
 }

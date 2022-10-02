@@ -3,7 +3,10 @@ package model;
 import java.io.File;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.JOptionPane;
+
+import gui.App;
+import gui.GameView;
+import javafx.scene.Scene;
 
 public class Court {
     // instance parameters
@@ -16,14 +19,17 @@ public class Court {
     private double racketA; // m
     private double racketB; // m
     private double ballX, ballY; // m
-    private double ballSpeedX, ballSpeedY; // m
+    private double ballSpeedX, ballSpeedY; // m   
     
+    private Scene lostScene;
 
-    public Court(RacketController playerA, RacketController playerB, double width, double height) {
+    public Court(RacketController playerA, RacketController playerB,
+    		double width, double height, Scene lostScene) {
         this.playerA = playerA;
         this.playerB = playerB;
         this.width = width;
         this.height = height;
+        this.lostScene = lostScene;
         reset();
     }
 
@@ -116,8 +122,6 @@ public class Court {
         return false;
     }
     
-    /* Ajouté par Evan le 27/09/2022 : méthode permettant d'informer que le joueur
-     * a perdu, par le biais d'un son et d'un message. */
     public void playerLost() {
     	
     	// On joue le son
@@ -132,11 +136,9 @@ public class Court {
             exc.printStackTrace(System.out);
         }
     	
-    	// On affiche une boîte de dialogue
-    	int rep = JOptionPane.showConfirmDialog(null,
-                "Vous avez perdu... voulez-vous rejouer ?", "Perdu !",
-                JOptionPane.YES_NO_OPTION);
-    	if (rep == JOptionPane.NO_OPTION) System.exit(0);	
+    	GameView.stopAnimation();
+    	reset();
+    	App.getStage().setScene(lostScene);
     }
         
     public double getBallRadius() {
