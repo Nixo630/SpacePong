@@ -8,6 +8,7 @@ import javax.sound.sampled.Clip;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
@@ -96,6 +97,24 @@ public class App extends Application {
         primaryStage.show();
         
         gameView.animate();
+
+        primaryStage.setTitle("Pong Project");
+        primaryStage.setResizable(false);
+
+        /* 
+        Méthode infructueuses (à retirer si gênant)
+        Image image = new Image( getClass().getResource( "pongimage.png").toExternalForm());
+        ImageView image = new ImageView( image);
+
+        Image icon = new Image((new File("/gui/pongimage.png").toURI().toString()));
+
+        Image icon = new Image((new File("file:/gui/pongimage.png"));
+
+        Image icon = new Image(Main.class.getClassLoader().getResource("/pongimage.png").toExternalForm());
+        */
+        String url = "https://logopond.com/logos/4913a56ebd1ab2eff62e01055f75ec61.png";
+        Image icon = new Image(url);
+        primaryStage.getIcons().add(icon);
     }
     
 }
