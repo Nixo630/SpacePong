@@ -131,11 +131,13 @@ public class Court {
         } else if (nextBallX < 0) {
         	setScoreB(scoreB+1);
         	playerLost();
+        	Sound("LoseSound.wav");
             return true;
             
         } else if (nextBallX > width) {
         	setScoreA(scoreA+1);
         	playerLost();
+        	Sound("LoseSound.wav");
             return true;
         }
         ballX = nextBallX;
