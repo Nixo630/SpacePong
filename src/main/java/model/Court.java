@@ -19,7 +19,9 @@ public class Court {
     private double racketA; // m
     private double racketB; // m
     private double ballX, ballY; // m
-    private double ballSpeedX, ballSpeedY; // m   
+    private double ballSpeedX, ballSpeedY; // m 
+    private int scoreA = 0;
+    private int scoreB = 0;
     
     private Scene lostScene;
 
@@ -59,6 +61,22 @@ public class Court {
 
     public double getBallY() {
         return ballY;
+    }
+    
+    public void setScoreA(int s) {
+    	scoreA=s;
+    }
+    
+    public void setScoreB(int s) {
+    	scoreB=s;
+    }
+    
+    public int getScoreA() {
+    	return scoreA;
+    }
+    
+    public int getScoreB() {
+    	return scoreB;
     }
     
     public void update(double deltaT) {
@@ -110,10 +128,12 @@ public class Court {
             else {ballSpeedY -= 25;}
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
+        	setScoreB(scoreB+1);
         	playerLost();
             return true;
             
         } else if (nextBallX > width) {
+        	setScoreA(scoreA+1);
         	playerLost();
             return true;
         }
@@ -124,21 +144,26 @@ public class Court {
     
     public void playerLost() {
     	
+    	if (scoreA==5 || scoreB== 5) {
+    		this.scoreA=0;
+    		this.scoreB=0;
     	// On joue le son
-    	try
-        {
-    		Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/lost.wav")));
-            clip.start();
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace(System.out);
-        }
+    		try
+    		{
+    			Clip clip = AudioSystem.getClip();
+    			clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/lost.wav")));
+    			clip.start();
+    		}
     	
-    	GameView.stopAnimation();
-    	reset();
-    	App.getStage().setScene(lostScene);
+    		catch (Exception exc)
+    		{
+    			exc.printStackTrace(System.out);
+    		}
+    	
+    		GameView.stopAnimation();
+    		reset();
+    		App.getStage().setScene(lostScene);
+    	}
     }
         
     public double getBallRadius() {

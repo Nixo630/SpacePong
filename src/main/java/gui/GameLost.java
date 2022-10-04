@@ -15,7 +15,7 @@ public class GameLost {
 		lostRoot.setMinWidth(width * scale);
 		lostRoot.setMinHeight(height * scale);
 		
-		Text t = new Text(0, (height * scale) / 4, "Vous avez perdu...\nVoulez-vous rejouer ?");
+		Text t = new Text(0, (height * scale) / 4, "La partie est finie...\nVoulez-vous rejouer ?");
 		t.setFont(new Font(50));
 		t.setLayoutX((width * scale) / 2 - t.getLayoutBounds().getCenterX());
 		t.setTextAlignment(TextAlignment.CENTER);

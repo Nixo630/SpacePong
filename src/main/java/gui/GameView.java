@@ -1,10 +1,12 @@
 package gui;
 
+import javafx.scene.control.Label;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import model.Court;
 
 public class GameView {
@@ -16,8 +18,10 @@ public class GameView {
     		murThinkness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB, murA, murB, murC, murD;
+    private final Rectangle racketA, racketB, murA, murB, murC, murD, murE, background;
     private final Circle ball;
+    
+    private Label affScoreA, affScoreB;
     
     private static AnimationTimer aTimer;
 
@@ -37,7 +41,7 @@ public class GameView {
         racketA = new Rectangle();
         racketA.setHeight(court.getRacketSize() * scale);
         racketA.setWidth(racketThickness);
-        racketA.setFill(Color.BLACK);
+        racketA.setFill(Color.DARKGREY);
 
         racketA.setX(xMargin - racketThickness);
         racketA.setY(court.getRacketA() * scale);
@@ -45,7 +49,7 @@ public class GameView {
         racketB = new Rectangle();
         racketB.setHeight(court.getRacketSize() * scale);
         racketB.setWidth(racketThickness);
-        racketB.setFill(Color.BLACK);
+        racketB.setFill(Color.DARKGREY);
 
         racketB.setX(court.getWidth() * scale + xMargin);
         racketB.setY(court.getRacketB() * scale);
@@ -85,7 +89,31 @@ public class GameView {
         murD.setX(court.getWidth() * scale + 2 * xMargin);
         murD.setY(0);
         
-        gameRoot.getChildren().addAll(racketA, racketB, ball, murA, murB, murC, murD);
+        murE = new Rectangle();
+        murE.setWidth(murThinkness);
+        murE.setHeight(court.getHeight() * scale + murThinkness);
+        murE.setFill(Color.BLACK);
+        murE.setX(court.getBallX() * scale + xMargin-(court.getBallRadius()/2));
+        murE.setY(0);
+        
+        background = new Rectangle();
+        background.setWidth(court.getWidth() * scale + 2 * xMargin);
+        background.setHeight(court.getHeight() * scale);
+        background.setFill(Color.DODGERBLUE);
+        background.setX(0);
+        background.setY(0);
+        
+        affScoreA = new Label(""+court.getScoreA());
+        affScoreA.setFont(Font.font("Cambria",500));
+        affScoreA.setTextFill(Color.DARKGREY);
+        affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/4);
+        
+        affScoreB = new Label(""+court.getScoreB());
+        affScoreB.setFont(Font.font("Cambria",500));
+        affScoreB.setTextFill(Color.DARKGREY);
+        affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
+        
+        gameRoot.getChildren().addAll(background,racketA, racketB, murA, murB, murC, murD, murE, affScoreA, affScoreB, ball);
             
     }
     
@@ -107,6 +135,8 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
+                affScoreA.setText(""+court.getScoreA());
+                affScoreB.setText(""+court.getScoreB());
 			}
     		
     	};
