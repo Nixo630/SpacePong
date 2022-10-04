@@ -125,15 +125,29 @@ public class Court {
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);Sound("RacketSound.wav");} // MAJ vitesse de la balle après avoir touché la raquette
             else {ballSpeedX = -(ballSpeedX - 25);Sound("RacketSound.wav");} // MAJ gauche> droite quand la vitesse est dans le négatif
-            if (ballSpeedY > 0) {ballSpeedY += 25;}
-            else {ballSpeedY -= 25;}
+            if (ballSpeedY > 0) {
+		// ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
+                if (nextBallX < 0) {
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7);
+                }
+                else {
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB))*7);
+                }
+            }
+            else {
+                if (nextBallX < 0) {
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*4));
+                }
+                else {
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB)))*4);
+                }
+            }
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
         	setScoreB(scoreB+1);
         	playerLost();
         	Sound("LoseSound.wav");
             return true;
-            
         } else if (nextBallX > width) {
         	setScoreA(scoreA+1);
         	playerLost();
