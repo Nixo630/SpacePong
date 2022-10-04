@@ -119,11 +119,12 @@ public class Court {
         if (nextBallY < 10 || nextBallY > height - 10) { // 10 correspond à la taille des murs
             ballSpeedY = -ballSpeedY;
             nextBallY = ballY + deltaT * ballSpeedY;
+            Sound("WallSound.wav");
         }
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
-            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
-            else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
+            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);Sound("RacketSound.wav");} // MAJ vitesse de la balle après avoir touché la raquette
+            else {ballSpeedX = -(ballSpeedX - 25);Sound("RacketSound.wav");} // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {ballSpeedY += 25;}
             else {ballSpeedY -= 25;}
             nextBallX = ballX + deltaT * ballSpeedX;
@@ -141,6 +142,21 @@ public class Court {
         ballY = nextBallY;
         return false;
     }
+    
+    public void Sound(String s) {
+    	// On joue le son
+    	try
+        {
+    		Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
+            clip.start();
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
+    }
+    
     
     public void playerLost() {
     	
