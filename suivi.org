@@ -1,0 +1,14 @@
+* 04/2022
+
+JOFFRIN;Evan
+EL JAMAI;Ali
+PARIS;Albin
+LEFORESTIER;Méril
+BOURGUIBA;Adem
+ESPANET;Nicolas
+JOSSE;Gaël
+
+
+* 18/2022
+** TODO Write and add to git a file with all the details / functionalities
+** the final videogame. 
