@@ -128,10 +128,10 @@ public class Court {
             if (ballSpeedY > 0) {
 		// ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
                 if (nextBallX < 0) {
-                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*4);
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7);
                 }
                 else {
-                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB))*4);
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB))*7);
                 }
             }
             else {
