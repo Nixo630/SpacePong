@@ -15,7 +15,7 @@ public class GameView {
     private final Pane gameRoot; // main node of the game
     private final double scale;
     private final double xMargin = 50.0, racketThickness = 10.0,
-    		murThinkness = 10.0; // pixels
+    		murThickness = 10.0; // pixels
 
     // children of the game main node
     private final Rectangle racketA, racketB, murA, murB, murC, murD, murE, background;
@@ -61,37 +61,37 @@ public class GameView {
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
         
-        murA = new Rectangle();
+        murA = new Rectangle();//mur du haut
         murA.setWidth(court.getWidth() * scale + 2 * xMargin);
-        murA.setHeight(murThinkness);
+        murA.setHeight(murThickness);
         murA.setFill(Color.BLACK);
         murA.setX(0);
         murA.setY(0);
         
-        murB = new Rectangle();
+        murB = new Rectangle();//mur du bas
         murB.setWidth(court.getWidth() * scale + 2 * xMargin);
-        murB.setHeight(murThinkness);
+        murB.setHeight(murThickness);
         murB.setFill(Color.BLACK);
         murB.setX(0);
         murB.setY(court.getHeight());
         
-        murC = new Rectangle();
-        murC.setWidth(murThinkness);
+        murC = new Rectangle();//mur de gauche
+        murC.setWidth(murThickness);
         murC.setHeight(court.getHeight() * scale);
         murC.setFill(Color.BLACK);
         murC.setX(0);
         murC.setY(0);
         
-        murD = new Rectangle();
-        murD.setWidth(murThinkness);
-        murD.setHeight(court.getHeight() * scale + murThinkness);
+        murD = new Rectangle();//mur de droite
+        murD.setWidth(murThickness);
+        murD.setHeight(court.getHeight() * scale + murThickness);
         murD.setFill(Color.BLACK);
         murD.setX(court.getWidth() * scale + 2 * xMargin);
         murD.setY(0);
         
-        murE = new Rectangle();
-        murE.setWidth(murThinkness);
-        murE.setHeight(court.getHeight() * scale + murThinkness);
+        murE = new Rectangle();//mur du milieu
+        murE.setWidth(murThickness);
+        murE.setHeight(court.getHeight() * scale + murThickness);
         murE.setFill(Color.BLACK);
         murE.setX(court.getBallX() * scale + xMargin-(court.getBallRadius()/2));
         murE.setY(0);
