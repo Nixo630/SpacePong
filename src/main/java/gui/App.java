@@ -24,6 +24,14 @@ public class App extends Application {
     public void start(Stage primaryStage) {
     	guiStage = primaryStage;
     	
+    	var start = new Pane();
+    	start.setId("pane");
+    	
+    	var startScene = new Scene(start);
+    	System.out.println("ici");
+    	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+    	
+
         var root = new Pane();
         var gameScene = new Scene(root);
         
@@ -79,6 +87,7 @@ public class App extends Application {
                
         var court = new Court(playerA, playerB, 1000, 600, lostScene);
         var gameView = new GameView(court, root, 1.0);
+        var gameStart = new GameStart(start,gameScene,gameView);
         var gameLost = new GameLost(lost, 1.0, 1000, 600, gameScene, gameView);
         
         try
@@ -92,10 +101,10 @@ public class App extends Application {
             exc.printStackTrace(System.out);
         }
         
-        primaryStage.setScene(gameScene);
+        primaryStage.setScene(startScene);
+        primaryStage.setFullScreen(true);
         primaryStage.show();
         
-        gameView.animate();
     }
     
 }
