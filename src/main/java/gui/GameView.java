@@ -1,6 +1,9 @@
 package gui;
 
 import javafx.scene.control.Label;
+
+import java.util.Random;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -21,9 +24,14 @@ public class GameView {
     private final Rectangle racketA, racketB, murA, murB, murC, murD, murE, background;
     private final Circle ball;
     
-    private Label affScoreA, affScoreB;
-    
+    private Label affScoreA, affScoreB;   
     private static AnimationTimer aTimer;
+    
+    public final Color[] colorList = {Color.BLACK, Color.BLUE,
+    		Color.BROWN, Color.CYAN, Color.GOLD, Color.GREEN, Color.LIME,
+    		Color.MAGENTA, Color.ORANGE, Color.PURPLE, Color.RED, Color.WHITE,
+    		Color.YELLOW}; // liste de couleurs possibles pour la balle
+    private static Color colorBall = Color.BLACK;
 
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
@@ -56,7 +64,7 @@ public class GameView {
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
-        ball.setFill(Color.BLACK);
+        ball.setFill(colorBall);
 
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
@@ -114,7 +122,6 @@ public class GameView {
         affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
         
         gameRoot.getChildren().addAll(background,racketA, racketB, murA, murB, murC, murD, murE, affScoreA, affScoreB, ball);
-            
     }
     
     public void animate() {
@@ -135,8 +142,34 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
-                affScoreA.setText(""+court.getScoreA());
-                affScoreB.setText(""+court.getScoreB());
+                if(court.getBallTouched()) { // la balle touche la raquette
+                	
+                	// Changement de couleur
+                	Random rd = new Random();
+                	int index = rd.nextInt(0, colorList.length);
+                	colorBall = colorList[index];
+                	ball.setFill(colorBall);
+                	
+                	// Changement de tailles de raquettes
+                	int h = rd.nextInt(50, 201);
+                	court.setRacketSize(h);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+            		        	
+                	court.resetBallTouched();
+                }
+                                
+                if(court.scored()) {             
+                	affScoreA.setText(""+court.getScoreA());
+                    affScoreB.setText(""+court.getScoreB());
+                    colorBall = Color.BLACK;
+                	ball.setFill(colorBall);
+                	
+                	court.setRacketSize(100);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+                	court.resetScored();
+                }                
 			}
     		
     	};
@@ -150,4 +183,5 @@ public class GameView {
     public void startAnimation() {
     	animate();
     }
+         
 }

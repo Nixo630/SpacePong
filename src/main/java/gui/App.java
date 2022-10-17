@@ -80,7 +80,8 @@ public class App extends Application {
                
         var court = new Court(playerA, playerB, 1000, 600, lostScene);
         var gameView = new GameView(court, root, 1.0);
-        var gameLost = new GameLost(lost, 1.0, 1000, 600, gameScene, gameView);
+        @SuppressWarnings("unused")
+		var gameLost = new GameLost(lost, 1.0, 1000, 600, gameScene, gameView);
         
         try
         {
