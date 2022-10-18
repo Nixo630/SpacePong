@@ -13,7 +13,7 @@ public class Court {
     private final RacketController playerA, playerB;
     private final double width, height; // m
     private final double racketSpeed = 300.0; // m/s
-    private final double racketSize = 100.0; // m
+    private double racketSize = 100.0; // m
     private final double ballRadius = 10.0; // m
     // instance state
     private double racketA; // m
@@ -24,6 +24,8 @@ public class Court {
     private int scoreB = 0;
     
     private Scene lostScene;
+    private boolean ballTouched = false;
+    private boolean scored = false;
 
     public Court(RacketController playerA, RacketController playerB,
     		double width, double height, Scene lostScene) {
@@ -45,6 +47,10 @@ public class Court {
 
     public double getRacketSize() {
         return racketSize;
+    }
+    
+    public void setRacketSize(double x) {
+    	racketSize = x;
     }
 
     public double getRacketA() {
@@ -123,8 +129,14 @@ public class Court {
         }
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
-            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);Sound("RacketSound.wav");} // MAJ vitesse de la balle après avoir touché la raquette
-            else {ballSpeedX = -(ballSpeedX - 25);Sound("RacketSound.wav");} // MAJ gauche> droite quand la vitesse est dans le négatif
+            if (ballSpeedX > 0) {
+            	ballSpeedX = -(ballSpeedX + 25);
+            	Sound("RacketSound.wav");
+            } // MAJ vitesse de la balle après avoir touché la raquette
+            else {
+            	ballSpeedX = -(ballSpeedX - 25);
+            	Sound("RacketSound.wav");
+            } // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {
 		// ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
                 if (nextBallX < 0) {
@@ -142,6 +154,7 @@ public class Court {
                     ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB)))*4);
                 }
             }
+            ballTouched = true;
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
         	setScoreB(scoreB+1);
@@ -175,21 +188,11 @@ public class Court {
     
     
     public void playerLost() {
-    	
+    	scored = true;
     	if (scoreA==5 || scoreB== 5) {
     		reset_score();
     	// On joue le son
-    		try
-    		{
-    			Clip clip = AudioSystem.getClip();
-    			clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/lost.wav")));
-    			clip.start();
-    		}
-    	
-    		catch (Exception exc)
-    		{
-    			exc.printStackTrace(System.out);
-    		}
+    		Sound("lost.wav");
     	
     		GameView.stopAnimation();
     		reset();
@@ -200,6 +203,22 @@ public class Court {
         
     public double getBallRadius() {
         return ballRadius;
+    }
+    
+    public boolean getBallTouched() {
+    	return ballTouched;
+    }
+    
+    public void resetBallTouched() {
+    	ballTouched = false;
+    }
+    
+    public boolean scored() {
+    	return scored;
+    }
+    
+    public void resetScored() {
+    	scored = false;
     }
 
     void reset_score() {
@@ -212,6 +231,7 @@ public class Court {
         this.ballSpeedX = 200.0;
         this.ballSpeedY = 200.0;
         this.ballX = width / 2;
-        this.ballY = height / 2;
+        this.ballY = height / 2;       
     }
+
 }
