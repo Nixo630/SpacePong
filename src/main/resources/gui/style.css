@@ -1,0 +1,53 @@
+#pane{
+    -fx-background-image: url("background_start.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+#start_button{
+    -fx-background-image: url("start_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#title{
+    -fx-background-image: url("title.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#title_end{
+    -fx-background-image: url("partie_terminee.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+#solo_play_button{
+    -fx-background-image: url("solo.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#replay_button{
+    -fx-background-image: url("replay.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#multiplay_play_button{
+    -fx-background-image: url("multiplayer.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#quit_button{
+    -fx-background-image: url("exit_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#settings_button{
+    -fx-background-image: url("setting_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
