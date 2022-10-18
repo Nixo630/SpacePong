@@ -159,10 +159,12 @@ public class Court {
         } else if (nextBallX < 0) {
         	setScoreB(scoreB+1);
         	playerLost();
+        	Sound("LoseSound.wav");
             return true;
         } else if (nextBallX > width) {
         	setScoreA(scoreA+1);
         	playerLost();
+        	Sound("LoseSound.wav");
             return true;
         }
         ballX = nextBallX;
@@ -188,14 +190,14 @@ public class Court {
     public void playerLost() {
     	scored = true;
     	if (scoreA==5 || scoreB== 5) {
-    		this.scoreA=0;
-    		this.scoreB=0;
+    		reset_score();
     	// On joue le son
     		Sound("lost.wav");
     	
     		GameView.stopAnimation();
     		reset();
     		App.getStage().setScene(lostScene);
+    		App.getStage().setFullScreen(true);
     	}
     }
         
@@ -219,6 +221,10 @@ public class Court {
     	scored = false;
     }
 
+    void reset_score() {
+    	this.scoreA=0;
+		this.scoreB=0;
+    }
     void reset() {
     	this.racketA = height / 2;
         this.racketB = height / 2;

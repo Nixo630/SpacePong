@@ -176,6 +176,16 @@ public class GameView {
     	aTimer.start();
     }
     
+    public int getScoreA() {
+    	return court.getScoreA();
+    }
+    
+    public int getScoreB() {
+    	return court.getScoreB();
+    }
+    
+    
+    
     public static void stopAnimation() {
     	aTimer.stop();
     }

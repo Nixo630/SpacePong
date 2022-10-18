@@ -25,11 +25,20 @@ public class App extends Application {
     public void start(Stage primaryStage) {
     	guiStage = primaryStage;
     	
+    	var start = new Pane();
+    	start.setId("pane");
+    	
+    	var startScene = new Scene(start);
+    	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+    	
+
         var root = new Pane();
         var gameScene = new Scene(root);
         
         var lost = new Pane();
+        lost.setId("pane");
         var lostScene = new Scene(lost);
+        lostScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         
         class Player implements RacketController {
             State state = State.IDLE;
@@ -80,9 +89,10 @@ public class App extends Application {
                
         var court = new Court(playerA, playerB, 1000, 600, lostScene);
         var gameView = new GameView(court, root, 1.0);
-        @SuppressWarnings("unused")
-		var gameLost = new GameLost(lost, 1.0, 1000, 600, gameScene, gameView);
+        var gameStart = new GameStart(start,gameScene,gameView);
+        var gameLost = new GameLost(lost,gameScene, gameView,startScene);
         
+        /*
         try
         {
     		Clip clip = AudioSystem.getClip();
@@ -93,29 +103,12 @@ public class App extends Application {
         {
             exc.printStackTrace(System.out);
         }
+        */
         
-        primaryStage.setScene(gameScene);
+        primaryStage.setScene(startScene);
+        primaryStage.setFullScreen(true);
         primaryStage.show();
         
-        gameView.animate();
-
-        primaryStage.setTitle("Pong Project");
-        primaryStage.setResizable(false);
-
-        /* 
-        Méthode infructueuses (à retirer si gênant)
-        Image image = new Image( getClass().getResource( "pongimage.png").toExternalForm());
-        ImageView image = new ImageView( image);
-
-        Image icon = new Image((new File("/gui/pongimage.png").toURI().toString()));
-
-        Image icon = new Image((new File("file:/gui/pongimage.png"));
-
-        Image icon = new Image(Main.class.getClassLoader().getResource("/pongimage.png").toExternalForm());
-        */
-        String url = "https://logopond.com/logos/4913a56ebd1ab2eff62e01055f75ec61.png";
-        Image icon = new Image(url);
-        primaryStage.getIcons().add(icon);
     }
     
 }
