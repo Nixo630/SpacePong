@@ -10,27 +10,29 @@ import javafx.scene.Scene;
 
 public class Court {
     // instance parameters
-    private final RacketController playerA, playerB;
+    private final RacketController playerA, playerB, playerC, playerD;
     private final double width, height; // m
     private final double racketSpeed = 300.0; // m/s
-    private double racketSize = 100.0; // m
+    private final double racketSize = 100.0; // m
     private final double ballRadius = 10.0; // m
     // instance state
     private double racketA; // m
     private double racketB; // m
+    private double racketC;
+    private double racketD;
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m 
     private int scoreA = 0;
     private int scoreB = 0;
     
     private Scene lostScene;
-    private boolean ballTouched = false;
-    private boolean scored = false;
 
-    public Court(RacketController playerA, RacketController playerB,
+    public Court(RacketController playerA, RacketController playerB,RacketController playerC, RacketController playerD, 
     		double width, double height, Scene lostScene) {
         this.playerA = playerA;
         this.playerB = playerB;
+        this.playerC = playerC;
+        this.playerD = playerD;
         this.width = width;
         this.height = height;
         this.lostScene = lostScene;
@@ -45,12 +47,9 @@ public class Court {
         return height;
     }
 
+
     public double getRacketSize() {
         return racketSize;
-    }
-    
-    public void setRacketSize(double x) {
-    	racketSize = x;
     }
 
     public double getRacketA() {
@@ -59,6 +58,14 @@ public class Court {
 
     public double getRacketB() {
         return racketB;
+    }
+
+    public double getRacketC() {
+        return racketC;
+    }
+
+    public double getRacketD() {
+        return racketD;
     }
 
     public double getBallX() {
@@ -110,6 +117,30 @@ public class Court {
                 if (racketB + racketSize > height) racketB = height - racketSize;
                 break;
         }
+        switch (playerC.getState()) {
+            case GOING_LEFT:
+                racketC -= racketSpeed * deltaT;
+                if (racketC < 0.0) racketC = 0.0;
+                break;
+            case IDLE:
+                break;
+            case GOING_RIGHT:
+                racketC += racketSpeed * deltaT;
+                if (racketC + racketSize > height) racketC = height - racketSize;
+                break;
+        }
+        switch (playerD.getState()) {
+            case GOING_LEFT:
+                racketD -= racketSpeed * deltaT;
+                if (racketD < 0.0) racketD = 0.0;
+                break;
+            case IDLE:
+                break;
+            case GOING_RIGHT:
+                racketD += racketSpeed * deltaT;
+                if (racketD + racketSize > height) racketD = height - racketSize;
+                break;
+        }
         
         if (updateBall(deltaT)) reset();
     }
@@ -122,116 +153,85 @@ public class Court {
         double nextBallX = ballX + deltaT * ballSpeedX;
         double nextBallY = ballY + deltaT * ballSpeedY;
         // next, see if the ball would meet some obstacle
-        if (nextBallY < 10 || nextBallY > height - 10) { // 10 correspond à la taille des murs
+
+        if ((nextBallY < 70 && nextBallX > (racketC*2) && nextBallX < (racketC*2) + racketSize )|| 
+            (nextBallY > height - 50 && nextBallX > (racketD*2)  && nextBallX < (racketD *2)+ racketSize )) {
             ballSpeedY = -ballSpeedY;
-            nextBallY = ballY + deltaT * ballSpeedY;
-            Sound("WallSound.wav");
-        }
-        if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
+            nextBallY = ballY + deltaT * ballSpeedY;}
+            else {
+
+            if (nextBallY < 0) {
+            setScoreB(scoreB+1);
+            playerLost();
+            return true;
+            
+            } else if (nextBallY > height) {
+            setScoreA(scoreA+1);
+            playerLost();
+            return true;
+            }
+            }
+        
+            if ((nextBallX < 50 && nextBallY > racketA && nextBallY < racketA + racketSize)
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
-            if (ballSpeedX > 0) {
-            	ballSpeedX = -(ballSpeedX + 25);
-            	Sound("RacketSound.wav");
-            } // MAJ vitesse de la balle après avoir touché la raquette
-            else {
-            	ballSpeedX = -(ballSpeedX - 25);
-            	Sound("RacketSound.wav");
-            } // MAJ gauche> droite quand la vitesse est dans le négatif
-            if (ballSpeedY > 0) {
-		// ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
-                if (nextBallX < 0) {
-                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7);
-                }
-                else {
-                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB))*7);
-                }
-            }
-            else {
-                if (nextBallX < 0) {
-                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*4));
-                }
-                else {
-                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB)))*4);
-                }
-            }
-            ballTouched = true;
+            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
+            else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
+            if (ballSpeedY > 0) {ballSpeedY += 25;}
+            else {ballSpeedY -= 25;}
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
-        	setScoreB(scoreB+1);
-        	playerLost();
-        	Sound("LoseSound.wav");
+            setScoreB(scoreB+1);
+            playerLost();
             return true;
+            
         } else if (nextBallX > width) {
-        	setScoreA(scoreA+1);
-        	playerLost();
-        	Sound("LoseSound.wav");
+            setScoreA(scoreA+1);
+            playerLost();
             return true;
+        
         }
         ballX = nextBallX;
         ballY = nextBallY;
         return false;
     }
-    
-    public void Sound(String s) {
-    	// On joue le son
-    	try
-        {
-    		Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
-            clip.start();
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace(System.out);
-        }
-    }
-    
-    
+
+
     public void playerLost() {
-    	scored = true;
+    	
     	if (scoreA==5 || scoreB== 5) {
-    		reset_score();
+    		this.scoreA=0;
+    		this.scoreB=0;
     	// On joue le son
-    		Sound("lost.wav");
+    		try
+    		{
+    			Clip clip = AudioSystem.getClip();
+    			clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/lost.wav")));
+    			clip.start();
+    		}
+    	
+    		catch (Exception exc)
+    		{
+    			exc.printStackTrace(System.out);
+    		}
     	
     		GameView.stopAnimation();
     		reset();
     		App.getStage().setScene(lostScene);
-    		App.getStage().setFullScreen(true);
     	}
     }
         
     public double getBallRadius() {
         return ballRadius;
     }
-    
-    public boolean getBallTouched() {
-    	return ballTouched;
-    }
-    
-    public void resetBallTouched() {
-    	ballTouched = false;
-    }
-    
-    public boolean scored() {
-    	return scored;
-    }
-    
-    public void resetScored() {
-    	scored = false;
-    }
 
-    void reset_score() {
-    	this.scoreA=0;
-		this.scoreB=0;
-    }
     void reset() {
     	this.racketA = height / 2;
         this.racketB = height / 2;
+        this.racketC = height / 2.4;
+        this.racketD = height / 2.4; 
         this.ballSpeedX = 200.0;
         this.ballSpeedY = 200.0;
         this.ballX = width / 2;
-        this.ballY = height / 2;       
+        this.ballY = height / 2;
     }
-
 }
