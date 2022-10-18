@@ -17,8 +17,19 @@
     -fx-background-size: cover;
 }
 
+#title_end{
+    -fx-background-image: url("partie_terminee.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
 #solo_play_button{
     -fx-background-image: url("solo.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#replay_button{
+    -fx-background-image: url("replay.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
 }

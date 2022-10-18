@@ -177,8 +177,7 @@ public class Court {
     public void playerLost() {
     	
     	if (scoreA==5 || scoreB== 5) {
-    		this.scoreA=0;
-    		this.scoreB=0;
+    		reset_score();
     	// On joue le son
     		try
     		{
@@ -195,6 +194,7 @@ public class Court {
     		GameView.stopAnimation();
     		reset();
     		App.getStage().setScene(lostScene);
+    		App.getStage().setFullScreen(true);
     	}
     }
         
@@ -202,6 +202,10 @@ public class Court {
         return ballRadius;
     }
 
+    void reset_score() {
+    	this.scoreA=0;
+		this.scoreB=0;
+    }
     void reset() {
     	this.racketA = height / 2;
         this.racketB = height / 2;

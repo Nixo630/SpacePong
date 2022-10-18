@@ -28,7 +28,6 @@ public class App extends Application {
     	start.setId("pane");
     	
     	var startScene = new Scene(start);
-    	System.out.println("ici");
     	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
     	
 
@@ -36,7 +35,9 @@ public class App extends Application {
         var gameScene = new Scene(root);
         
         var lost = new Pane();
+        lost.setId("pane");
         var lostScene = new Scene(lost);
+        lostScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         
         class Player implements RacketController {
             State state = State.IDLE;
@@ -88,8 +89,9 @@ public class App extends Application {
         var court = new Court(playerA, playerB, 1000, 600, lostScene);
         var gameView = new GameView(court, root, 1.0);
         var gameStart = new GameStart(start,gameScene,gameView);
-        var gameLost = new GameLost(lost, 1.0, 1000, 600, gameScene, gameView);
+        var gameLost = new GameLost(lost,gameScene, gameView,startScene);
         
+        /*
         try
         {
     		Clip clip = AudioSystem.getClip();
@@ -100,6 +102,7 @@ public class App extends Application {
         {
             exc.printStackTrace(System.out);
         }
+        */
         
         primaryStage.setScene(startScene);
         primaryStage.setFullScreen(true);

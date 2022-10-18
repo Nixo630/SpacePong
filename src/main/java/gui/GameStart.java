@@ -16,6 +16,9 @@ import javafx.scene.control.ProgressBar;
 
 public class GameStart {
 	
+	//Boolean pour savoir si la barre de chargement à deja été charge
+	private boolean charge= false;
+	
 	public GameStart (Pane startRoot,Scene courtScene, GameView gw) {
 		
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -144,29 +147,36 @@ public class GameStart {
 			startRoot.getChildren().removeAll(start_button);
 			startRoot.getChildren().addAll(progressBar);
 			
-			Timer chrono = new Timer();
-			chrono.schedule(new TimerTask() {
-
-				int time = 100;
-				@Override
-				public void run() {
-					System.out.println(time);
-					avancer(progressBar);
-					
-					
-					if (time ==0) {
-						progressBar.setVisible(false);
-						debuter(quit,play,setting_button,multiplay);
-			        	chrono.cancel();
-			        	
-			        	
+			if (charge == false) {
+				charge = true;
+				Timer chrono = new Timer();
+				chrono.schedule(new TimerTask() {
+	
+					int time = 100;
+					@Override
+					public void run() {
+						System.out.println(time);
+						avancer(progressBar);
+						
+						
+						if (time ==0) {
+							charge=true;
+							progressBar.setVisible(false);
+							debuter(quit,play,setting_button,multiplay);
+				        	chrono.cancel();
+				        	
+				        	
+						}
+						time--;
 					}
-					time--;
-				}
+					
+				}, 100,25);
+			}
+			else {
+				debuter(quit,play,setting_button,multiplay);
+			}
 				
-			}, 100,25);
-			
-	    });
+		  });
 		
 		startRoot.getChildren().addAll(title,start_button);
 	}
@@ -179,6 +189,9 @@ public class GameStart {
 		m.setVisible(true);
 	}
 	
+	void setCharge(boolean t) {
+		charge = t;
+	}
 	//Cette fonction fait avancer la barre de chargmement
 	public static void avancer(ProgressBar pb) {
 		pb.setProgress(0.01+pb.getProgress());
