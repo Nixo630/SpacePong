@@ -1,7 +1,11 @@
 package gui;
 
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import java.awt.Dimension;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
@@ -21,7 +25,7 @@ public class GameView {
     		murThickness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB, murA, murB, murC, murD, murE, background;
+    private final Rectangle racketA, racketB, murA, murB, murC, murD, murE;
     private final Circle ball;
     
     private Label affScoreA, affScoreB;   
@@ -32,16 +36,22 @@ public class GameView {
     		Color.MAGENTA, Color.ORANGE, Color.PURPLE, Color.RED, Color.WHITE,
     		Color.YELLOW}; // liste de couleurs possibles pour la balle
     private static Color colorBall = Color.BLACK;
+    
+    private boolean changement_taille_racket;
+    private final Scene start;
 
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
      * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
      */
-    public GameView(Court court, Pane root, double scale) {
+    public GameView(Court court, Pane root, double scale,Scene startScene) {
         this.court = court;
         this.gameRoot = root;
         this.scale = scale;
+        start = startScene;
+        
+        changement_taille_racket = false;
 
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
@@ -104,24 +114,28 @@ public class GameView {
         murE.setX(court.getBallX() * scale + xMargin-(court.getBallRadius()/2));
         murE.setY(0);
         
-        background = new Rectangle();
-        background.setWidth(court.getWidth() * scale + 2 * xMargin);
-        background.setHeight(court.getHeight() * scale);
-        background.setFill(Color.DODGERBLUE);
+        Rectangle background = new Rectangle();
+        //background.setWidth(court.getWidth() * scale + 2 * xMargin);
+        //background.setHeight(court.getHeight() * scale);
+        background.setId("pane");
+        //background.setFill(Color.BLUE);
         background.setX(0);
         background.setY(0);
+        background.getStyleClass().addAll(this.getClass().getResource("style.css").toExternalForm());
+        
+        
         
         affScoreA = new Label(""+court.getScoreA());
-        affScoreA.setFont(Font.font("Cambria",500));
+        affScoreA.setFont(Font.font("Cambria",250));
         affScoreA.setTextFill(Color.DARKGREY);
-        affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/4);
+        affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/2);
         
         affScoreB = new Label(""+court.getScoreB());
-        affScoreB.setFont(Font.font("Cambria",500));
+        affScoreB.setFont(Font.font("Cambria",250));
         affScoreB.setTextFill(Color.DARKGREY);
         affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
         
-        gameRoot.getChildren().addAll(background,racketA, racketB, murA, murB, murC, murD, murE, affScoreA, affScoreB, ball);
+        gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD, affScoreA, affScoreB, ball);
     }
     
     public void animate() {
@@ -142,13 +156,9 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
-                if(court.getBallTouched()) { // la balle touche la raquette
+                if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
                 	
-                	// Changement de couleur
                 	Random rd = new Random();
-                	int index = rd.nextInt(0, colorList.length);
-                	colorBall = colorList[index];
-                	ball.setFill(colorBall);
                 	
                 	// Changement de tailles de raquettes
                 	int h = rd.nextInt(50, 201);
@@ -169,22 +179,25 @@ public class GameView {
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	court.resetScored();
-                }                
+                }
+                if(court.getLost()) {
+                	
+                	lost_game();
+                }
 			}
     		
     	};
     	aTimer.start();
     }
     
-    public int getScoreA() {
-    	return court.getScoreA();
+    public void reset() {
+    	affScoreA.setLayoutY(25);
+		affScoreB.setLayoutY(25);
+    	affScoreA.setText("0");
+    	affScoreB.setText("0");
+    	court.reset();
+    	court.reset_score();
     }
-    
-    public int getScoreB() {
-    	return court.getScoreB();
-    }
-    
-    
     
     public static void stopAnimation() {
     	aTimer.stop();
@@ -193,5 +206,113 @@ public class GameView {
     public void startAnimation() {
     	animate();
     }
-         
+    
+    public void pause() {
+    	stopAnimation();
+    	Button quit = new Button();
+		quit.setCancelButton(true);
+		quit.setId("quit_button");
+		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		quit.setPrefSize(1238/4,461/4);
+		quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+		quit.setLayoutY(650);
+		
+		quit.setCursor(Cursor.HAND);
+		quit.setOnAction(value ->  {
+			court.reset();
+			court.reset_score();
+			quit.setVisible(false);
+			App.getStage().setScene(start);
+			App.getStage().setFullScreen(true);
+			
+	    });
+		
+		gameRoot.getChildren().addAll(quit);
+    } 
+    
+    public void lost_game() {
+    	stopAnimation();
+    	racketA.setVisible(false);
+    	racketB.setVisible(false);
+    	ball.setVisible(false);
+    	
+    	Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		//Mise en place de l'affichage de la fin de partie
+	
+		//Ici c'est le bouton qui affiche que la partie est termine
+		
+    	Button title_end = new Button();
+		title_end.setId("title_end");
+		title_end.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		title_end.setPrefSize(2111/3,477/3);
+		title_end.setLayoutX(width/2 - title_end.getPrefWidth()/2);
+		title_end.setLayoutY(50);
+		
+		//Affichage des score
+		
+		affScoreA.setLayoutY(200);
+		affScoreB.setLayoutY(200);
+		
+		//Bouton pour rejouer
+		Button replay = new Button();
+		replay.setCursor(Cursor.HAND);
+		replay.setId("replay_button");
+		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		replay.setPrefSize(2489/4.5,380/4.5);
+		
+		replay.setLayoutX(width/2 - replay.getPrefWidth());
+		replay.setLayoutY(625);
+		
+		
+		
+		Button quit = new Button();
+		quit.setCancelButton(true);
+		quit.setId("quit_button");
+		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		quit.setPrefSize(1238/4,461/4);
+		quit.setLayoutX(width/2 + quit.getPrefWidth()/1.5);
+		quit.setLayoutY(610);
+		
+		quit.setCursor(Cursor.HAND);
+		quit.setOnAction(value ->  {
+			reset();
+			
+			quit.setVisible(false);
+			replay.setVisible(false);
+			title_end.setVisible(false);
+			court.setLost(false);
+			racketA.setVisible(true);
+	    	racketB.setVisible(true);
+	    	ball.setVisible(true);
+			App.getStage().setScene(start);
+			App.getStage().setFullScreen(true);
+	    });
+		
+		replay.setOnAction(value ->  {
+			reset();
+			
+			quit.setVisible(false);
+			replay.setVisible(false);
+			title_end.setVisible(false);
+			court.setLost(false);
+			racketA.setVisible(true);
+	    	racketB.setVisible(true);
+	    	ball.setVisible(true);
+			startAnimation();
+	    });
+		
+		gameRoot.getChildren().addAll(replay,title_end,quit);
+		
+		
+    }
 }

@@ -1,0 +1,42 @@
+#title{
+    -fx-background-image: url("settings_title.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#title_choix_bg{
+    -fx-background-image: url("choix_bg.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_galaxie{
+    -fx-background-image: url("bg_galaxie.jpg");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_trou_noir{
+    -fx-background-image: url("bg_trou_noir.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_earth{
+    -fx-background-image: url("bg_earth.jpg");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_earth2{
+    -fx-background-image: url("bg_earth2.jpg");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#finish_button{
+    -fx-background-image: url("button_apply.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+

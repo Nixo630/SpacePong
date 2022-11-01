@@ -19,15 +19,26 @@ public class GameStart {
 	//Boolean pour savoir si la barre de chargement à deja été charge
 	private boolean charge= false;
 	
-	public GameStart (Pane startRoot,Scene courtScene, GameView gw) {
+	private final Button quit,play,setting_button,multiplay,title;
+	private int height;
+	private int width;
+	private Pane startRoot;
+	private Pane gameRoot;
+	
+	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw) {
+		
+		this.startRoot = startRoot;
+		this.gameRoot = root;
+		
+		gameRoot.setId("choix_galaxie");
 		
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int height = (int)dimension.getHeight();
-		int width  = (int)dimension.getWidth();
+		height = (int)dimension.getHeight();
+		width  = (int)dimension.getWidth();
 		
 		
 		//Le titre est un bouton sans commande dessus
-		Button title = new Button();
+		title = new Button();
 		title.setId("title");
 		title.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
@@ -38,7 +49,7 @@ public class GameStart {
 		
 		
 		//Mise en place du boutton Play pour jouer au jeu en solo
-		Button play = new Button();
+		play = new Button();
 		play.setCursor(Cursor.HAND);
 		
 		play.setId("solo_play_button");
@@ -57,7 +68,7 @@ public class GameStart {
 		
 		//Mise en place du bouton pour jouer à deux 
 		
-		Button multiplay = new Button();
+		multiplay = new Button();
 		multiplay.setCursor(Cursor.HAND);
 		
 		multiplay.setId("multiplay_play_button");
@@ -76,7 +87,7 @@ public class GameStart {
 		
 		
 		//Boutton pour quitter le jeu
-		Button quit = new Button();
+		quit = new Button();
 		quit.setCancelButton(true);
 		quit.setId("quit_button");
 		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -99,7 +110,7 @@ public class GameStart {
 		
 		//Mise en place du boutton setting
 		
-		Button setting_button = new Button();
+		setting_button = new Button();
 		setting_button.setCursor(Cursor.HAND);
 		setting_button.setId("settings_button");
 		setting_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -108,6 +119,10 @@ public class GameStart {
 		
 		setting_button.setLayoutX(width-setting_button.getPrefWidth());
 		setting_button.setLayoutY(0);
+		
+		setting_button.setOnAction(value ->  {
+			parametre();
+	    });
 		
 		
 		startRoot.getChildren().addAll(setting_button);
@@ -146,6 +161,7 @@ public class GameStart {
 		start_button.setOnAction(value ->  {
 			startRoot.getChildren().removeAll(start_button);
 			startRoot.getChildren().addAll(progressBar);
+			Button[] tab = {quit,play,setting_button,multiplay};
 			
 			if (charge == false) {
 				charge = true;
@@ -155,14 +171,14 @@ public class GameStart {
 					int time = 100;
 					@Override
 					public void run() {
-						System.out.println(time);
+						
 						avancer(progressBar);
 						
 						
 						if (time ==0) {
 							charge=true;
 							progressBar.setVisible(false);
-							debuter(quit,play,setting_button,multiplay);
+							visible_change(tab,true);
 				        	chrono.cancel();
 				        	
 				        	
@@ -173,7 +189,7 @@ public class GameStart {
 				}, 100,25);
 			}
 			else {
-				debuter(quit,play,setting_button,multiplay);
+				visible_change(tab,true);
 			}
 				
 		  });
@@ -182,11 +198,10 @@ public class GameStart {
 	}
 	
 	//Cette fonction fait apparaitre les bouton de jeu et pour quitter
-	public static void debuter(Button q,Button p,Button d,Button m) {
-		p.setVisible(true);
-		q.setVisible(true);
-		d.setVisible(true);
-		m.setVisible(true);
+	public static void visible_change(Button [] t,boolean b) {
+		for (int i = 0;i<t.length;i++) {
+			t[i].setVisible(b);
+		}
 	}
 	
 	void setCharge(boolean t) {
@@ -198,5 +213,103 @@ public class GameStart {
 		
 	}
 	
+	
+	public void parametre() {
+		Button[] tab_init = {quit,play,setting_button,multiplay,title};
+		visible_change(tab_init,false);
+		
+		
+		//Mise en place des settings
+		
+		Button title_s = new Button();
+		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		title_s.setId("title");
+		
+		title_s.setPrefSize(2733/7,425/7);
+		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
+		title_s.setLayoutY(50);
+		
+		
+		//Mise en place du choix de l'arriere plan
+		Button title_choix_bg = new Button();
+		title_choix_bg.setId("title_choix_bg");
+		title_choix_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		title_choix_bg.setPrefSize(3366/8,343/8);
+		title_choix_bg.setLayoutX(20);
+		title_choix_bg.setLayoutY(200);
+		
+		
+		Button choix_galaxie = new Button();
+		choix_galaxie.setId("choix_galaxie");
+		choix_galaxie.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		choix_galaxie.setPrefSize(1600/8,1200/10);
+		choix_galaxie.setLayoutX(20+title_choix_bg.getPrefWidth()+25);
+		choix_galaxie.setLayoutY(200);
+		
+		choix_galaxie.setOnAction(value ->  {
+			gameRoot.setId("choix_galaxie");
+	    });
+		
+		Button choix_trou_noir = new Button();
+		choix_trou_noir.setId("choix_trou_noir");
+		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		choix_trou_noir.setPrefSize(1600/8,900/7.5);
+		choix_trou_noir.setLayoutX(20 + choix_galaxie.getLayoutX()+choix_galaxie.getPrefWidth()+25);
+		choix_trou_noir.setLayoutY(200);
+		
+		choix_trou_noir.setOnAction(value ->  {
+			gameRoot.setId("choix_trou_noir");
+	    });
+		
+		
+		Button choix_earth = new Button();
+		choix_earth.setId("choix_earth");
+		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		choix_earth.setPrefSize(1920/9.6,1080/9);
+		choix_earth.setLayoutX(20 + choix_trou_noir.getLayoutX()+choix_trou_noir.getPrefWidth()+25);
+		choix_earth.setLayoutY(200);
+		
+		choix_earth.setOnAction(value ->  {
+			gameRoot.setId("choix_earth");
+	    });
+		
+		
+		Button choix_earth2 = new Button();
+		choix_earth2.setId("choix_earth2");
+		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		choix_earth2.setPrefSize(1920/9.6,1080/9);
+		choix_earth2.setLayoutX(20 + choix_earth.getLayoutX()+choix_earth.getPrefWidth()+25);
+		choix_earth2.setLayoutY(200);
+		
+		choix_earth2.setOnAction(value ->  {
+			gameRoot.setId("choix_earth2");
+	    });
+		
+		Button finish_button = new Button();
+		finish_button.setId("finish_button");
+		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		finish_button.setPrefSize(1795/8,332/8);
+		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
+		finish_button.setLayoutY(height-100);
+		
+		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button};
+		
+		finish_button.setOnAction(value ->  {
+			
+			visible_change(tab_setting,false);
+			visible_change(tab_init,true);
+			
+			
+	    });
+		
+		startRoot.getChildren().addAll(title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button);
+		
+	}
 }
 

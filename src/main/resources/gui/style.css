@@ -51,3 +51,16 @@
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
 }
+
+#bg_trou_noir{
+    -fx-background-image: url("bg_trou_noir.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#bg_galaxie{
+    -fx-background-image: url("bg_galaxie.jpg");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
