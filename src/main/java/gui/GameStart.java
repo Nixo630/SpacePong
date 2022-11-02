@@ -348,11 +348,108 @@ public class GameStart {
 				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
 				middle_bar_no};
 		
+		//Mise en place du choix du skin de la balle pour le joueur
+		
+		Button title_ball_skin = new Button();
+		title_ball_skin.setId("title_ball_skin");
+		title_ball_skin.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		title_ball_skin.setPrefSize(3213/9,375/9);
+		title_ball_skin.setLayoutX(20);
+		title_ball_skin.setLayoutY(550);
+		
+		
+		Button choix_ball_sun = new Button();
+		choix_ball_sun.setId("choix_ball_sun");
+		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		choix_ball_sun.setPrefSize(202/4,202/4);
+		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+25);
+		choix_ball_sun.setLayoutY(550);
+		choix_ball_sun.setOnAction(value ->  {
+			gw.setBallSkin("sun_ball.png");
+	    });
+		
+		Button choix_ball_green = new Button();
+		choix_ball_green.setId("choix_ball_green");
+		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		choix_ball_green.setPrefSize(196/4,217/4);
+		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+25);
+		choix_ball_green.setLayoutY(550);
+		choix_ball_green.setOnAction(value ->  {
+			gw.setBallSkin("green_ball.png");
+	    });
+		
+		Button choix_ball_moon = new Button();
+		choix_ball_moon.setId("choix_ball_moon");
+		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		choix_ball_moon.setPrefSize(208/4,237/4);
+		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+25);
+		choix_ball_moon.setLayoutY(550);
+		choix_ball_moon.setOnAction(value ->  {
+			gw.setBallSkin("moon_ball.png");
+	    });
+		
+		Button choix_ball_jupiter = new Button();
+		choix_ball_jupiter.setId("choix_ball_jupiter");
+		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		choix_ball_jupiter.setPrefSize(158/4,234/4);
+		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+25);
+		choix_ball_jupiter.setLayoutY(550);
+		choix_ball_jupiter.setOnAction(value ->  {
+			gw.setBallSkin("jupiter_ball.png");
+	    });
+		
+		Button choix_ball_saturne = new Button();
+		choix_ball_saturne.setId("choix_ball_saturne");
+		choix_ball_saturne.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		choix_ball_saturne.setPrefSize(239/4,214/4);
+		choix_ball_saturne.setLayoutX(choix_ball_jupiter.getLayoutX()+choix_ball_jupiter.getPrefWidth()+25);
+		choix_ball_saturne.setLayoutY(550);
+		choix_ball_saturne.setOnAction(value ->  {
+			gw.setBallSkin("saturne_ball.png");
+	    });
+		
+		Button choix_ball_lila = new Button();
+		choix_ball_lila.setId("choix_ball_lila");
+		choix_ball_lila.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		choix_ball_lila.setPrefSize(199/4,214/4);
+		choix_ball_lila.setLayoutX(choix_ball_saturne.getLayoutX()+choix_ball_saturne.getPrefWidth()+25);
+		choix_ball_lila.setLayoutY(550);
+		choix_ball_lila.setOnAction(value ->  {
+			gw.setBallSkin("lila_ball.png");
+	    });
+		
+		Button choix_ball_earth = new Button();
+		choix_ball_earth.setId("choix_ball_earth");
+		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		
+		choix_ball_earth.setPrefSize(168/4,234/4);
+		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+25);
+		choix_ball_earth.setLayoutY(550);
+		choix_ball_earth.setOnAction(value ->  {
+			gw.setBallSkin("earth_ball.png");
+	    });
+		
+		
+		Button[] tab_skin= {title_ball_skin,choix_ball_sun,choix_ball_green,
+				choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
+				choix_ball_earth};
+		
+		
+		startRoot.getChildren().addAll(title_ball_skin,choix_ball_sun,choix_ball_green
+				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
+				choix_ball_earth);
+		
 		finish_button.setOnAction(value ->  {
-			
+			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
 			visible_change(tab_init,true);
-			
 			
 	    });
 		

@@ -4,6 +4,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 
 import java.awt.Dimension;
 import java.util.Random;
@@ -11,6 +12,8 @@ import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -78,6 +81,8 @@ public class GameView {
         
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
+        
+        setBallSkin("saturne_ball.png");
         
         murA = new Rectangle();//mur du haut
         murA.setWidth(court.getWidth() * scale + 2 * xMargin);
@@ -214,8 +219,7 @@ public class GameView {
 		
 		quit.setCursor(Cursor.HAND);
 		quit.setOnAction(value ->  {
-			court.reset();
-			court.reset_score();
+			reset();
 			quit.setVisible(false);
 			App.getStage().setScene(start);
 			App.getStage().setFullScreen(true);
@@ -305,7 +309,12 @@ public class GameView {
 	    });
 		
 		gameRoot.getChildren().addAll(replay,title_end,quit);
-		
-		
+    }
+    
+    
+    public void setBallSkin(String s) {
+    	String t = "Ball_skin/"+s;
+    	Image i = new Image(getClass().getResourceAsStream(t));
+        ball.setFill(new ImagePattern(i));
     }
 }

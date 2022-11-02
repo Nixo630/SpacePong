@@ -14,7 +14,7 @@ public class Court {
     private final double width, height; // m
     private final double racketSpeed = 300.0; // m/s
     private double racketSize = 100.0; // m
-    private final double ballRadius = 10.0; // m
+    private final double ballRadius = 15.0; // m
     // instance state
     private double racketA; // m
     private double racketB; // m
