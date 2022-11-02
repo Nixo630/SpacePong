@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -25,10 +26,14 @@ public class GameStart {
 	private Pane startRoot;
 	private Pane gameRoot;
 	
+	private GameView gw;
+	
+	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw) {
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
+		this.gw = gw;
 		
 		gameRoot.setId("choix_galaxie");
 		
@@ -243,7 +248,7 @@ public class GameStart {
 		Button choix_galaxie = new Button();
 		choix_galaxie.setId("choix_galaxie");
 		choix_galaxie.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
+		choix_galaxie.setCursor(Cursor.HAND);
 		choix_galaxie.setPrefSize(1600/8,1200/10);
 		choix_galaxie.setLayoutX(20+title_choix_bg.getPrefWidth()+25);
 		choix_galaxie.setLayoutY(200);
@@ -255,7 +260,7 @@ public class GameStart {
 		Button choix_trou_noir = new Button();
 		choix_trou_noir.setId("choix_trou_noir");
 		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
+		choix_trou_noir.setCursor(Cursor.HAND);
 		choix_trou_noir.setPrefSize(1600/8,900/7.5);
 		choix_trou_noir.setLayoutX(20 + choix_galaxie.getLayoutX()+choix_galaxie.getPrefWidth()+25);
 		choix_trou_noir.setLayoutY(200);
@@ -268,7 +273,7 @@ public class GameStart {
 		Button choix_earth = new Button();
 		choix_earth.setId("choix_earth");
 		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
+		choix_earth.setCursor(Cursor.HAND);
 		choix_earth.setPrefSize(1920/9.6,1080/9);
 		choix_earth.setLayoutX(20 + choix_trou_noir.getLayoutX()+choix_trou_noir.getPrefWidth()+25);
 		choix_earth.setLayoutY(200);
@@ -281,7 +286,7 @@ public class GameStart {
 		Button choix_earth2 = new Button();
 		choix_earth2.setId("choix_earth2");
 		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
+		choix_earth2.setCursor(Cursor.HAND);
 		choix_earth2.setPrefSize(1920/9.6,1080/9);
 		choix_earth2.setLayoutX(20 + choix_earth.getLayoutX()+choix_earth.getPrefWidth()+25);
 		choix_earth2.setLayoutY(200);
@@ -293,12 +298,55 @@ public class GameStart {
 		Button finish_button = new Button();
 		finish_button.setId("finish_button");
 		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
+		finish_button.setCursor(Cursor.HAND);
 		finish_button.setPrefSize(1795/8,332/8);
 		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
 		finish_button.setLayoutY(height-100);
 		
-		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button};
+		
+		startRoot.getChildren().addAll(title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button);
+		
+		
+		
+		// User can choose between with middle bar or without middle bar 
+		
+		Button title_middle_bar = new Button();
+		title_middle_bar.setId("title_middle_bar");
+		title_middle_bar.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		title_middle_bar.setPrefSize(2872/8,311/8);
+		title_middle_bar.setLayoutX(20);
+		title_middle_bar.setLayoutY(450);
+		
+		Button middle_bar_yes = new Button();
+		middle_bar_yes.setId("middle_bar_yes");
+		middle_bar_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		middle_bar_yes.setPrefSize(497/4,464/4);
+		middle_bar_yes.setLayoutX(20+title_middle_bar.getPrefWidth()+25);
+		middle_bar_yes.setLayoutY(400);
+		
+		middle_bar_yes.setOnAction(value ->  {
+			gw.Visible_middle_bar(true);
+	    });
+		
+		Button middle_bar_no = new Button();
+		middle_bar_no.setId("middle_bar_no");
+		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		middle_bar_no.setPrefSize(497/4,464/4);
+		middle_bar_no.setLayoutX(middle_bar_yes.getLayoutX()+middle_bar_yes.getPrefWidth()+25);
+		middle_bar_no.setLayoutY(400);
+		
+		middle_bar_no.setOnAction(value ->  {
+			gw.Visible_middle_bar(false);
+	    });
+		
+		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no);
+		
+		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,
+				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
+				middle_bar_no};
 		
 		finish_button.setOnAction(value ->  {
 			
@@ -307,8 +355,6 @@ public class GameStart {
 			
 			
 	    });
-		
-		startRoot.getChildren().addAll(title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button);
 		
 	}
 }

@@ -40,3 +40,23 @@
     -fx-background-size: cover;
 }
 
+#title_middle_bar{
+    -fx-background-image: url("middle_bar_title.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+
+#middle_bar_yes{
+    -fx-background-image: url("yes_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#middle_bar_no{
+    -fx-background-image: url("no_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+

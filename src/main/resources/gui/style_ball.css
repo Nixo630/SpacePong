@@ -1,0 +1,6 @@
+#default_ball{
+    -fx-background-image: url("earth_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+    
+}

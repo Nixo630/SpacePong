@@ -35,7 +35,7 @@ public class GameView {
     		Color.BROWN, Color.CYAN, Color.GOLD, Color.GREEN, Color.LIME,
     		Color.MAGENTA, Color.ORANGE, Color.PURPLE, Color.RED, Color.WHITE,
     		Color.YELLOW}; // liste de couleurs possibles pour la balle
-    private static Color colorBall = Color.BLACK;
+    
     
     private boolean changement_taille_racket;
     private final Scene start;
@@ -74,8 +74,8 @@ public class GameView {
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
-        ball.setFill(colorBall);
-
+        ball.getStyleClass().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+        
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
         
@@ -114,16 +114,6 @@ public class GameView {
         murE.setX(court.getBallX() * scale + xMargin-(court.getBallRadius()/2));
         murE.setY(0);
         
-        Rectangle background = new Rectangle();
-        //background.setWidth(court.getWidth() * scale + 2 * xMargin);
-        //background.setHeight(court.getHeight() * scale);
-        background.setId("pane");
-        //background.setFill(Color.BLUE);
-        background.setX(0);
-        background.setY(0);
-        background.getStyleClass().addAll(this.getClass().getResource("style.css").toExternalForm());
-        
-        
         
         affScoreA = new Label(""+court.getScoreA());
         affScoreA.setFont(Font.font("Cambria",250));
@@ -135,7 +125,11 @@ public class GameView {
         affScoreB.setTextFill(Color.DARKGREY);
         affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
         
-        gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD, affScoreA, affScoreB, ball);
+        gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
+    }
+    
+    public void Visible_middle_bar(boolean b) {
+    	murE.setVisible(b);
     }
     
     public void animate() {
@@ -156,6 +150,7 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
+                 
                 if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
                 	
                 	Random rd = new Random();
@@ -168,20 +163,18 @@ public class GameView {
             		        	
                 	court.resetBallTouched();
                 }
-                                
+                             
                 if(court.scored()) {             
                 	affScoreA.setText(""+court.getScoreA());
                     affScoreB.setText(""+court.getScoreB());
-                    colorBall = Color.BLACK;
-                	ball.setFill(colorBall);
+                    
                 	
                 	court.setRacketSize(100);
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	court.resetScored();
                 }
-                if(court.getLost()) {
-                	
+                if(court.getLost()) {   	
                 	lost_game();
                 }
 			}
