@@ -7,8 +7,10 @@ import java.util.TimerTask;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -342,11 +344,7 @@ public class GameStart {
 			gw.Visible_middle_bar(false);
 	    });
 		
-		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no);
 		
-		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,
-				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
-				middle_bar_no};
 		
 		//Mise en place du choix du skin de la balle pour le joueur
 		
@@ -446,11 +444,88 @@ public class GameStart {
 				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
 				choix_ball_earth);
 		
+		
+		Button title_ball_difficult = new Button ();
+		title_ball_difficult.setId("ball_difficulty");
+		title_ball_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		title_ball_difficult.setPrefSize(3222/9,492/9);
+		title_ball_difficult.setLayoutX(middle_bar_no.getLayoutX()+middle_bar_no.getPrefWidth()+100);
+		title_ball_difficult.setLayoutY(450);
+		
+		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no,title_ball_difficult);
+		
+		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,
+				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
+				middle_bar_no,title_ball_difficult};
+		
+		
+		title_ball_difficult.setOnAction(value ->  {
+			visible_change(tab_skin,false);
+			visible_change(tab_setting,false);
+			print_setting_ball_difficulty(tab_setting,tab_skin);
+			
+	    });
+		
 		finish_button.setOnAction(value ->  {
 			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
 			visible_change(tab_init,true);
 			
+	    });
+		
+	}
+	
+	public void print_setting_ball_difficulty(Button [] tab1, Button[] tab2) {
+		Button title_s = new Button();
+		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		title_s.setId("ball_difficulty");
+		
+		title_s.setPrefSize(3222/7,492/7);
+		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
+		title_s.setLayoutY(50);
+		
+		Label explication = new Label("Ici vous pouvez choisir si voulez un changent aleatoire de la taille des rackets a chaque rebond");
+		explication.setFont(Font.font("Cambria",25));
+		explication.setTextFill(Color.DARKGREY);
+		explication.setPrefWidth(1025);
+		explication.setLayoutX(width/2 - explication.getPrefWidth()/2);
+		explication.setLayoutY(150);
+		
+		Button button_yes = new Button();
+		button_yes.setId("middle_bar_yes");
+		button_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		button_yes.setPrefSize(497/4,464/4);
+		button_yes.setLayoutX(width/2 - button_yes.getPrefWidth()-25);
+		button_yes.setLayoutY(250);
+		
+		Button button_no = new Button();
+		button_no.setId("middle_bar_no");
+		button_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		
+		button_no.setPrefSize(497/4,464/4);
+		button_no.setLayoutX(width/2 + button_no.getPrefWidth()+25);
+		button_no.setLayoutY(250);
+		
+		startRoot.getChildren().addAll(title_s,explication,button_yes,button_no);
+		
+		Button[] difficulty= {title_s,button_yes,button_no};
+		
+		button_yes.setOnAction(value ->  {
+			gw.setChangeRacketSize(true);
+			visible_change(tab1,true);
+			visible_change(tab2,true);
+			visible_change(difficulty,false);
+			explication.setVisible(false);
+	    });
+		
+		button_no.setOnAction(value ->  {
+			gw.setChangeRacketSize(false);
+			visible_change(tab1,true);
+			visible_change(tab2,true);
+			visible_change(difficulty,false);
+			explication.setVisible(false);
 	    });
 		
 	}

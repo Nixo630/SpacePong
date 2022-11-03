@@ -311,6 +311,9 @@ public class GameView {
 		gameRoot.getChildren().addAll(replay,title_end,quit);
     }
     
+    public void setChangeRacketSize(boolean b) {
+    	changement_taille_racket = b;
+    }
     
     public void setBallSkin(String s) {
     	String t = "Ball_skin/"+s;
