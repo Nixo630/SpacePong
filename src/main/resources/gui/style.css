@@ -46,6 +46,12 @@
     -fx-background-size: cover;
 }
 
+#resume_button{
+    -fx-background-image: url("resume_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
 #settings_button{
     -fx-background-image: url("setting_button.png");
     -fx-background-color: TRANSPARENT;

@@ -217,16 +217,35 @@ public class GameView {
 		quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
 		quit.setLayoutY(650);
 		
+		Button resume = new Button();
+		resume.setId("resume_button");
+		resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		resume.setPrefSize(1329/4,138/4);
+		resume.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+		resume.setLayoutY(450);
+		
+		resume.setCursor(Cursor.HAND);
+		resume.setOnAction(value ->  {
+			startAnimation();
+			quit.setVisible(false);
+			resume.setVisible(false);
+			
+			
+	    });
+		
 		quit.setCursor(Cursor.HAND);
 		quit.setOnAction(value ->  {
 			reset();
 			quit.setVisible(false);
+			resume.setVisible(false);
 			App.getStage().setScene(start);
 			App.getStage().setFullScreen(true);
 			
 	    });
 		
-		gameRoot.getChildren().addAll(quit);
+		gameRoot.getChildren().addAll(quit,resume);
     } 
     
     public void lost_game() {
