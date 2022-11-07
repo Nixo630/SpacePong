@@ -14,7 +14,7 @@ public class Court {
     private final double width, height; // m
     private final double racketSpeed = 300.0; // m/s
     private double racketSize = 100.0; // m
-    private final double ballRadius = 15.0; // m
+    private final double ballRadius = 20.0; // m
     // instance state
     private double racketA; // m
     private double racketB; // m
@@ -132,7 +132,7 @@ public class Court {
             Sound("WallSound.wav");
         }
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
+                || (nextBallX > width - 120 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0) {
             	ballSpeedX = -(ballSpeedX + 25);
             	Sound("RacketSound.wav");
@@ -165,7 +165,7 @@ public class Court {
         	playerLost();
         	Sound("LoseSound.wav");
             return true;
-        } else if (nextBallX > width) {
+        } else if (nextBallX > width - 120) {
         	setScoreA(scoreA+1);
         	playerLost();
         	Sound("LoseSound.wav");

@@ -9,6 +9,7 @@
     -fx-background-image: url("start_button.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #title{
@@ -26,47 +27,55 @@
     -fx-background-image: url("solo.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #replay_button{
     -fx-background-image: url("replay.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #multiplay_play_button{
     -fx-background-image: url("multiplayer.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #quit_button{
     -fx-background-image: url("exit_button.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #resume_button{
     -fx-background-image: url("resume_button.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #settings_button{
     -fx-background-image: url("setting_button.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #bg_trou_noir{
     -fx-background-image: url("bg_trou_noir.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #bg_galaxie{
     -fx-background-image: url("bg_galaxie.jpg");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 

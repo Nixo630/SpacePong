@@ -1,6 +1,7 @@
 package gui;
 
 
+import java.awt.Dimension;
 import java.io.File;
 
 import javax.sound.sampled.AudioSystem;
@@ -54,7 +55,11 @@ public class App extends Application {
         var playerA = new Player();
         var playerB = new Player();
         
-        var court = new Court(playerA, playerB, 1450, 860);
+        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		double height = (int)dimension.getHeight();
+		double width  = (int)dimension.getWidth();
+        
+        var court = new Court(playerA, playerB, width, height);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView);
         

@@ -72,8 +72,8 @@ public class GameView {
         racketB.setWidth(racketThickness);
         racketB.setFill(Color.DARKGREY);
 
-        racketB.setX(court.getWidth() * scale + xMargin);
-        racketB.setY(court.getRacketB() * scale);
+        racketB.setX(court.getWidth() - xMargin - racketThickness);
+        racketB.setY(court.getRacketB());
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
@@ -85,50 +85,52 @@ public class GameView {
         setBallSkin("saturne_ball.png");
         
         murA = new Rectangle();//mur du haut
-        murA.setWidth(court.getWidth() * scale + 2 * xMargin);
+        murA.setWidth(court.getWidth());
         murA.setHeight(murThickness);
         murA.setFill(Color.BLACK);
         murA.setX(0);
         murA.setY(0);
         
         murB = new Rectangle();//mur du bas
-        murB.setWidth(court.getWidth() * scale + 2 * xMargin);
+        murB.setWidth(court.getWidth());
         murB.setHeight(murThickness);
         murB.setFill(Color.BLACK);
         murB.setX(0);
-        murB.setY(court.getHeight());
+        murB.setY(court.getHeight()-murThickness);
         
         murC = new Rectangle();//mur de gauche
         murC.setWidth(murThickness);
-        murC.setHeight(court.getHeight() * scale);
+        murC.setHeight(court.getHeight());
         murC.setFill(Color.BLACK);
         murC.setX(0);
         murC.setY(0);
         
         murD = new Rectangle();//mur de droite
         murD.setWidth(murThickness);
-        murD.setHeight(court.getHeight() * scale + murThickness);
+        murD.setHeight(court.getHeight());
         murD.setFill(Color.BLACK);
-        murD.setX(court.getWidth() * scale + 2 * xMargin);
+        murD.setX(court.getWidth()-murThickness);
         murD.setY(0);
         
         murE = new Rectangle();//mur du milieu
         murE.setWidth(murThickness);
-        murE.setHeight(court.getHeight() * scale + murThickness);
+        murE.setHeight(court.getHeight());
         murE.setFill(Color.BLACK);
-        murE.setX(court.getBallX() * scale + xMargin-(court.getBallRadius()/2));
+        murE.setX(court.getWidth()/2);
         murE.setY(0);
         
         
         affScoreA = new Label(""+court.getScoreA());
-        affScoreA.setFont(Font.font("Cambria",250));
+        affScoreA.setFont(Font.font("Cambria",1000));
         affScoreA.setTextFill(Color.DARKGREY);
-        affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/2);
+        affScoreA.setLayoutX(court.getWidth()/8);
+        affScoreA.setLayoutY(-75);
         
         affScoreB = new Label(""+court.getScoreB());
-        affScoreB.setFont(Font.font("Cambria",250));
+        affScoreB.setFont(Font.font("Cambria",1000));
         affScoreB.setTextFill(Color.DARKGREY);
-        affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
+        affScoreB.setLayoutX(court.getWidth()/1.7);
+        affScoreB.setLayoutY(-75);
         
         gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
     }
@@ -270,10 +272,6 @@ public class GameView {
 		title_end.setLayoutX(width/2 - title_end.getPrefWidth()/2);
 		title_end.setLayoutY(50);
 		
-		//Affichage des score
-		
-		affScoreA.setLayoutY(200);
-		affScoreB.setLayoutY(200);
 		
 		//Bouton pour rejouer
 		Button replay = new Button();
@@ -282,10 +280,10 @@ public class GameView {
 		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		replay.setPrefSize(2489/4.5,380/4.5);
+		replay.setPrefSize(2489/6,380/6);
 		
-		replay.setLayoutX(width/2 - replay.getPrefWidth());
-		replay.setLayoutY(625);
+		replay.setLayoutX(court.getWidth()/2 - replay.getPrefWidth()/2);
+		replay.setLayoutY(450);
 		
 		
 		
@@ -296,8 +294,8 @@ public class GameView {
 		
 		
 		quit.setPrefSize(1238/4,461/4);
-		quit.setLayoutX(width/2 + quit.getPrefWidth()/1.5);
-		quit.setLayoutY(610);
+		quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+		quit.setLayoutY(650);
 		
 		quit.setCursor(Cursor.HAND);
 		quit.setOnAction(value ->  {

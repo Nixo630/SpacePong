@@ -14,30 +14,35 @@
     -fx-background-image: url("bg_galaxie.jpg");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #choix_trou_noir{
     -fx-background-image: url("bg_trou_noir.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #choix_earth{
     -fx-background-image: url("bg_earth.jpg");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #choix_earth2{
     -fx-background-image: url("bg_earth2.jpg");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #finish_button{
     -fx-background-image: url("button_apply.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #title_middle_bar{
@@ -51,12 +56,14 @@
     -fx-background-image: url("yes_button.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 #middle_bar_no{
     -fx-background-image: url("no_button.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
+    -fx-cursor:hand;
 }
 
 
