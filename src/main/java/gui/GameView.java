@@ -206,48 +206,50 @@ public class GameView {
     }
     
     public void pause() {
-    	stopAnimation();
-    	Button quit = new Button();
-		quit.setCancelButton(true);
-		quit.setId("quit_button");
-		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		
-		quit.setPrefSize(1238/4,461/4);
-		quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
-		quit.setLayoutY(650);
-		
-		Button resume = new Button();
-		resume.setId("resume_button");
-		resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		
-		resume.setPrefSize(1329/4,138/4);
-		resume.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
-		resume.setLayoutY(450);
-		
-		resume.setCursor(Cursor.HAND);
-		resume.setOnAction(value ->  {
-			court.setEndGame(false);
-			startAnimation();
-			quit.setVisible(false);
-			resume.setVisible(false);
+    	if (court.getPartiEnCours()) {
+	    	stopAnimation();
+	    	Button quit = new Button();
+			quit.setCancelButton(true);
+			quit.setId("quit_button");
+			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
 			
-	    });
-		
-		quit.setCursor(Cursor.HAND);
-		quit.setOnAction(value ->  {
-			court.setEndGame(false);
-			reset();
-			quit.setVisible(false);
-			resume.setVisible(false);
-			App.getStage().setScene(start);
-			App.getStage().setFullScreen(true);
+			quit.setPrefSize(1238/4,461/4);
+			quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+			quit.setLayoutY(650);
 			
-	    });
-		
-		gameRoot.getChildren().addAll(quit,resume);
+			Button resume = new Button();
+			resume.setId("resume_button");
+			resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+			
+			
+			resume.setPrefSize(1329/4,138/4);
+			resume.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+			resume.setLayoutY(450);
+			
+			resume.setCursor(Cursor.HAND);
+			resume.setOnAction(value ->  {
+				court.setPartiEnCours(true);
+				startAnimation();
+				quit.setVisible(false);
+				resume.setVisible(false);
+				
+				
+		    });
+			
+			quit.setCursor(Cursor.HAND);
+			quit.setOnAction(value ->  {
+				reset();
+				quit.setVisible(false);
+				resume.setVisible(false);
+				court.setPartiEnCours(false);
+				App.getStage().setScene(start);
+				App.getStage().setFullScreen(true);
+				
+		    });
+			
+			gameRoot.getChildren().addAll(quit,resume);
+    	}
     } 
     
     public void lost_game() {
@@ -318,7 +320,7 @@ public class GameView {
 		
 		replay.setOnAction(value ->  {
 			reset();
-			
+			court.setPartiEnCours(true);
 			quit.setVisible(false);
 			replay.setVisible(false);
 			title_end.setVisible(false);

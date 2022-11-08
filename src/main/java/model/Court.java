@@ -30,11 +30,17 @@ public class Court {
     private boolean ballTouched = false;
     private boolean scored = false;
     
-    private boolean endGame = false;
+    private boolean partiEnCours = false;
     
     private boolean lost=false;
     
-    
+    // Idée : pour la mise en pause
+    //Créer un boolean partieEnCours
+    // TU fais tout les vérifications dans la fonction, tu dois juste verifier si partieEnCours est égale à True
+    //Si c'est le cas tu affiches les bouton résume et exit
+    //Sinon tu fais rien
+    // Bien oublie pas quand tu appuis sur la touche p ou le bouton de Adem la fonction partieEnCours est égale à false
+    // Comme ca y'a pas l'erreur d'apuiiyer plusieurs fois sur pause.
 
     public Court(RacketController playerA, RacketController playerB,
     		double width, double height) {
@@ -50,12 +56,12 @@ public class Court {
         isBot = b;
     }
     
-    public boolean getEndGame() {
-    	return endGame;
+    public boolean getPartiEnCours() {
+    	return partiEnCours;
     }
     
-    public void setEndGame(boolean b) {
-    	endGame = b;
+    public void setPartiEnCours(boolean b) {
+    	partiEnCours = b;
     }
 
     public boolean getIsBot(){
@@ -279,7 +285,7 @@ public class Court {
     	scored = true;
     	if (scoreA==5 || scoreB== 5) {
     	// On joue le son
-    		endGame = true;
+    		partiEnCours = false;
     		sound("lost.wav");
     		
     		lost = true;

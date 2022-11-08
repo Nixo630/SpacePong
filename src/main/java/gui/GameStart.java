@@ -71,6 +71,7 @@ public class GameStart {
 		play.setLayoutY(280);
 		
 		play.setOnAction(value ->  {
+			court.setPartiEnCours(true);
 			court.setIsBot(true);
 			App.getStage().setScene(courtScene);
 			App.getStage().setFullScreen(true);
@@ -92,6 +93,7 @@ public class GameStart {
 		
 		multiplay.setOnAction(value ->  {
 			court.setIsBot(false);
+			court.setPartiEnCours(true);
 			App.getStage().setScene(courtScene);
 			App.getStage().setFullScreen(true);
 			gw.startAnimation();

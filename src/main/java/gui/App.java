@@ -73,10 +73,8 @@ public class App extends Application {
                     }
                     break;
                 case P:
-                	if (!court.getEndGame()) {
-                		court.setEndGame(true);
                 		gameView.pause();
-                	}
+                	
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
