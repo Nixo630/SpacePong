@@ -148,7 +148,7 @@ public class Court {
     /**
      * @return true if a player lost
      */
-    private boolean updateBall(double deltaT) {
+     private boolean updateBall(double deltaT) {
         // first, compute possible next position if nothing stands in the way
         double nextBallX = ballX + deltaT * ballSpeedX;
         double nextBallY = ballY + deltaT * ballSpeedY;
@@ -160,12 +160,12 @@ public class Court {
             nextBallY = ballY + deltaT * ballSpeedY;}
             else {
 
-            if (nextBallY < 0) {
+            if (nextBallY < 70) {
             setScoreB(scoreB+1);
             playerLost();
             return true;
             
-            } else if (nextBallY > height) {
+            } else if (nextBallY > height-50) {
             setScoreA(scoreA+1);
             playerLost();
             return true;
@@ -173,18 +173,18 @@ public class Court {
             }
         
             if ((nextBallX < 50 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
+                || (nextBallX > width +50 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
             else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {ballSpeedY += 25;}
             else {ballSpeedY -= 25;}
             nextBallX = ballX + deltaT * ballSpeedX;
-        } else if (nextBallX < 0) {
+        } else if (nextBallX < 50) {
             setScoreB(scoreB+1);
             playerLost();
             return true;
             
-        } else if (nextBallX > width) {
+        } else if (nextBallX > width+50) {
             setScoreA(scoreA+1);
             playerLost();
             return true;
@@ -194,6 +194,7 @@ public class Court {
         ballY = nextBallY;
         return false;
     }
+
 
 
     public void playerLost() {
