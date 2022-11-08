@@ -1,6 +1,7 @@
 package gui;
 
 
+import java.awt.Dimension;
 import java.io.File;
 
 import javax.sound.sampled.AudioSystem;
@@ -33,7 +34,10 @@ public class App extends Application {
     	
 
         var root = new Pane();
+        
         var gameScene = new Scene(root);
+        gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+     
         
         var lost = new Pane();
         lost.setId("pane");
@@ -50,6 +54,15 @@ public class App extends Application {
         }
         var playerA = new Player();
         var playerB = new Player();
+        
+        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		double height = (int)dimension.getHeight();
+		double width  = (int)dimension.getWidth();
+        
+        var court = new Court(playerA, playerB, width, height);
+        var gameView = new GameView(court, root, 1.0,startScene);
+        var gameStart = new GameStart(start,root,gameScene,gameView);
+        
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case Z:
@@ -64,6 +77,8 @@ public class App extends Application {
                 case DOWN:
                     playerB.state = RacketController.State.GOING_DOWN;
                     break;
+                case P:
+                	gameView.pause();
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
@@ -86,11 +101,10 @@ public class App extends Application {
                 	break;
             }
         });
+        
+        
                
-        var court = new Court(playerA, playerB, 1000, 600, lostScene);
-        var gameView = new GameView(court, root, 1.0);
-        var gameStart = new GameStart(start,gameScene,gameView);
-        var gameLost = new GameLost(lost,gameScene, gameView,startScene);
+       
         
         /*
         try

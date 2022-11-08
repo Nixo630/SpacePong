@@ -1,81 +1,78 @@
-#pane{
-    -fx-background-image: url("background_start.jpg");
-    -fx-background-repeat: stretch;   
-    -fx-background-size: cover;
-    -fx-background-position: center center;
-}
-
-#start_button{
-    -fx-background-image: url("start_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-    -fx-cursor:hand;
-}
-
 #title{
-    -fx-background-image: url("title.png");
+    -fx-background-image: url("settings_title.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
 }
 
-#title_end{
-    -fx-background-image: url("partie_terminee.png");
+#title_choix_bg{
+    -fx-background-image: url("choix_bg.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
 }
-#solo_play_button{
-    -fx-background-image: url("solo.png");
+
+#choix_galaxie{
+    -fx-background-image: url("bg_galaxie.jpg");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
     -fx-cursor:hand;
 }
 
-#replay_button{
-    -fx-background-image: url("replay.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-    -fx-cursor:hand;
-}
-
-#multiplay_play_button{
-    -fx-background-image: url("multiplayer.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-    -fx-cursor:hand;
-}
-
-#quit_button{
-    -fx-background-image: url("exit_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-    -fx-cursor:hand;
-}
-
-#resume_button{
-    -fx-background-image: url("resume_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-    -fx-cursor:hand;
-}
-
-#settings_button{
-    -fx-background-image: url("setting_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-    -fx-cursor:hand;
-}
-
-#bg_trou_noir{
+#choix_trou_noir{
     -fx-background-image: url("bg_trou_noir.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
     -fx-cursor:hand;
 }
 
-#bg_galaxie{
-    -fx-background-image: url("bg_galaxie.jpg");
+#choix_earth{
+    -fx-background-image: url("bg_earth.jpg");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
     -fx-cursor:hand;
 }
+
+#choix_earth2{
+    -fx-background-image: url("bg_earth2.jpg");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+    -fx-cursor:hand;
+}
+
+#finish_button{
+    -fx-background-image: url("button_apply.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+    -fx-cursor:hand;
+}
+
+#title_middle_bar{
+    -fx-background-image: url("middle_bar_title.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+
+#middle_bar_yes{
+    -fx-background-image: url("yes_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+    -fx-cursor:hand;
+}
+
+#middle_bar_no{
+    -fx-background-image: url("no_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+    -fx-cursor:hand;
+}
+
+
+#ball_difficulty{
+    -fx-background-image: url("raquet_difficulty.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+
+
 

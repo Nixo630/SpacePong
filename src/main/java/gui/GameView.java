@@ -1,12 +1,19 @@
 package gui;
 
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 
+import java.awt.Dimension;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -21,7 +28,7 @@ public class GameView {
     		murThickness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB, murA, murB, murC, murD, murE, background;
+    private final Rectangle racketA, racketB, murA, murB, murC, murD, murE;
     private final Circle ball;
     
     private Label affScoreA, affScoreB;   
@@ -31,17 +38,23 @@ public class GameView {
     		Color.BROWN, Color.CYAN, Color.GOLD, Color.GREEN, Color.LIME,
     		Color.MAGENTA, Color.ORANGE, Color.PURPLE, Color.RED, Color.WHITE,
     		Color.YELLOW}; // liste de couleurs possibles pour la balle
-    private static Color colorBall = Color.BLACK;
+    
+    
+    private boolean changement_taille_racket;
+    private final Scene start;
 
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
      * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
      */
-    public GameView(Court court, Pane root, double scale) {
+    public GameView(Court court, Pane root, double scale,Scene startScene) {
         this.court = court;
         this.gameRoot = root;
         this.scale = scale;
+        start = startScene;
+        
+        changement_taille_racket = false;
 
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
@@ -59,69 +72,71 @@ public class GameView {
         racketB.setWidth(racketThickness);
         racketB.setFill(Color.DARKGREY);
 
-        racketB.setX(court.getWidth() * scale + xMargin);
-        racketB.setY(court.getRacketB() * scale);
+        racketB.setX(court.getWidth() - xMargin - racketThickness);
+        racketB.setY(court.getRacketB());
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
-        ball.setFill(colorBall);
-
+        ball.getStyleClass().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+        
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
         
+        setBallSkin("saturne_ball.png");
+        
         murA = new Rectangle();//mur du haut
-        murA.setWidth(court.getWidth() * scale + 2 * xMargin);
+        murA.setWidth(court.getWidth());
         murA.setHeight(murThickness);
         murA.setFill(Color.BLACK);
         murA.setX(0);
         murA.setY(0);
         
         murB = new Rectangle();//mur du bas
-        murB.setWidth(court.getWidth() * scale + 2 * xMargin);
+        murB.setWidth(court.getWidth());
         murB.setHeight(murThickness);
         murB.setFill(Color.BLACK);
         murB.setX(0);
-        murB.setY(court.getHeight());
+        murB.setY(court.getHeight()-murThickness);
         
         murC = new Rectangle();//mur de gauche
         murC.setWidth(murThickness);
-        murC.setHeight(court.getHeight() * scale);
+        murC.setHeight(court.getHeight());
         murC.setFill(Color.BLACK);
         murC.setX(0);
         murC.setY(0);
         
         murD = new Rectangle();//mur de droite
         murD.setWidth(murThickness);
-        murD.setHeight(court.getHeight() * scale + murThickness);
+        murD.setHeight(court.getHeight());
         murD.setFill(Color.BLACK);
-        murD.setX(court.getWidth() * scale + 2 * xMargin);
+        murD.setX(court.getWidth()-murThickness);
         murD.setY(0);
         
         murE = new Rectangle();//mur du milieu
         murE.setWidth(murThickness);
-        murE.setHeight(court.getHeight() * scale + murThickness);
+        murE.setHeight(court.getHeight());
         murE.setFill(Color.BLACK);
-        murE.setX(court.getBallX() * scale + xMargin-(court.getBallRadius()/2));
+        murE.setX(court.getWidth()/2);
         murE.setY(0);
         
-        background = new Rectangle();
-        background.setWidth(court.getWidth() * scale + 2 * xMargin);
-        background.setHeight(court.getHeight() * scale);
-        background.setFill(Color.DODGERBLUE);
-        background.setX(0);
-        background.setY(0);
         
         affScoreA = new Label(""+court.getScoreA());
-        affScoreA.setFont(Font.font("Cambria",500));
+        affScoreA.setFont(Font.font("Cambria",1000));
         affScoreA.setTextFill(Color.DARKGREY);
-        affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/4);
+        affScoreA.setLayoutX(court.getWidth()/8);
+        affScoreA.setLayoutY(-75);
         
         affScoreB = new Label(""+court.getScoreB());
-        affScoreB.setFont(Font.font("Cambria",500));
+        affScoreB.setFont(Font.font("Cambria",1000));
         affScoreB.setTextFill(Color.DARKGREY);
-        affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
+        affScoreB.setLayoutX(court.getWidth()/1.7);
+        affScoreB.setLayoutY(-75);
         
-        gameRoot.getChildren().addAll(background,racketA, racketB, murA, murB, murC, murD, murE, affScoreA, affScoreB, ball);
+        gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
+    }
+    
+    public void Visible_middle_bar(boolean b) {
+    	murE.setVisible(b);
     }
     
     public void animate() {
@@ -142,13 +157,10 @@ public class GameView {
                 racketB.setY(court.getRacketB() * scale);
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
-                if(court.getBallTouched()) { // la balle touche la raquette
+                 
+                if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
                 	
-                	// Changement de couleur
                 	Random rd = new Random();
-                	int index = rd.nextInt(0, colorList.length);
-                	colorBall = colorList[index];
-                	ball.setFill(colorBall);
                 	
                 	// Changement de tailles de raquettes
                 	int h = rd.nextInt(50, 201);
@@ -158,33 +170,34 @@ public class GameView {
             		        	
                 	court.resetBallTouched();
                 }
-                                
+                             
                 if(court.scored()) {             
                 	affScoreA.setText(""+court.getScoreA());
                     affScoreB.setText(""+court.getScoreB());
-                    colorBall = Color.BLACK;
-                	ball.setFill(colorBall);
+                    
                 	
                 	court.setRacketSize(100);
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	court.resetScored();
-                }                
+                }
+                if(court.getLost()) {   	
+                	lost_game();
+                }
 			}
     		
     	};
     	aTimer.start();
     }
     
-    public int getScoreA() {
-    	return court.getScoreA();
+    public void reset() {
+    	affScoreA.setLayoutY(25);
+		affScoreB.setLayoutY(25);
+    	affScoreA.setText("0");
+    	affScoreB.setText("0");
+    	court.reset();
+    	court.reset_score();
     }
-    
-    public int getScoreB() {
-    	return court.getScoreB();
-    }
-    
-    
     
     public static void stopAnimation() {
     	aTimer.stop();
@@ -193,5 +206,135 @@ public class GameView {
     public void startAnimation() {
     	animate();
     }
-         
+    
+    public void pause() {
+    	stopAnimation();
+    	Button quit = new Button();
+		quit.setCancelButton(true);
+		quit.setId("quit_button");
+		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		quit.setPrefSize(1238/4,461/4);
+		quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+		quit.setLayoutY(650);
+		
+		Button resume = new Button();
+		resume.setId("resume_button");
+		resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		resume.setPrefSize(1329/4,138/4);
+		resume.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+		resume.setLayoutY(450);
+		
+		resume.setCursor(Cursor.HAND);
+		resume.setOnAction(value ->  {
+			startAnimation();
+			quit.setVisible(false);
+			resume.setVisible(false);
+			
+			
+	    });
+		
+		quit.setCursor(Cursor.HAND);
+		quit.setOnAction(value ->  {
+			reset();
+			quit.setVisible(false);
+			resume.setVisible(false);
+			App.getStage().setScene(start);
+			App.getStage().setFullScreen(true);
+			
+	    });
+		
+		gameRoot.getChildren().addAll(quit,resume);
+    } 
+    
+    public void lost_game() {
+    	stopAnimation();
+    	racketA.setVisible(false);
+    	racketB.setVisible(false);
+    	ball.setVisible(false);
+    	
+    	Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		//Mise en place de l'affichage de la fin de partie
+	
+		//Ici c'est le bouton qui affiche que la partie est termine
+		
+    	Button title_end = new Button();
+		title_end.setId("title_end");
+		title_end.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		title_end.setPrefSize(2111/3,477/3);
+		title_end.setLayoutX(width/2 - title_end.getPrefWidth()/2);
+		title_end.setLayoutY(50);
+		
+		
+		//Bouton pour rejouer
+		Button replay = new Button();
+		replay.setCursor(Cursor.HAND);
+		replay.setId("replay_button");
+		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		replay.setPrefSize(2489/6,380/6);
+		
+		replay.setLayoutX(court.getWidth()/2 - replay.getPrefWidth()/2);
+		replay.setLayoutY(450);
+		
+		
+		
+		Button quit = new Button();
+		quit.setCancelButton(true);
+		quit.setId("quit_button");
+		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		
+		quit.setPrefSize(1238/4,461/4);
+		quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+		quit.setLayoutY(650);
+		
+		quit.setCursor(Cursor.HAND);
+		quit.setOnAction(value ->  {
+			reset();
+			
+			quit.setVisible(false);
+			replay.setVisible(false);
+			title_end.setVisible(false);
+			court.setLost(false);
+			racketA.setVisible(true);
+	    	racketB.setVisible(true);
+	    	ball.setVisible(true);
+			App.getStage().setScene(start);
+			App.getStage().setFullScreen(true);
+	    });
+		
+		replay.setOnAction(value ->  {
+			reset();
+			
+			quit.setVisible(false);
+			replay.setVisible(false);
+			title_end.setVisible(false);
+			court.setLost(false);
+			racketA.setVisible(true);
+	    	racketB.setVisible(true);
+	    	ball.setVisible(true);
+			startAnimation();
+	    });
+		
+		gameRoot.getChildren().addAll(replay,title_end,quit);
+    }
+    
+    public void setChangeRacketSize(boolean b) {
+    	changement_taille_racket = b;
+    }
+    
+    public void setBallSkin(String s) {
+    	String t = "Ball_skin/"+s;
+    	Image i = new Image(getClass().getResourceAsStream(t));
+        ball.setFill(new ImagePattern(i));
+    }
 }

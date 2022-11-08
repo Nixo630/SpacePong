@@ -14,7 +14,7 @@ public class Court {
     private final double width, height; // m
     private final double racketSpeed = 300.0; // m/s
     private double racketSize = 100.0; // m
-    private final double ballRadius = 10.0; // m
+    private final double ballRadius = 20.0; // m
     // instance state
     private double racketA; // m
     private double racketB; // m
@@ -26,14 +26,18 @@ public class Court {
     private Scene lostScene;
     private boolean ballTouched = false;
     private boolean scored = false;
+    
+    private boolean lost=false;
+    
+    
 
     public Court(RacketController playerA, RacketController playerB,
-    		double width, double height, Scene lostScene) {
+    		double width, double height) {
         this.playerA = playerA;
         this.playerB = playerB;
         this.width = width;
         this.height = height;
-        this.lostScene = lostScene;
+        
         reset();
     }
 
@@ -128,7 +132,7 @@ public class Court {
             Sound("WallSound.wav");
         }
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
+                || (nextBallX > width - 120 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0) {
             	ballSpeedX = -(ballSpeedX + 25);
             	Sound("RacketSound.wav");
@@ -161,7 +165,7 @@ public class Court {
         	playerLost();
         	Sound("LoseSound.wav");
             return true;
-        } else if (nextBallX > width) {
+        } else if (nextBallX > width - 120) {
         	setScoreA(scoreA+1);
         	playerLost();
         	Sound("LoseSound.wav");
@@ -190,15 +194,19 @@ public class Court {
     public void playerLost() {
     	scored = true;
     	if (scoreA==5 || scoreB== 5) {
-    		reset_score();
     	// On joue le son
     		Sound("lost.wav");
-    	
-    		GameView.stopAnimation();
-    		reset();
-    		App.getStage().setScene(lostScene);
-    		App.getStage().setFullScreen(true);
+    		
+    		lost = true;
     	}
+    }
+    
+    public boolean getLost() {
+    	return lost;
+    }
+    
+    public void setLost(boolean b) {
+    	lost = b;
     }
         
     public double getBallRadius() {
@@ -221,11 +229,12 @@ public class Court {
     	scored = false;
     }
 
-    void reset_score() {
+    public void reset_score() {
     	this.scoreA=0;
 		this.scoreB=0;
     }
-    void reset() {
+    
+    public void reset() {
     	this.racketA = height / 2;
         this.racketB = height / 2;
         this.ballSpeedX = 200.0;
