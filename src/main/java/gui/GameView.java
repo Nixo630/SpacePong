@@ -228,6 +228,7 @@ public class GameView {
 		
 		resume.setCursor(Cursor.HAND);
 		resume.setOnAction(value ->  {
+			court.setEndGame(false);
 			startAnimation();
 			quit.setVisible(false);
 			resume.setVisible(false);
@@ -237,6 +238,7 @@ public class GameView {
 		
 		quit.setCursor(Cursor.HAND);
 		quit.setOnAction(value ->  {
+			court.setEndGame(false);
 			reset();
 			quit.setVisible(false);
 			resume.setVisible(false);

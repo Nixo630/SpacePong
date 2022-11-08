@@ -31,17 +31,13 @@ public class App extends Application {
     	var startScene = new Scene(start);
     	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
     	
-
+        
         var root = new Pane();
         
         var gameScene = new Scene(root);
         gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-     
         
-        var lost = new Pane();
-        lost.setId("pane");
-        var lostScene = new Scene(lost);
-        lostScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+        
         
         class Player implements RacketController {
             State state = State.IDLE;
@@ -56,7 +52,7 @@ public class App extends Application {
         
         var court = new Court(playerA, playerB, 1450, 860);
         var gameView = new GameView(court, root, 1.0,startScene);
-        var gameStart = new GameStart(start,root,gameScene,gameView);
+        var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
@@ -67,13 +63,20 @@ public class App extends Application {
                     playerA.state = RacketController.State.GOING_DOWN;
                     break;
                 case UP:
-                    playerB.state = RacketController.State.GOING_UP;
+                    if (!court.getIsBot()){
+                        playerB.state = RacketController.State.GOING_UP;
+                    }
                     break;
-                case DOWN:
-                    playerB.state = RacketController.State.GOING_DOWN;
+                case DOWN :
+                    if (!court.getIsBot()){
+                        playerB.state = RacketController.State.GOING_DOWN;
+                    }
                     break;
                 case P:
-                	gameView.pause();
+                	if (!court.getEndGame()) {
+                		court.setEndGame(true);
+                		gameView.pause();
+                	}
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
@@ -87,11 +90,15 @@ public class App extends Application {
                     if (playerA.state == RacketController.State.GOING_DOWN) playerA.state = RacketController.State.IDLE;
                     break;
                 case UP:
-                    if (playerB.state == RacketController.State.GOING_UP) playerB.state = RacketController.State.IDLE;
+                    if (!court.getIsBot()){
+                        if (playerB.state == RacketController.State.GOING_UP) playerB.state = RacketController.State.IDLE;
+                    }
                     break;
                 case DOWN:
-                    if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
-                    break;
+                    if (!court.getIsBot()){
+                        if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
+                    }
+                    break;    
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }

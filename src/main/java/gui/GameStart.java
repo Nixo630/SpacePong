@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.ProgressBar;
+import model.Court;
 
 
 public class GameStart {
@@ -29,13 +30,15 @@ public class GameStart {
 	private Pane gameRoot;
 	
 	private GameView gw;
+	private Court court;
 	
 	
-	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw) {
+	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
 		this.gw = gw;
+		this.court = court;
 		
 		gameRoot.setId("choix_galaxie");
 		
@@ -68,6 +71,7 @@ public class GameStart {
 		play.setLayoutY(280);
 		
 		play.setOnAction(value ->  {
+			court.setIsBot(true);
 			App.getStage().setScene(courtScene);
 			App.getStage().setFullScreen(true);
 			gw.startAnimation();
@@ -87,6 +91,7 @@ public class GameStart {
 		multiplay.setLayoutY(400);
 		
 		multiplay.setOnAction(value ->  {
+			court.setIsBot(false);
 			App.getStage().setScene(courtScene);
 			App.getStage().setFullScreen(true);
 			gw.startAnimation();
@@ -175,7 +180,7 @@ public class GameStart {
 				Timer chrono = new Timer();
 				chrono.schedule(new TimerTask() {
 	
-					int time = 100;
+					int time = 25;
 					@Override
 					public void run() {
 						
@@ -193,7 +198,7 @@ public class GameStart {
 						time--;
 					}
 					
-				}, 100,25);
+				}, 100,15);
 			}
 			else {
 				visible_change(tab,true);
@@ -216,7 +221,7 @@ public class GameStart {
 	}
 	//Cette fonction fait avancer la barre de chargmement
 	public static void avancer(ProgressBar pb) {
-		pb.setProgress(0.01+pb.getProgress());
+		pb.setProgress(0.1+pb.getProgress());
 		
 	}
 	
