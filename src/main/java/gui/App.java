@@ -87,6 +87,8 @@ public class App extends Application {
                 case R:
                 	if(gameView.getEnPause()) gameView.resume(); gameView.setEnPause(false);
                 	break;
+                case ESCAPE:
+                	System.exit(0);
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
