@@ -31,6 +31,7 @@ public class GameStart {
 	
 	private GameView gw;
 	private Court court;
+	private Scene courtScene;
 	
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
@@ -39,6 +40,7 @@ public class GameStart {
 		this.gameRoot = root;
 		this.gw = gw;
 		this.court = court;
+		this.courtScene = courtScene;
 		
 		gameRoot.setId("choix_galaxie");
 		
@@ -71,11 +73,7 @@ public class GameStart {
 		play.setLayoutY(280);
 		
 		play.setOnAction(value ->  {
-			court.setPartiEnCours(true);
-			court.setIsBot(true);
-			App.getStage().setScene(courtScene);
-			App.getStage().setFullScreen(true);
-			gw.startAnimation();
+			chose_difficulty();
 	    });
 		
 		//Mise en place du bouton pour jouer à deux 
@@ -270,7 +268,7 @@ public class GameStart {
 		choix_trou_noir.setId("choix_trou_noir");
 		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_trou_noir.setCursor(Cursor.HAND);
-		choix_trou_noir.setPrefSize(1600/8,900/7.5);
+		choix_trou_noir.setPrefSize(1600/8,1200/10);
 		choix_trou_noir.setLayoutX(20 + choix_galaxie.getLayoutX()+choix_galaxie.getPrefWidth()+25);
 		choix_trou_noir.setLayoutY(200);
 		
@@ -283,7 +281,7 @@ public class GameStart {
 		choix_earth.setId("choix_earth");
 		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth.setCursor(Cursor.HAND);
-		choix_earth.setPrefSize(1920/9.6,1080/9);
+		choix_earth.setPrefSize(1600/8,1200/10);
 		choix_earth.setLayoutX(20 + choix_trou_noir.getLayoutX()+choix_trou_noir.getPrefWidth()+25);
 		choix_earth.setLayoutY(200);
 		
@@ -296,7 +294,7 @@ public class GameStart {
 		choix_earth2.setId("choix_earth2");
 		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth2.setCursor(Cursor.HAND);
-		choix_earth2.setPrefSize(1920/9.6,1080/9);
+		choix_earth2.setPrefSize(1600/8,1200/10);
 		choix_earth2.setLayoutX(20 + choix_earth.getLayoutX()+choix_earth.getPrefWidth()+25);
 		choix_earth2.setLayoutY(200);
 		
@@ -535,6 +533,84 @@ public class GameStart {
 			explication.setVisible(false);
 	    });
 		
+	}
+	
+	public void chose_difficulty() {
+		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		visible_change(btn_accueil,false);
+		
+		Button easy = new Button();
+		easy.setId("button_easy");
+		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		easy.setPrefSize(874/3,159/3);
+		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
+		easy.setLayoutY(50);
+		
+		
+		Button medium = new Button();
+		medium.setId("button_medium");
+		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		medium.setPrefSize(1183/3,157/3);
+		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
+		medium.setLayoutY(150);
+		
+		Button hard = new Button();
+		hard.setId("button_hard");
+		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		hard.setPrefSize(869/3,154/3);
+		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
+		hard.setLayoutY(250);
+		
+		Button insane = new Button();
+		insane.setId("button_insane");
+		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		insane.setPrefSize(1257/2,168/2);
+		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
+		insane.setLayoutY(350);
+		
+		Button[] diff = {easy,medium,hard,insane};
+		
+		insane.setOnAction(value ->  {
+			court.setDifficulty(4);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		
+		easy.setOnAction(value ->  {
+			court.setDifficulty(1);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		
+		hard.setOnAction(value ->  {
+			court.setDifficulty(3);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		
+		medium.setOnAction(value ->  {
+			court.setDifficulty(2);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		startRoot.getChildren().addAll(easy,medium,hard,insane);
+			
+			
+		
+	}
+	
+	public void jouer_solo() {
+		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		visible_change(btn_accueil,true);
+		court.setPartiEnCours(true);
+		court.setIsBot(true);
+		App.getStage().setScene(courtScene);
+		App.getStage().setFullScreen(true);
+		gw.startAnimation();
 	}
 }
 

@@ -207,6 +207,7 @@ public class GameView {
     
     public void pause() {
     	if (court.getPartiEnCours()) {
+    		court.setPartiEnCours(false);
 	    	stopAnimation();
 	    	Button quit = new Button();
 			quit.setCancelButton(true);
@@ -286,21 +287,20 @@ public class GameView {
 		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		replay.setPrefSize(2489/4.5,380/4.5);
+		replay.setPrefSize(1412/3,165/3);
 		
-		replay.setLayoutX(width/2 - replay.getPrefWidth());
-		replay.setLayoutY(625);
+		replay.setLayoutX(width/2 - width/2/2 - replay.getPrefWidth()/2);
+		replay.setLayoutY(610);
 		
 		
 		
 		Button quit = new Button();
-		quit.setCancelButton(true);
-		quit.setId("quit_button");
+		
+		quit.setId("menu_button");
 		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		
-		quit.setPrefSize(1238/4,461/4);
-		quit.setLayoutX(width/2 + quit.getPrefWidth()/1.5);
+		quit.setPrefSize(1003/3,165/3);
+		quit.setLayoutX(width/2 + width/2/2 - quit.getPrefWidth()/2);
 		quit.setLayoutY(610);
 		
 		quit.setCursor(Cursor.HAND);

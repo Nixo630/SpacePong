@@ -46,6 +46,12 @@
     -fx-background-size: cover;
 }
 
+#menu_button{
+    -fx-background-image: url("menu_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
 #resume_button{
     -fx-background-image: url("resume_button.png");
     -fx-background-color: TRANSPARENT;
@@ -69,4 +75,29 @@
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
 }
+
+#button_easy{
+    -fx-background-image: url("easy_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_medium{
+    -fx-background-image: url("medium_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_hard{
+    -fx-background-image: url("hard_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_insane{
+    -fx-background-image: url("insane_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
 
