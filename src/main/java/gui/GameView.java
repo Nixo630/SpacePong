@@ -255,8 +255,7 @@ public class GameView {
 				reset();
 				gameRoot.getChildren().removeAll(quit,resume);	
 				court.setPartiEnCours(false);
-				App.getStage().setScene(start);
-				App.getStage().setFullScreen(true);
+				lost_game();
 				
 		    });
 			
