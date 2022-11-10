@@ -42,6 +42,11 @@ public class GameView {
     
     private boolean changement_taille_racket;
     private final Scene start;
+    
+    private boolean enPause = false;
+    private Button quit ;
+    private Button resume;
+    
 
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
@@ -55,6 +60,8 @@ public class GameView {
         start = startScene;
         
         changement_taille_racket = false;
+        quit = new Button();
+        resume = new Button();
 
         root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
         root.setMinHeight(court.getHeight() * scale);
@@ -205,11 +212,20 @@ public class GameView {
     	animate();
     }
     
+    public boolean getEnPause() {
+    	return enPause;
+    }
+    
+    public void setEnPause(boolean b) {
+    	enPause = b;
+    }
+    
     public void pause() {
+    	enPause = true;
     	if (court.getPartiEnCours()) {
     		court.setPartiEnCours(false);
 	    	stopAnimation();
-	    	Button quit = new Button();
+	    	
 			quit.setCancelButton(true);
 			quit.setId("quit_button");
 			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -219,7 +235,7 @@ public class GameView {
 			quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
 			quit.setLayoutY(650);
 			
-			Button resume = new Button();
+			
 			resume.setId("resume_button");
 			resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
@@ -230,19 +246,14 @@ public class GameView {
 			
 			resume.setCursor(Cursor.HAND);
 			resume.setOnAction(value ->  {
-				court.setPartiEnCours(true);
-				startAnimation();
-				quit.setVisible(false);
-				resume.setVisible(false);
-				
-				
+				resume();
 		    });
 			
 			quit.setCursor(Cursor.HAND);
 			quit.setOnAction(value ->  {
+				enPause = false;
 				reset();
-				quit.setVisible(false);
-				resume.setVisible(false);
+				gameRoot.getChildren().removeAll(quit,resume);	
 				court.setPartiEnCours(false);
 				App.getStage().setScene(start);
 				App.getStage().setFullScreen(true);
@@ -252,6 +263,13 @@ public class GameView {
 			gameRoot.getChildren().addAll(quit,resume);
     	}
     } 
+    
+    public void resume() {
+    	enPause = false;
+    	court.setPartiEnCours(true);
+		startAnimation();
+		gameRoot.getChildren().removeAll(quit,resume);	
+    }
     
     public void lost_game() {
     	stopAnimation();

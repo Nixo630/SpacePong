@@ -82,8 +82,11 @@ public class App extends Application {
                     }
                     break;
                 case P:
-                		gameView.pause();
-                	
+                	gameView.pause();
+                	break;
+                case R:
+                	if(gameView.getEnPause()) gameView.resume(); gameView.setEnPause(false);
+                	break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
