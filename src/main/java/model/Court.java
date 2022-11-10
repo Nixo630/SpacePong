@@ -335,8 +335,27 @@ public class Court {
     public void reset() {
     	this.racketA = height / 2;
         this.racketB = height / 2;
-        this.ballSpeedX = 450.0;
-        this.ballSpeedY = 450.0;
+        
+        double nb;
+        nb = Math.random()*10;
+    
+        if (nb<2.5) {
+        	this.ballSpeedX = 450.0;
+        	this.ballSpeedY = 450.0;
+        	}
+        else if(nb>=2.5 && nb<5) {
+        	this.ballSpeedX = 450.0;
+        	this.ballSpeedY = -450.0;
+        }
+        else if(nb>=5 && nb<7.5) {
+        	this.ballSpeedX = -450.0;
+        	this.ballSpeedY = 450.0;
+        }
+        else{
+        	this.ballSpeedX = -450.0;
+        	this.ballSpeedY = -450.0;
+        }
+        
         this.ballX = width / 2;
         this.ballY = height / 2;
         this.racketSize = 150.0;
