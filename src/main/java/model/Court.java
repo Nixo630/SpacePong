@@ -12,9 +12,8 @@ public class Court {
     // instance parameters
     private final RacketController playerA, playerB;
     private final double width, height; // m
-    private final double racketSpeed = 300.0; // m/s
-    private double racketSize = 100.0; // m
-    private final double ballRadius = 20.0; // m
+    private final double racketSpeed = 350.0; // m/s
+    private final double ballRadius = 15.0; // m
     // instance state
     private double racketA; // m
     private double racketB; // m
@@ -22,14 +21,27 @@ public class Court {
     private double ballSpeedX, ballSpeedY; // m 
     private int scoreA = 0;
     private int scoreB = 0;
+    private double racketSize; // m
+    private RacketController.State botDirection;//direction du bot
+    private double directionPoint;//coordonee en y ou la balle se dirige
+    private boolean isBot;//pour savoir si on est en solo et qu'on a besoin d'un bot
     
     private Scene lostScene;
     private boolean ballTouched = false;
     private boolean scored = false;
     
+    private boolean partiEnCours = false;
+    private int difficulty;//chiffre entre 1 et 4 pour les 4 niveaux de difficultés
+    
     private boolean lost=false;
     
-    
+    // Idée : pour la mise en pause
+    //Créer un boolean partieEnCours
+    // TU fais tout les vérifications dans la fonction, tu dois juste verifier si partieEnCours est égale à True
+    //Si c'est le cas tu affiches les bouton résume et exit
+    //Sinon tu fais rien
+    // Bien oublie pas quand tu appuis sur la touche p ou le bouton de Adem la fonction partieEnCours est égale à false
+    // Comme ca y'a pas l'erreur d'apuiiyer plusieurs fois sur pause.
 
     public Court(RacketController playerA, RacketController playerB,
     		double width, double height) {
@@ -39,6 +51,26 @@ public class Court {
         this.height = height;
         
         reset();
+    }
+
+    public void setIsBot(boolean b){
+        isBot = b;
+    }
+    
+    public boolean getPartiEnCours() {
+    	return partiEnCours;
+    }
+    
+    public void setPartiEnCours(boolean b) {
+    	partiEnCours = b;
+    }
+    
+    public void setDifficulty(int n) {
+    	difficulty=n;
+    }
+
+    public boolean getIsBot(){
+        return isBot;
     }
 
     public double getWidth() {
@@ -88,7 +120,19 @@ public class Court {
     public int getScoreB() {
     	return scoreB;
     }
-    
+
+    private void direction() {
+        if ((racketB + racketSize/2) > directionPoint) {
+            botDirection = RacketController.State.GOING_UP;
+        }
+        else if ((racketB + racketSize/2) < directionPoint) {
+            botDirection = RacketController.State.GOING_DOWN;
+        }
+        else {
+            botDirection = RacketController.State.IDLE;
+        }
+    }
+
     public void update(double deltaT) {
     	switch (playerA.getState()) {
             case GOING_UP:
@@ -102,7 +146,8 @@ public class Court {
                 if (racketA + racketSize > height) racketA = height - racketSize;
                 break;
         }
-        switch (playerB.getState()) {
+        if(!isBot){
+            switch (playerB.getState()) {
             case GOING_UP:
                 racketB -= racketSpeed * deltaT;
                 if (racketB < 0.0) racketB = 0.0;
@@ -113,11 +158,62 @@ public class Court {
                 racketB += racketSpeed * deltaT;
                 if (racketB + racketSize > height) racketB = height - racketSize;
                 break;
+            }
+            if (updateBall(deltaT)) reset();
+            return;
         }
-        
+        //La suite est pour le fonctionnement du bot
+        if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY < racketB + racketSize/2) {//si la balle est dans la premiere moitie du terrain et que les coordonées de la balle sont en dessous du milieu de la raquette alors on monte pour suivre la balle
+        	//mais il faut aussi que la balle aille dans la direction du bot
+            System.out.println((width/4)*difficulty);
+        	racketB -= racketSpeed * deltaT;
+            if (racketB < 0.0) racketB = 0.0;
+        }
+        else if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
+        	System.out.println((width/4)*difficulty);
+        	racketB += racketSpeed * deltaT;
+            if (racketB + racketSize > height) racketB = height - racketSize;
+        }
+        else {//et si la balle est dans la deuxieme moitie du terrain on predict la trajectoire
+            double tmp = (width - ballX)/ballSpeedX;//rapport de la distance restante sur la vitesse
+            if (ballSpeedY > 0) {//si la balle va de haut en bas
+                if (((height-ballY)/(width-ballX)) < (ballSpeedY/ballSpeedX)) {//si la balle va toucher le mur du bas avant le but
+                    directionPoint = Math.abs(ballY + ballSpeedY*tmp) % height;
+                    directionPoint = height-directionPoint;
+                }
+                else {//si la balle va de haut en bas directement dans le but
+                    directionPoint = Math.abs(ballY + ballSpeedY*tmp) % height;
+                }
+            }
+            else {//si la balle va de bas en haut
+                if ((ballY/(width-ballX)) < (Math.abs(ballSpeedY)/ballSpeedX)) {//si la balle va toucher le mur du haut avant le but
+                    directionPoint = Math.abs(ballY + ballSpeedY*tmp) % height;
+                    //directionPoint = height-directionPoint;
+                }
+                else {//si la balle va de bas en haut directement dans le but
+                    directionPoint = Math.abs(ballY + ballSpeedY*tmp) % height;
+                }
+            }
+            direction();
+            if (Math.abs((racketB + racketSize/2) - directionPoint) < 5) {//on teste pour savoir quand s'arreter de deplacer le bot avec une approximation de 5
+                botDirection = RacketController.State.IDLE;
+            }
+            switch (botDirection) {
+                case GOING_UP:
+                    racketB -= racketSpeed * deltaT;
+                    if (racketB < 0.0) racketB = 0.0;
+                    break;
+                case IDLE:
+                    break;
+                case GOING_DOWN:
+                    racketB += racketSpeed * deltaT;
+                    if (racketB + racketSize > height) racketB = height - racketSize;
+                    break;
+            }
+        }
         if (updateBall(deltaT)) reset();
     }
-       
+
     /**
      * @return true if a player lost
      */
@@ -129,17 +225,18 @@ public class Court {
         if (nextBallY < 10 || nextBallY > height - 10) { // 10 correspond à la taille des murs
             ballSpeedY = -ballSpeedY;
             nextBallY = ballY + deltaT * ballSpeedY;
-            Sound("WallSound.wav");
+            sound("WallSound.wav");
         }
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width - 120 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
+                || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0) {
+                botDirection = RacketController.State.IDLE;
             	ballSpeedX = -(ballSpeedX + 25);
-            	Sound("RacketSound.wav");
+            	sound("RacketSound.wav");
             } // MAJ vitesse de la balle après avoir touché la raquette
             else {
             	ballSpeedX = -(ballSpeedX - 25);
-            	Sound("RacketSound.wav");
+            	sound("RacketSound.wav");
             } // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {
 		// ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
@@ -163,12 +260,12 @@ public class Court {
         } else if (nextBallX < 0) {
         	setScoreB(scoreB+1);
         	playerLost();
-        	Sound("LoseSound.wav");
+        	sound("LoseSound.wav");
             return true;
-        } else if (nextBallX > width - 120) {
+        } else if (nextBallX > width) {
         	setScoreA(scoreA+1);
         	playerLost();
-        	Sound("LoseSound.wav");
+        	sound("LoseSound.wav");
             return true;
         }
         ballX = nextBallX;
@@ -176,7 +273,7 @@ public class Court {
         return false;
     }
     
-    public void Sound(String s) {
+    public void sound(String s) {
     	// On joue le son
     	try
         {
@@ -195,7 +292,8 @@ public class Court {
     	scored = true;
     	if (scoreA==5 || scoreB== 5) {
     	// On joue le son
-    		Sound("lost.wav");
+    		partiEnCours = false;
+    		sound("lost.wav");
     		
     		lost = true;
     	}
@@ -237,10 +335,12 @@ public class Court {
     public void reset() {
     	this.racketA = height / 2;
         this.racketB = height / 2;
-        this.ballSpeedX = 200.0;
-        this.ballSpeedY = 200.0;
+        this.ballSpeedX = 450.0;
+        this.ballSpeedY = 450.0;
         this.ballX = width / 2;
-        this.ballY = height / 2;       
+        this.ballY = height / 2;
+        this.racketSize = 150.0;
+        botDirection = RacketController.State.IDLE;//reset de la direction du bot pour recalculer la trajectoire
     }
 
 }
