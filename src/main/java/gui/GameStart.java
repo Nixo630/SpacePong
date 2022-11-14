@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
@@ -471,11 +472,75 @@ public class GameStart {
 		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,
 				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
 				middle_bar_no,title_ball_difficult};
+
+		//Ajout du nombre de points pour finir une partie
+		ChoiceBox<Integer> choiceBox = new ChoiceBox<>();
+		choiceBox.getItems().addAll(5, 6, 7, 8, 9, 10, 15, 20);
+
+		choiceBox.setPrefSize(168/4,234/4);
+		choiceBox.setValue(5);
+		choiceBox.setLayoutX(490);
+		choiceBox.setLayoutY(650);
+
+		startRoot.getChildren().add(choiceBox);
+
+		Button points_bg = new Button();
+		points_bg.setId("points_background");
+		points_bg.getStylesheets().addAll(this.getClass().getResource("settings.css").toExternalForm());
+		points_bg.setPrefSize(450, 190/4);
+		points_bg.setLayoutX(10);
+		points_bg.setLayoutY(650);
+
+		startRoot.getChildren().add(points_bg);
+
+		//Ajout du choix de redimmension de l'écran
+		ChoiceBox<String> choiceBox_screen = new ChoiceBox<>();
+		choiceBox_screen.getItems().addAll("Plein ecran fenetre", "Plein ecran");
+		choiceBox_screen.setPrefSize(400/4,190/4);
+		choiceBox_screen.setLayoutX(490);
+		choiceBox_screen.setLayoutY(750);
+		choiceBox_screen.setValue("Plein ecran");
 		
+		startRoot.getChildren().add(choiceBox_screen);
+
+		Button resolution_bg = new Button();
+		resolution_bg.setId("resolution_background");
+		resolution_bg.getStylesheets().addAll(this.getClass().getResource("settings.css").toExternalForm());
+		resolution_bg.setPrefSize(450, 190/4);
+		resolution_bg.setLayoutX(10);
+		resolution_bg.setLayoutY(750);
+
+		startRoot.getChildren().add(resolution_bg);
+
+		//Ajout de la flèche retour en arrière
+		Button retour = new Button();
+		retour.setId("return");
+		retour.getStylesheets().addAll(this.getClass().getResource("settings.css").toExternalForm());
+		retour.setLayoutX(40);
+		retour.setLayoutY(40);
+		retour.setPrefSize(100, 100);
+		retour.setCursor(Cursor.HAND);
+		retour.setOnAction(value ->  {
+			visible_change(tab_skin,false);
+			visible_change(tab_setting,false);
+			choiceBox.setVisible(false);
+			choiceBox_screen.setVisible(false);
+			points_bg.setVisible(false);
+			resolution_bg.setVisible(false);
+			retour.setVisible(false);
+			visible_change(tab_init,true);
+	    });
+
+		startRoot.getChildren().add(retour);
 		
 		title_ball_difficult.setOnAction(value ->  {
 			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
+			choiceBox.setVisible(false);
+			choiceBox_screen.setVisible(false);
+			points_bg.setVisible(false);
+			resolution_bg.setVisible(false);
+			retour.setVisible(false);
 			print_setting_ball_difficulty(tab_setting,tab_skin);
 			
 	    });
@@ -483,7 +548,26 @@ public class GameStart {
 		finish_button.setOnAction(value ->  {
 			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
+			choiceBox.setVisible(false);
+			choiceBox_screen.setVisible(false);
+			points_bg.setVisible(false);
+			resolution_bg.setVisible(false);
+			retour.setVisible(false);
 			visible_change(tab_init,true);
+			gw.getCourt().setScoreFinal(choiceBox.getValue());
+			
+			switch(choiceBox_screen.getValue()){
+				case "Plein ecran fenetre": 
+					App.getStage().setFullScreen(false);
+					break;
+
+				case "Plein ecran":
+					App.getStage().setFullScreen(true);
+					break;
+
+				default:
+					break;
+			}
 			
 	    });
 		
@@ -544,6 +628,7 @@ public class GameStart {
 	    });
 		
 	}
+	
 	
 	public void chose_difficulty() {
 		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
