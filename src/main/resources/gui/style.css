@@ -100,4 +100,14 @@
     -fx-background-size: cover;
 }
 
+#curseur_droit{
+    -fx-background-image: url("insane_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
 
+#curseur_gauche{
+    -fx-background-image: url("insane_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}

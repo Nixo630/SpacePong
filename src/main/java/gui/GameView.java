@@ -84,7 +84,6 @@ public class GameView {
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
-        ball.getStyleClass().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
         
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);

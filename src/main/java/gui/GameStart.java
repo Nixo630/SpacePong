@@ -11,10 +11,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import model.Court;
 
 
@@ -47,6 +50,7 @@ public class GameStart {
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		height = (int)dimension.getHeight();
 		width  = (int)dimension.getWidth();
+		
 		
 		
 		//Le titre est un bouton sans commande dessus
@@ -545,7 +549,10 @@ public class GameStart {
 		
 	}
 	
+	
+	
 	public void chose_difficulty() {
+		
 		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
 		visible_change(btn_accueil,false);
 		
@@ -554,9 +561,9 @@ public class GameStart {
 		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		easy.setCursor(Cursor.HAND);
 		
-		easy.setPrefSize(874/3,159/3);
+		easy.setPrefSize(1424/3,216/3);
 		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
-		easy.setLayoutY(50);
+		
 		
 		
 		Button medium = new Button();
@@ -564,27 +571,29 @@ public class GameStart {
 		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		medium.setCursor(Cursor.HAND);
 		
-		medium.setPrefSize(1183/3,157/3);
+		medium.setPrefSize(1424/3,216/3);
 		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
-		medium.setLayoutY(150);
+		medium.setLayoutY(height/2 - medium.getHeight()- 50);
+		
+		easy.setLayoutY(medium.getLayoutY()-medium.getHeight() - 100);
 		
 		Button hard = new Button();
 		hard.setId("button_hard");
 		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		hard.setCursor(Cursor.HAND);
 		
-		hard.setPrefSize(869/3,154/3);
+		hard.setPrefSize(1424/3,216/3);
 		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
-		hard.setLayoutY(250);
+		hard.setLayoutY(height/2 + hard.getHeight()+ 50);
 		
 		Button insane = new Button();
 		insane.setId("button_insane");
 		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		insane.setCursor(Cursor.HAND);
 		
-		insane.setPrefSize(1257/2,168/2);
+		insane.setPrefSize(1424/3,216/3);
 		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
-		insane.setLayoutY(350);
+		insane.setLayoutY(hard.getLayoutY()+hard.getHeight()+100);
 		
 		Button[] diff = {easy,medium,hard,insane};
 		
@@ -612,9 +621,6 @@ public class GameStart {
 			visible_change(diff,false);
 	    });
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
-			
-			
-		
 	}
 	
 	public void jouer_solo() {

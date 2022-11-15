@@ -77,7 +77,7 @@ public class App extends Application {
                     }
                     break;
                 case DOWN :
-                    if (!court.getIsBot()){
+                	if (!court.getIsBot()){
                         playerB.state = RacketController.State.GOING_DOWN;
                     }
                     break;
