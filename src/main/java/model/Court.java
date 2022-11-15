@@ -295,7 +295,7 @@ public class Court {
     
     public void playerLost() {
     	scored = true;
-    	if (scoreA==5 || scoreB== 5) {
+    	if (scoreA==scoreFinal || scoreB== scoreFinal) {
     	// On joue le son
     		partiEnCours = false;
     		sound("lost.wav");
