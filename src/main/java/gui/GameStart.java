@@ -4,6 +4,10 @@ import java.awt.Dimension;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.print.attribute.standard.Media;
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,6 +21,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.ProgressBar;
 import model.Court;
+import java.io.File;
+import java.nio.file.Paths;
+
+import javafx.scene.*;
 
 
 public class GameStart {
@@ -172,6 +180,7 @@ public class GameStart {
 		//Lorsqu'on clique sur le bouton, on active une fonction qui fait augmenter la jauge de chargement
 		
 		start_button.setOnAction(value ->  {
+			sound("starting.wav");
 			startRoot.getChildren().removeAll(start_button);
 			startRoot.getChildren().addAll(progressBar);
 			Button[] tab = {quit,play,setting_button,multiplay};
@@ -555,7 +564,7 @@ public class GameStart {
 			retour.setVisible(false);
 			visible_change(tab_init,true);
 			gw.getCourt().setScoreFinal(choiceBox.getValue());
-			
+
 			switch(choiceBox_screen.getValue()){
 				case "Plein ecran fenetre": 
 					App.getStage().setFullScreen(false);
@@ -572,6 +581,20 @@ public class GameStart {
 	    });
 		
 	}
+
+	public void sound(String s) {
+    	// On joue le son
+    	try
+        {
+    		Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
+            clip.start();
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
+    }
 	
 	public void print_setting_ball_difficulty(Button [] tab1, Button[] tab2) {
 		Button title_s = new Button();
