@@ -1,6 +1,8 @@
 package gui;
 
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 
 import javax.sound.sampled.AudioSystem;
@@ -8,6 +10,7 @@ import javax.sound.sampled.Clip;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
@@ -24,11 +27,19 @@ public class App extends Application {
     public void start(Stage primaryStage) {
     	guiStage = primaryStage;
     	
-        var root = new Pane();
-        var gameScene = new Scene(root);
+    	var start = new Pane();
+    	start.setId("pane");
+    	
+    	var startScene = new Scene(start);
+    	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+    	
         
-        var lost = new Pane();
-        var lostScene = new Scene(lost);
+        var root = new Pane();
+        
+        var gameScene = new Scene(root);
+        gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+        
+        
         
         class Player implements RacketController {
             State state = State.IDLE;
@@ -42,6 +53,18 @@ public class App extends Application {
         var playerB = new Player();
         var playerC = new Player();
         var playerD = new Player();
+        
+        Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
+        int longueur = tailleMoniteur.width-100;
+        int hauteur = tailleMoniteur.height;
+        
+        System.out.println(longueur);
+        System.out.println(hauteur);
+        		
+        var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
+        var gameView = new GameView(court, root, 1.0,startScene);
+        var gameStart = new GameStart(start,root,gameScene,gameView,court);
+        
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case Z:
@@ -50,72 +73,56 @@ public class App extends Application {
                 case X:
                     playerA.state = RacketController.State.GOING_DOWN;
                     break;
-                    
                 case UP:
-                    playerB.state = RacketController.State.GOING_UP;
+                    if (!court.getIsBot()){
+                        playerB.state = RacketController.State.GOING_UP;
+                    }
                     break;
-                case DOWN:
-                    playerB.state = RacketController.State.GOING_DOWN;
+                case DOWN :
+                    if (!court.getIsBot()){
+                        playerB.state = RacketController.State.GOING_DOWN;
+                    }
                     break;
-
-                case O :
-                    playerC.state = RacketController.State.GOING_RIGHT;
-                    break;
-                case U :
-                    playerC.state = RacketController.State.GOING_LEFT;
-                    break;
-
-                case L :
-                    playerD.state = RacketController.State.GOING_RIGHT;
-                    break;
-                case J :
-                    playerD.state = RacketController.State.GOING_LEFT;
-                    break;    
-
+                case P:
+                	gameView.pause();
+                	break;
+                case R:
+                	if(gameView.getEnPause()) gameView.resume(); gameView.setEnPause(false);
+                	break;
+                case ESCAPE:
+                	System.exit(0);
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
         });
         gameScene.setOnKeyReleased(ev -> {
             switch (ev.getCode()) {
-
                 case Z:
                     if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
                     break;
                 case X:
                     if (playerA.state == RacketController.State.GOING_DOWN) playerA.state = RacketController.State.IDLE;
                     break;
-
                 case UP:
-                    if (playerB.state == RacketController.State.GOING_UP) playerB.state = RacketController.State.IDLE;
+                    if (!court.getIsBot()){
+                        if (playerB.state == RacketController.State.GOING_UP) playerB.state = RacketController.State.IDLE;
+                    }
                     break;
                 case DOWN:
-                    if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
-                    break;
-
-                case O:
-                    if (playerC.state == RacketController.State.GOING_RIGHT) playerC.state = RacketController.State.IDLE;
-                    break;
-                case U:
-                    if (playerC.state == RacketController.State.GOING_LEFT) playerC.state = RacketController.State.IDLE;
-                    break;
-
-                case L:
-                    if (playerD.state == RacketController.State.GOING_RIGHT) playerD.state = RacketController.State.IDLE;
-                    break;
-                case J:
-                    if (playerD.state == RacketController.State.GOING_LEFT) playerD.state = RacketController.State.IDLE;
-                    break;
-
+                    if (!court.getIsBot()){
+                        if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
+                    }
+                    break;    
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
         });
-               
-        var court = new Court(playerA, playerB,playerC,playerD, 1450, 860, lostScene);
-        var gameView = new GameView(court, root, 1.0);
-        var gameLost = new GameLost(lost, 1.0, 1450, 860, gameScene, gameView);
         
+        
+               
+       
+        
+        /*
         try
         {
     		Clip clip = AudioSystem.getClip();
@@ -126,11 +133,12 @@ public class App extends Application {
         {
             exc.printStackTrace(System.out);
         }
+        */
         
-        primaryStage.setScene(gameScene);
+        primaryStage.setScene(startScene);
+        primaryStage.setFullScreen(true);
         primaryStage.show();
         
-        gameView.animate();
     }
     
 }
