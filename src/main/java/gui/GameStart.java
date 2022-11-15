@@ -94,11 +94,7 @@ public class GameStart {
 		multiplay.setLayoutY(400);
 		
 		multiplay.setOnAction(value ->  {
-			court.setIsBot(false);
-			court.setPartiEnCours(true);
-			App.getStage().setScene(courtScene);
-			App.getStage().setFullScreen(true);
-			gw.startAnimation();
+			choose_multiplay();
 	    });
 		
 		
@@ -628,6 +624,57 @@ public class GameStart {
 		visible_change(btn_accueil,true);
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
+		App.getStage().setScene(courtScene);
+		App.getStage().setFullScreen(true);
+		gw.startAnimation();
+	}
+	
+	
+	//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
+	public void choose_multiplay() {
+		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		visible_change(btn_accueil,false);
+		
+		Button button_1vs1 = new Button();
+		button_1vs1.setId("button_1vs1");
+		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		button_1vs1.setCursor(Cursor.HAND);
+		
+		button_1vs1.setPrefSize(1424/3,216/3);
+		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
+		button_1vs1.setLayoutY(height/2 - 100);
+		
+		
+		Button button_2vs2 = new Button();
+		button_2vs2.setId("button_2vs2");
+		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		button_2vs2.setCursor(Cursor.HAND);
+		
+		button_2vs2.setPrefSize(1424/3,216/3);
+		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
+		button_2vs2.setLayoutY(height/2 + 100);
+		
+		Button[] btn_multi = {button_1vs1,button_2vs2};
+		
+		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
+		
+		button_1vs1.setOnAction(value ->  {
+			visible_change(btn_accueil,true);
+			visible_change(btn_multi,false);
+			jouer_multi();
+	    });
+		
+		button_2vs2.setOnAction(value ->  {
+			visible_change(btn_accueil,true);
+			visible_change(btn_multi,false);
+			jouer_multi();
+	    });
+		
+	}
+	
+	public void jouer_multi() {
+		court.setIsBot(false);
+		court.setPartiEnCours(true);
 		App.getStage().setScene(courtScene);
 		App.getStage().setFullScreen(true);
 		gw.startAnimation();
