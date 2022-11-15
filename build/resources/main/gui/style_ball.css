@@ -1,0 +1,47 @@
+#title_ball_skin{
+    -fx-background-image: url("Ball_skin/skin_ball_title.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_ball_sun{
+    -fx-background-image: url("Ball_skin/sun_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_ball_green{
+    -fx-background-image: url("Ball_skin/green_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_ball_moon{
+    -fx-background-image: url("Ball_skin/moon_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_ball_jupiter{
+    -fx-background-image: url("Ball_skin/jupiter_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_ball_earth{
+    -fx-background-image: url("Ball_skin/earth_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_ball_lila{
+    -fx-background-image: url("Ball_skin/lila_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#choix_ball_saturne{
+    -fx-background-image: url("Ball_skin/saturne_ball.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
