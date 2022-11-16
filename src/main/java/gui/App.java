@@ -51,6 +51,8 @@ public class App extends Application {
         }
         var playerA = new Player();
         var playerB = new Player();
+        var playerC = new Player();
+        var playerD = new Player();
         
         Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
         int longueur = tailleMoniteur.width-100;

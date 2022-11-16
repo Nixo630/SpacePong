@@ -10,13 +10,15 @@ import javafx.scene.Scene;
 
 public class Court {
     // instance parameters
-    private final RacketController playerA, playerB;
+    private final RacketController playerA, playerB, playerC, playerD;
     private final double width, height; // m
     private final double racketSpeed = 350.0; // m/s
     private final double ballRadius = 15.0; // m
     // instance state
     private double racketA; // m
     private double racketB; // m
+    private double racketC; // m
+    private double racketD; // m
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m 
     private int scoreA = 0;
@@ -43,10 +45,12 @@ public class Court {
     // Bien oublie pas quand tu appuis sur la touche p ou le bouton de Adem la fonction partieEnCours est égale à false
     // Comme ca y'a pas l'erreur d'apuiiyer plusieurs fois sur pause.
 
-    public Court(RacketController playerA, RacketController playerB,
-    		double width, double height) {
+    public Court(RacketController playerA, RacketController playerB,RacketController playerC, RacketController playerD,
+            double width, double height) {
         this.playerA = playerA;
         this.playerB = playerB;
+        this.playerC = playerC;
+        this.playerD = playerD;
         this.width = width;
         this.height = height;
         
@@ -86,7 +90,7 @@ public class Court {
     }
     
     public void setRacketSize(double x) {
-    	racketSize = x;
+        racketSize = x;
     }
 
     public double getRacketA() {
@@ -95,6 +99,14 @@ public class Court {
 
     public double getRacketB() {
         return racketB;
+    }
+
+    public double getRacketC() {
+        return racketC;
+    }
+
+    public double getRacketD() {
+        return racketD;
     }
 
     public double getBallX() {
@@ -106,19 +118,19 @@ public class Court {
     }
     
     public void setScoreA(int s) {
-    	scoreA=s;
+        scoreA=s;
     }
     
     public void setScoreB(int s) {
-    	scoreB=s;
+        scoreB=s;
     }
     
     public int getScoreA() {
-    	return scoreA;
+        return scoreA;
     }
     
     public int getScoreB() {
-    	return scoreB;
+        return scoreB;
     }
 
     private void direction() {
@@ -134,7 +146,7 @@ public class Court {
     }
 
     public void update(double deltaT) {
-    	switch (playerA.getState()) {
+        switch (playerA.getState()) {
             case GOING_UP:
                 racketA -= racketSpeed * deltaT;
                 if (racketA < 0.0) racketA = 0.0;
@@ -239,7 +251,7 @@ public class Court {
             	sound("RacketSound.wav");
             } // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {
-		// ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
+        // ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
                 if (nextBallX < 0) {
                     ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7);
                 }
@@ -277,7 +289,7 @@ public class Court {
     	// On joue le son
     	try
         {
-    		Clip clip = AudioSystem.getClip();
+            Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
             clip.start();
         }
@@ -300,11 +312,11 @@ public class Court {
     }
     
     public boolean getLost() {
-    	return lost;
+        return lost;
     }
     
     public void setLost(boolean b) {
-    	lost = b;
+        lost = b;
     }
         
     public double getBallRadius() {
@@ -312,28 +324,28 @@ public class Court {
     }
     
     public boolean getBallTouched() {
-    	return ballTouched;
+        return ballTouched;
     }
     
     public void resetBallTouched() {
-    	ballTouched = false;
+        ballTouched = false;
     }
     
     public boolean scored() {
-    	return scored;
+        return scored;
     }
     
     public void resetScored() {
-    	scored = false;
+        scored = false;
     }
 
     public void reset_score() {
-    	this.scoreA=0;
-		this.scoreB=0;
+        this.scoreA=0;
+        this.scoreB=0;
     }
     
     public void reset() {
-    	this.racketA = height / 2;
+        this.racketA = height / 2;
         this.racketB = height / 2;
         
         double nb;

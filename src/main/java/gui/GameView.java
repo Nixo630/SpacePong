@@ -28,7 +28,7 @@ public class GameView {
     		murThickness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB, murA, murB, murC, murD, murE;
+    private final Rectangle racketA, racketB, racketC, racketD, murA, murB, murC, murD, murE;
     private final Circle ball;
     
     private Label affScoreA, affScoreB;   
@@ -136,7 +136,7 @@ public class GameView {
         affScoreB.setTextFill(Color.DARKGREY);
         affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
         
-        gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
+        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
     }
     
     public void Visible_middle_bar(boolean b) {
@@ -154,11 +154,12 @@ public class GameView {
                     last = now;
                     return;
                 }
-                                                
+                System.out.println (court.getRacketC());                                
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);
                 racketB.setY(court.getRacketB() * scale);
+
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
                  
@@ -193,6 +194,66 @@ public class GameView {
     	};
     	aTimer.start();
     }
+
+        public void animate2() {
+     	racketD.setVisible(true);
+    	racketC.setVisible(true);
+    	aTimer = new AnimationTimer() {
+    		long last = 0;
+			@Override
+			public void handle(long now) {
+				// TODO Auto-generated method stub
+				
+				if (last == 0) { // ignore the first tick, just compute the first deltaT
+                    last = now;
+                    return;
+                }
+                System.out.println (court.getRacketC());                                
+                court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
+                last = now;
+                racketA.setY(court.getRacketA() * scale);
+                racketB.setY(court.getRacketB() * scale);
+                racketC.setX(court.getRacketC() * scale * 2);
+                racketD.setX(court.getRacketD() * scale * 2);
+
+                ball.setCenterX(court.getBallX() * scale + xMargin);
+                ball.setCenterY(court.getBallY() * scale);
+                 
+                if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
+                	
+                	Random rd = new Random();
+                	
+                	// Changement de tailles de raquettes
+                	int h = rd.nextInt(50, 201);
+                	court.setRacketSize(h);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+                	racketC.setHeight(racketThickness);
+                	racketD.setHeight(racketThickness);
+            		        	
+                	court.resetBallTouched();
+                }
+                             
+                if(court.scored()) {             
+                	affScoreA.setText(""+court.getScoreA());
+                    affScoreB.setText(""+court.getScoreB());
+                    
+                	
+                	court.setRacketSize(100);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+                	racketC.setHeight(racketThickness);
+                	racketD.setHeight(racketThickness);
+                	court.resetScored();
+                }
+                if(court.getLost()) {   	
+                	lost_game();
+                }
+			}
+    		
+    	};
+    	aTimer.start();
+    }
     
     public void reset() {
     	affScoreA.setLayoutY(25);
@@ -209,6 +270,19 @@ public class GameView {
     
     public void startAnimation() {
     	animate();
+    }
+
+    public void startAnimation2() {
+    	animate2();
+    }
+
+    
+    public boolean getEnPause() {
+    	return enPause;
+    }
+    
+    public void setEnPause(boolean b) {
+    	enPause = b;
     }
     
     public boolean getEnPause() {
@@ -273,6 +347,8 @@ public class GameView {
     	stopAnimation();
     	racketA.setVisible(false);
     	racketB.setVisible(false);
+    	racketC.setVisible(false);
+    	racketD.setVisible(false);
     	ball.setVisible(false);
     	
     	Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -329,6 +405,8 @@ public class GameView {
 			court.setLost(false);
 			racketA.setVisible(true);
 	    	racketB.setVisible(true);
+	    	racketC.setVisible(true);
+	    	racketD.setVisible(true);
 	    	ball.setVisible(true);
 			App.getStage().setScene(start);
 			App.getStage().setFullScreen(true);
@@ -343,6 +421,8 @@ public class GameView {
 			court.setLost(false);
 			racketA.setVisible(true);
 	    	racketB.setVisible(true);
+	    	racketC.setVisible(true);
+	    	racketD.setVisible(true);
 	    	ball.setVisible(true);
 			startAnimation();
 	    });
