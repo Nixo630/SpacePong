@@ -1,0 +1,103 @@
+#pane{
+    -fx-background-image: url("background_start.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+#start_button{
+    -fx-background-image: url("start_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#title{
+    -fx-background-image: url("title.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#title_end{
+    -fx-background-image: url("partie_terminee.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+#solo_play_button{
+    -fx-background-image: url("solo.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#replay_button{
+    -fx-background-image: url("replay.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#multiplay_play_button{
+    -fx-background-image: url("multiplayer.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#quit_button{
+    -fx-background-image: url("exit_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#menu_button{
+    -fx-background-image: url("menu_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#resume_button{
+    -fx-background-image: url("resume_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#settings_button{
+    -fx-background-image: url("setting_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#bg_trou_noir{
+    -fx-background-image: url("bg_trou_noir.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#bg_galaxie{
+    -fx-background-image: url("bg_galaxie.jpg");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_easy{
+    -fx-background-image: url("easy_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_medium{
+    -fx-background-image: url("medium_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_hard{
+    -fx-background-image: url("hard_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_insane{
+    -fx-background-image: url("insane_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+

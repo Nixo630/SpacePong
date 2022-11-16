@@ -23,6 +23,7 @@ public class Court {
     private double ballSpeedX, ballSpeedY; // m 
     private int scoreA = 0;
     private int scoreB = 0;
+    private int scoreFinal;
     private double racketSize; // m
     private RacketController.State botDirection;//direction du bot
     private double directionPoint;//coordonee en y ou la balle se dirige
@@ -57,6 +58,10 @@ public class Court {
         reset();
     }
 
+    public void setScoreFinal(int scoreFinal) {
+        this.scoreFinal = scoreFinal;
+    }
+    
     public void setIsBot(boolean b){
         isBot = b;
     }
@@ -302,7 +307,7 @@ public class Court {
     
     public void playerLost() {
     	scored = true;
-    	if (scoreA==5 || scoreB== 5) {
+    	if (scoreA==scoreFinal || scoreB== scoreFinal) {
     	// On joue le son
     		partiEnCours = false;
     		sound("lost.wav");

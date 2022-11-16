@@ -158,6 +158,10 @@ public class GameView {
     public void Visible_middle_bar(boolean b) {
     	murE.setVisible(b);
     }
+
+	public Court getCourt() {
+		return court;
+	}
     
     public void animate() {
     	aTimer = new AnimationTimer() {
