@@ -25,7 +25,13 @@ public class App extends Application {
 	
     @Override
     public void start(Stage primaryStage) {
+        Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
+        int longueur = tailleMoniteur.width;
+        int hauteur = tailleMoniteur.height;
+
     	guiStage = primaryStage;
+        guiStage.setHeight(hauteur);
+        guiStage.setWidth(longueur);
     	
     	var start = new Pane();
     	start.setId("pane");
@@ -53,13 +59,6 @@ public class App extends Application {
         var playerB = new Player();
         var playerC = new Player();
         var playerD = new Player();
-        
-        Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
-        int longueur = tailleMoniteur.width-100;
-        int hauteur = tailleMoniteur.height;
-        
-        System.out.println(longueur);
-        System.out.println(hauteur);
         		
         var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);

@@ -181,7 +181,7 @@ public class GameView {
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
                  
-                if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
+                if(court.getBallTouched() && changement_taille_racket) { //la balle touche la raquette
                 	
                 	Random rd = new Random();
                 	
@@ -420,7 +420,6 @@ public class GameView {
 	    	racketD.setVisible(true);
 	    	ball.setVisible(true);
 			App.getStage().setScene(start);
-			App.getStage().setFullScreen(true);
 	    });
 		
 		replay.setOnAction(value ->  {

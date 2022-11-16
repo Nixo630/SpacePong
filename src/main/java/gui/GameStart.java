@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.print.attribute.standard.Media;
 import java.io.File;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -13,20 +12,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.control.ProgressBar;
 import model.Court;
-import java.io.File;
-import java.nio.file.Paths;
-
-import javafx.scene.*;
 
 
 public class GameStart {
@@ -43,6 +33,7 @@ public class GameStart {
 	private GameView gw;
 	private Court court;
 	private Scene courtScene;
+
 	
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
@@ -520,6 +511,7 @@ public class GameStart {
 
 		startRoot.getChildren().add(resolution_bg);
 
+
 		//Ajout de la flèche retour en arrière
 		Button retour = new Button();
 		retour.setId("return");
@@ -730,7 +722,6 @@ public class GameStart {
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
 		App.getStage().setScene(courtScene);
-		App.getStage().setFullScreen(true);
 		gw.startAnimation();
 	}
 
@@ -780,7 +771,6 @@ public class GameStart {
 		court.setIsBot(false);
 		court.setPartiEnCours(true);
 		App.getStage().setScene(courtScene);
-		App.getStage().setFullScreen(true);
 		if (x){
 		gw.startAnimation2();}
 		else {gw.startAnimation(); }
