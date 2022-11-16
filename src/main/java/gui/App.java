@@ -2,6 +2,7 @@ package gui;
 
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 
 import javax.sound.sampled.AudioSystem;
@@ -32,17 +33,13 @@ public class App extends Application {
     	var startScene = new Scene(start);
     	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
     	
-
+        
         var root = new Pane();
         
         var gameScene = new Scene(root);
         gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-     
         
-        var lost = new Pane();
-        lost.setId("pane");
-        var lostScene = new Scene(lost);
-        lostScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+        
         
         class Player implements RacketController {
             State state = State.IDLE;
@@ -54,14 +51,19 @@ public class App extends Application {
         }
         var playerA = new Player();
         var playerB = new Player();
+        var playerC = new Player();
+        var playerD = new Player();
         
-        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		double height = (int)dimension.getHeight();
-		double width  = (int)dimension.getWidth();
+        Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
+        int longueur = tailleMoniteur.width-100;
+        int hauteur = tailleMoniteur.height;
         
-        var court = new Court(playerA, playerB, width, height);
+        System.out.println(longueur);
+        System.out.println(hauteur);
+        		
+        var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
-        var gameStart = new GameStart(start,root,gameScene,gameView);
+        var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
@@ -72,13 +74,23 @@ public class App extends Application {
                     playerA.state = RacketController.State.GOING_DOWN;
                     break;
                 case UP:
-                    playerB.state = RacketController.State.GOING_UP;
+                    if (!court.getIsBot()){
+                        playerB.state = RacketController.State.GOING_UP;
+                    }
                     break;
-                case DOWN:
-                    playerB.state = RacketController.State.GOING_DOWN;
+                case DOWN :
+                    if (!court.getIsBot()){
+                        playerB.state = RacketController.State.GOING_DOWN;
+                    }
                     break;
                 case P:
                 	gameView.pause();
+                	break;
+                case R:
+                	if(gameView.getEnPause()) gameView.resume(); gameView.setEnPause(false);
+                	break;
+                case ESCAPE:
+                	System.exit(0);
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
@@ -92,11 +104,15 @@ public class App extends Application {
                     if (playerA.state == RacketController.State.GOING_DOWN) playerA.state = RacketController.State.IDLE;
                     break;
                 case UP:
-                    if (playerB.state == RacketController.State.GOING_UP) playerB.state = RacketController.State.IDLE;
+                    if (!court.getIsBot()){
+                        if (playerB.state == RacketController.State.GOING_UP) playerB.state = RacketController.State.IDLE;
+                    }
                     break;
                 case DOWN:
-                    if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
-                    break;
+                    if (!court.getIsBot()){
+                        if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
+                    }
+                    break;    
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }

@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.ProgressBar;
+import model.Court;
 
 
 public class GameStart {
@@ -29,13 +30,17 @@ public class GameStart {
 	private Pane gameRoot;
 	
 	private GameView gw;
+	private Court court;
+	private Scene courtScene;
 	
 	
-	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw) {
+	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
 		this.gw = gw;
+		this.court = court;
+		this.courtScene = courtScene;
 		
 		gameRoot.setId("choix_galaxie");
 		
@@ -62,15 +67,12 @@ public class GameStart {
 		play.setId("solo_play_button");
 		play.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		
 		play.setPrefSize(1920/4.5,463/4.5);
 		play.setLayoutX(width/2 - play.getPrefWidth()/2);
 		play.setLayoutY(280);
 		
 		play.setOnAction(value ->  {
-			App.getStage().setScene(courtScene);
-			App.getStage().setFullScreen(true);
-			gw.startAnimation();
+			chose_difficulty();
 	    });
 		
 		//Mise en place du bouton pour jouer à deux 
@@ -87,10 +89,9 @@ public class GameStart {
 		multiplay.setLayoutY(400);
 		
 		multiplay.setOnAction(value ->  {
-			App.getStage().setScene(courtScene);
-			App.getStage().setFullScreen(true);
-			gw.startAnimation();
+			choose_multiplay();
 	    });
+
 		
 		
 		//Boutton pour quitter le jeu
@@ -175,7 +176,7 @@ public class GameStart {
 				Timer chrono = new Timer();
 				chrono.schedule(new TimerTask() {
 	
-					int time = 100;
+					int time = 25;
 					@Override
 					public void run() {
 						
@@ -193,7 +194,7 @@ public class GameStart {
 						time--;
 					}
 					
-				}, 100,25);
+				}, 100,15);
 			}
 			else {
 				visible_change(tab,true);
@@ -216,7 +217,7 @@ public class GameStart {
 	}
 	//Cette fonction fait avancer la barre de chargmement
 	public static void avancer(ProgressBar pb) {
-		pb.setProgress(0.01+pb.getProgress());
+		pb.setProgress(0.1+pb.getProgress());
 		
 	}
 	
@@ -263,7 +264,7 @@ public class GameStart {
 		choix_trou_noir.setId("choix_trou_noir");
 		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_trou_noir.setCursor(Cursor.HAND);
-		choix_trou_noir.setPrefSize(1600/8,900/7.5);
+		choix_trou_noir.setPrefSize(1600/8,1200/10);
 		choix_trou_noir.setLayoutX(20 + choix_galaxie.getLayoutX()+choix_galaxie.getPrefWidth()+25);
 		choix_trou_noir.setLayoutY(200);
 		
@@ -276,7 +277,7 @@ public class GameStart {
 		choix_earth.setId("choix_earth");
 		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth.setCursor(Cursor.HAND);
-		choix_earth.setPrefSize(1920/9.6,1080/9);
+		choix_earth.setPrefSize(1600/8,1200/10);
 		choix_earth.setLayoutX(20 + choix_trou_noir.getLayoutX()+choix_trou_noir.getPrefWidth()+25);
 		choix_earth.setLayoutY(200);
 		
@@ -289,7 +290,7 @@ public class GameStart {
 		choix_earth2.setId("choix_earth2");
 		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth2.setCursor(Cursor.HAND);
-		choix_earth2.setPrefSize(1920/9.6,1080/9);
+		choix_earth2.setPrefSize(1600/8,1200/10);
 		choix_earth2.setLayoutX(20 + choix_earth.getLayoutX()+choix_earth.getPrefWidth()+25);
 		choix_earth2.setLayoutY(200);
 		
@@ -323,7 +324,7 @@ public class GameStart {
 		Button middle_bar_yes = new Button();
 		middle_bar_yes.setId("middle_bar_yes");
 		middle_bar_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
+		middle_bar_yes.setCursor(Cursor.HAND);
 		middle_bar_yes.setPrefSize(497/4,464/4);
 		middle_bar_yes.setLayoutX(20+title_middle_bar.getPrefWidth()+25);
 		middle_bar_yes.setLayoutY(400);
@@ -335,7 +336,7 @@ public class GameStart {
 		Button middle_bar_no = new Button();
 		middle_bar_no.setId("middle_bar_no");
 		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
+		middle_bar_no.setCursor(Cursor.HAND);
 		middle_bar_no.setPrefSize(497/4,464/4);
 		middle_bar_no.setLayoutX(middle_bar_yes.getLayoutX()+middle_bar_yes.getPrefWidth()+25);
 		middle_bar_no.setLayoutY(400);
@@ -360,6 +361,7 @@ public class GameStart {
 		Button choix_ball_sun = new Button();
 		choix_ball_sun.setId("choix_ball_sun");
 		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		choix_ball_sun.setCursor(Cursor.HAND);
 		
 		choix_ball_sun.setPrefSize(202/4,202/4);
 		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+25);
@@ -371,6 +373,7 @@ public class GameStart {
 		Button choix_ball_green = new Button();
 		choix_ball_green.setId("choix_ball_green");
 		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		choix_ball_green.setCursor(Cursor.HAND);
 		
 		choix_ball_green.setPrefSize(196/4,217/4);
 		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+25);
@@ -382,6 +385,7 @@ public class GameStart {
 		Button choix_ball_moon = new Button();
 		choix_ball_moon.setId("choix_ball_moon");
 		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		choix_ball_moon.setCursor(Cursor.HAND);
 		
 		choix_ball_moon.setPrefSize(208/4,237/4);
 		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+25);
@@ -393,6 +397,7 @@ public class GameStart {
 		Button choix_ball_jupiter = new Button();
 		choix_ball_jupiter.setId("choix_ball_jupiter");
 		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		choix_ball_jupiter.setCursor(Cursor.HAND);
 		
 		choix_ball_jupiter.setPrefSize(158/4,234/4);
 		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+25);
@@ -404,6 +409,7 @@ public class GameStart {
 		Button choix_ball_saturne = new Button();
 		choix_ball_saturne.setId("choix_ball_saturne");
 		choix_ball_saturne.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		choix_ball_saturne.setCursor(Cursor.HAND);
 		
 		choix_ball_saturne.setPrefSize(239/4,214/4);
 		choix_ball_saturne.setLayoutX(choix_ball_jupiter.getLayoutX()+choix_ball_jupiter.getPrefWidth()+25);
@@ -415,6 +421,7 @@ public class GameStart {
 		Button choix_ball_lila = new Button();
 		choix_ball_lila.setId("choix_ball_lila");
 		choix_ball_lila.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		choix_ball_lila.setCursor(Cursor.HAND);
 		
 		choix_ball_lila.setPrefSize(199/4,214/4);
 		choix_ball_lila.setLayoutX(choix_ball_saturne.getLayoutX()+choix_ball_saturne.getPrefWidth()+25);
@@ -426,6 +433,7 @@ public class GameStart {
 		Button choix_ball_earth = new Button();
 		choix_ball_earth.setId("choix_ball_earth");
 		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+		choix_ball_earth.setCursor(Cursor.HAND);
 		
 		choix_ball_earth.setPrefSize(168/4,234/4);
 		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+25);
@@ -448,6 +456,7 @@ public class GameStart {
 		Button title_ball_difficult = new Button ();
 		title_ball_difficult.setId("ball_difficulty");
 		title_ball_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		title_ball_difficult.setCursor(Cursor.HAND);
 		
 		title_ball_difficult.setPrefSize(3222/9,492/9);
 		title_ball_difficult.setLayoutX(middle_bar_no.getLayoutX()+middle_bar_no.getPrefWidth()+100);
@@ -495,6 +504,7 @@ public class GameStart {
 		Button button_yes = new Button();
 		button_yes.setId("middle_bar_yes");
 		button_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		button_yes.setCursor(Cursor.HAND);
 		
 		button_yes.setPrefSize(497/4,464/4);
 		button_yes.setLayoutX(width/2 - button_yes.getPrefWidth()-25);
@@ -503,6 +513,7 @@ public class GameStart {
 		Button button_no = new Button();
 		button_no.setId("middle_bar_no");
 		button_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		button_no.setCursor(Cursor.HAND);
 		
 		button_no.setPrefSize(497/4,464/4);
 		button_no.setLayoutX(width/2 + button_no.getPrefWidth()+25);
@@ -528,6 +539,141 @@ public class GameStart {
 			explication.setVisible(false);
 	    });
 		
+	}
+	
+	public void chose_difficulty() {
+		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		visible_change(btn_accueil,false);
+		
+		Button easy = new Button();
+		easy.setId("button_easy");
+		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		easy.setCursor(Cursor.HAND);
+		
+		easy.setPrefSize(874/3,159/3);
+		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
+		easy.setLayoutY(50);
+		
+		
+		Button medium = new Button();
+		medium.setId("button_medium");
+		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		medium.setCursor(Cursor.HAND);
+		
+		medium.setPrefSize(1183/3,157/3);
+		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
+		medium.setLayoutY(150);
+		
+		Button hard = new Button();
+		hard.setId("button_hard");
+		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		hard.setCursor(Cursor.HAND);
+		
+		hard.setPrefSize(869/3,154/3);
+		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
+		hard.setLayoutY(250);
+		
+		Button insane = new Button();
+		insane.setId("button_insane");
+		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		insane.setCursor(Cursor.HAND);
+		
+		insane.setPrefSize(1257/2,168/2);
+		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
+		insane.setLayoutY(350);
+		
+		Button[] diff = {easy,medium,hard,insane};
+		
+		insane.setOnAction(value ->  {
+			court.setDifficulty(4);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		
+		easy.setOnAction(value ->  {
+			court.setDifficulty(1);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		
+		hard.setOnAction(value ->  {
+			court.setDifficulty(3);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		
+		medium.setOnAction(value ->  {
+			court.setDifficulty(2);
+			jouer_solo();
+			visible_change(diff,false);
+	    });
+		startRoot.getChildren().addAll(easy,medium,hard,insane);
+			
+			
+		
+	}
+	
+	public void jouer_solo() {
+		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		visible_change(btn_accueil,true);
+		court.setPartiEnCours(true);
+		court.setIsBot(true);
+		App.getStage().setScene(courtScene);
+		App.getStage().setFullScreen(true);
+		gw.startAnimation();
+	}
+
+		//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
+	public void choose_multiplay() {
+		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		visible_change(btn_accueil,false);
+		
+		Button button_1vs1 = new Button();
+		button_1vs1.setId("button_1vs1");
+		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		button_1vs1.setCursor(Cursor.HAND);
+		
+		button_1vs1.setPrefSize(1424/3,216/3);
+		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
+		button_1vs1.setLayoutY(height/2 - 100);
+		
+		
+		Button button_2vs2 = new Button();
+		button_2vs2.setId("button_2vs2");
+		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		button_2vs2.setCursor(Cursor.HAND);
+		
+		button_2vs2.setPrefSize(1424/3,216/3);
+		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
+		button_2vs2.setLayoutY(height/2 + 100);
+		
+		Button[] btn_multi = {button_1vs1,button_2vs2};
+		
+		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
+
+		
+		button_1vs1.setOnAction(value ->  {
+			visible_change(btn_accueil,true);
+			visible_change(btn_multi,false);
+			jouer_multi(false);
+	    });
+		
+		button_2vs2.setOnAction(value ->  {
+			visible_change(btn_accueil,true);
+			visible_change(btn_multi,false);
+			jouer_multi(true);
+	    });
+		
+	}
+	
+	public void jouer_multi(boolean x) {
+		court.setIsBot(false);
+		court.setPartiEnCours(true);
+		App.getStage().setScene(courtScene);
+		App.getStage().setFullScreen(true);
+		if (x){
+		gw.startAnimation2();}
+		else {gw.startAnimation(); }
 	}
 }
 
