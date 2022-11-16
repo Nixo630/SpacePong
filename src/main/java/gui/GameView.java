@@ -82,29 +82,8 @@ public class GameView {
         racketB.setX(court.getWidth() * scale + xMargin);
         racketB.setY(court.getRacketB() * scale);
 
-        racketC = new Rectangle();
-        racketC.setWidth(court.getRacketSize() * scale);
-        racketC.setHeight(racketThickness);
-        racketC.setFill(Color.DARKGREY);
-
-        racketC.setX(court.getRacketC() * scale);
-        racketC.setY(xMargin + racketThickness);
-
-        racketC.setVisible(false);
-
-        racketD = new Rectangle();
-        racketD.setWidth(court.getRacketSize() * scale);
-        racketD.setHeight(racketThickness);
-        racketD.setFill(Color.DARKGREY);
-
-        racketD.setX(court.getRacketD() * scale);
-        racketD.setY(court.getHeight() * scale - xMargin);
-
-        racketD.setVisible(false);
-
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
-        ball.getStyleClass().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
         
         ball.setCenterX(court.getBallX() * scale + xMargin);
         ball.setCenterY(court.getBallY() * scale);
@@ -297,6 +276,14 @@ public class GameView {
     	animate2();
     }
 
+    
+    public boolean getEnPause() {
+    	return enPause;
+    }
+    
+    public void setEnPause(boolean b) {
+    	enPause = b;
+    }
     
     public boolean getEnPause() {
     	return enPause;

@@ -62,15 +62,15 @@ public class Court {
     }
     
     public boolean getPartiEnCours() {
-        return partiEnCours;
+    	return partiEnCours;
     }
     
     public void setPartiEnCours(boolean b) {
-        partiEnCours = b;
+    	partiEnCours = b;
     }
     
     public void setDifficulty(int n) {
-        difficulty=n;
+    	difficulty=n;
     }
 
     public boolean getIsBot(){
@@ -176,14 +176,14 @@ public class Court {
         }
         //La suite est pour le fonctionnement du bot
         if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY < racketB + racketSize/2) {//si la balle est dans la premiere moitie du terrain et que les coordonées de la balle sont en dessous du milieu de la raquette alors on monte pour suivre la balle
-            //mais il faut aussi que la balle aille dans la direction du bot
-//            System.out.println((width/4)*difficulty);
-            racketB -= racketSpeed * deltaT;
+        	//mais il faut aussi que la balle aille dans la direction du bot
+            System.out.println((width/4)*difficulty);
+        	racketB -= racketSpeed * deltaT;
             if (racketB < 0.0) racketB = 0.0;
         }
         else if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
-//          System.out.println((width/4)*difficulty);
-            racketB += racketSpeed * deltaT;
+        	System.out.println((width/4)*difficulty);
+        	racketB += racketSpeed * deltaT;
             if (racketB + racketSize > height) racketB = height - racketSize;
         }
         else {//et si la balle est dans la deuxieme moitie du terrain on predict la trajectoire
@@ -243,12 +243,12 @@ public class Court {
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0) {
                 botDirection = RacketController.State.IDLE;
-                ballSpeedX = -(ballSpeedX + 25);
-                sound("RacketSound.wav");
+            	ballSpeedX = -(ballSpeedX + 25);
+            	sound("RacketSound.wav");
             } // MAJ vitesse de la balle après avoir touché la raquette
             else {
-                ballSpeedX = -(ballSpeedX - 25);
-                sound("RacketSound.wav");
+            	ballSpeedX = -(ballSpeedX - 25);
+            	sound("RacketSound.wav");
             } // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {
         // ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
@@ -270,14 +270,14 @@ public class Court {
             ballTouched = true;
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
-            setScoreB(scoreB+1);
-            playerLost();
-            sound("LoseSound.wav");
+        	setScoreB(scoreB+1);
+        	playerLost();
+        	sound("LoseSound.wav");
             return true;
         } else if (nextBallX > width) {
-            setScoreA(scoreA+1);
-            playerLost();
-            sound("LoseSound.wav");
+        	setScoreA(scoreA+1);
+        	playerLost();
+        	sound("LoseSound.wav");
             return true;
         }
         ballX = nextBallX;
@@ -286,8 +286,8 @@ public class Court {
     }
     
     public void sound(String s) {
-        // On joue le son
-        try
+    	// On joue le son
+    	try
         {
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
@@ -301,14 +301,14 @@ public class Court {
     
     
     public void playerLost() {
-        scored = true;
-        if (scoreA==5 || scoreB== 5) {
-        // On joue le son
-            partiEnCours = false;
-            sound("lost.wav");
-            
-            lost = true;
-        }
+    	scored = true;
+    	if (scoreA==5 || scoreB== 5) {
+    	// On joue le son
+    		partiEnCours = false;
+    		sound("lost.wav");
+    		
+    		lost = true;
+    	}
     }
     
     public boolean getLost() {
@@ -347,27 +347,25 @@ public class Court {
     public void reset() {
         this.racketA = height / 2;
         this.racketB = height / 2;
-        this.racketC = height / 2.5;
-        this.racketD = height / 2.5; 
         
         double nb;
         nb = Math.random()*10;
     
         if (nb<2.5) {
-            this.ballSpeedX = 450.0;
-            this.ballSpeedY = 450.0;
-            }
+        	this.ballSpeedX = 450.0;
+        	this.ballSpeedY = 450.0;
+        	}
         else if(nb>=2.5 && nb<5) {
-            this.ballSpeedX = 450.0;
-            this.ballSpeedY = -450.0;
+        	this.ballSpeedX = 450.0;
+        	this.ballSpeedY = -450.0;
         }
         else if(nb>=5 && nb<7.5) {
-            this.ballSpeedX = -450.0;
-            this.ballSpeedY = 450.0;
+        	this.ballSpeedX = -450.0;
+        	this.ballSpeedY = 450.0;
         }
         else{
-            this.ballSpeedX = -450.0;
-            this.ballSpeedY = -450.0;
+        	this.ballSpeedX = -450.0;
+        	this.ballSpeedY = -450.0;
         }
         
         this.ballX = width / 2;
