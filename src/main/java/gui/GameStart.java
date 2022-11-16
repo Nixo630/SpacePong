@@ -89,12 +89,9 @@ public class GameStart {
 		multiplay.setLayoutY(400);
 		
 		multiplay.setOnAction(value ->  {
-			court.setIsBot(false);
-			court.setPartiEnCours(true);
-			App.getStage().setScene(courtScene);
-			App.getStage().setFullScreen(true);
-			gw.startAnimation();
+			choose_multiplay();
 	    });
+
 		
 		
 		//Boutton pour quitter le jeu
@@ -653,27 +650,30 @@ public class GameStart {
 		Button[] btn_multi = {button_1vs1,button_2vs2};
 		
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
+
 		
 		button_1vs1.setOnAction(value ->  {
 			visible_change(btn_accueil,true);
 			visible_change(btn_multi,false);
-			jouer_multi();
+			jouer_multi(false);
 	    });
 		
 		button_2vs2.setOnAction(value ->  {
 			visible_change(btn_accueil,true);
 			visible_change(btn_multi,false);
-			jouer_multi();
+			jouer_multi(true);
 	    });
 		
 	}
 	
-	public void jouer_multi() {
+	public void jouer_multi(boolean x) {
 		court.setIsBot(false);
 		court.setPartiEnCours(true);
 		App.getStage().setScene(courtScene);
 		App.getStage().setFullScreen(true);
-		gw.startAnimation();
+		if (x){
+		gw.startAnimation2();}
+		else {gw.startAnimation(); }
 	}
 }
 

@@ -11,4 +11,24 @@ JOSSE;Gaël
 
 * 18/2022
 ** TODO Write and add to git a file with all the details / functionalities
-** the final videogame. 
+** the final videogame.
+
+
+* 8/11/2022
+
+nom; prénom; issues closed; issues opened; working on
+JOFFRIN;Evan; 11, 8; 21, 17, 13, 12, 10, 9; 21
+EL JAMAI;Ali; 5; 21; 16; 21
+PARIS;Albin; 7, 15, 5, 14, 13; 7, 15, 3; --
+LEFORESTIER;Méril; ABI
+BOURGUIBA;Adem; --; 4, 14; --
+ESPANET;Nicolas; 2 ; --; --
+JOSSE;Gaël; ABI
+
+
+
+* 22/11/2022
+** TODO
+*** Solve the issue with GUI overlays in case after "replay"
+*** Add shortcuts for every label in every GUI
+*** Add spport for Locale

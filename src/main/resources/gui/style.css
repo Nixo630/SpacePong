@@ -46,8 +46,69 @@
     -fx-background-size: cover;
 }
 
+#menu_button{
+    -fx-background-image: url("menu_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#resume_button{
+    -fx-background-image: url("resume_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
 #settings_button{
     -fx-background-image: url("setting_button.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
 }
+
+#bg_trou_noir{
+    -fx-background-image: url("bg_trou_noir.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#bg_galaxie{
+    -fx-background-image: url("bg_galaxie.jpg");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_easy{
+    -fx-background-image: url("easy_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_medium{
+    -fx-background-image: url("medium_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_hard{
+    -fx-background-image: url("hard_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_insane{
+    -fx-background-image: url("insane_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_1vs1{
+    -fx-background-image: url("button_1vs1.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_2vs2{
+    -fx-background-image: url("button_2vs2.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
