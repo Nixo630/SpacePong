@@ -13,7 +13,6 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -53,6 +52,7 @@ public class GameView {
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
      * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
      */
+
     public GameView(Court court, Pane root, double scale,Scene startScene) {
         this.court = court;
         this.gameRoot = root;
@@ -81,6 +81,22 @@ public class GameView {
 
         racketB.setX(court.getWidth() * scale + xMargin);
         racketB.setY(court.getRacketB() * scale);
+
+		racketC = new Rectangle();
+        racketC.setHeight(court.getRacketSize() * scale);
+        racketC.setWidth(racketThickness);
+        racketC.setFill(Color.DARKGREY);
+
+        racketC.setX(xMargin - racketThickness);
+        racketC.setY(court.getRacketA() * scale);
+
+        racketD = new Rectangle();
+        racketD.setHeight(court.getRacketSize() * scale);
+        racketD.setWidth(racketThickness);
+        racketD.setFill(Color.DARKGREY);
+
+        racketD.setX(court.getWidth() * scale + xMargin);
+        racketD.setY(court.getRacketB() * scale);
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
@@ -147,9 +163,7 @@ public class GameView {
     	aTimer = new AnimationTimer() {
     		long last = 0;
 			@Override
-			public void handle(long now) {
-				// TODO Auto-generated method stub
-				
+			public void handle(long now) {			
 				if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
@@ -284,14 +298,7 @@ public class GameView {
     public void setEnPause(boolean b) {
     	enPause = b;
     }
-    
-    public boolean getEnPause() {
-    	return enPause;
-    }
-    
-    public void setEnPause(boolean b) {
-    	enPause = b;
-    }
+
     
     public void pause() {
     	enPause = true;

@@ -61,7 +61,7 @@ public class App extends Application {
         System.out.println(longueur);
         System.out.println(hauteur);
         		
-        var court = new Court(playerA, playerB, longueur, hauteur);
+        var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
