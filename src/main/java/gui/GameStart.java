@@ -170,7 +170,7 @@ public class GameStart {
 		//Lorsqu'on clique sur le bouton, on active une fonction qui fait augmenter la jauge de chargement
 		
 		start_button.setOnAction(value ->  {
-			sound("starting.wav");
+			court.sound("starting.wav");
 			startRoot.getChildren().removeAll(start_button);
 			startRoot.getChildren().addAll(progressBar);
 			Button[] tab = {quit,play,setting_button,multiplay};
@@ -485,7 +485,7 @@ public class GameStart {
 
 		Button points_bg = new Button();
 		points_bg.setId("points_background");
-		points_bg.getStylesheets().addAll(this.getClass().getResource("settings.css").toExternalForm());
+		points_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		points_bg.setPrefSize(450, 190/4);
 		points_bg.setLayoutX(10);
 		points_bg.setLayoutY(650);
@@ -504,7 +504,7 @@ public class GameStart {
 
 		Button resolution_bg = new Button();
 		resolution_bg.setId("resolution_background");
-		resolution_bg.getStylesheets().addAll(this.getClass().getResource("settings.css").toExternalForm());
+		resolution_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		resolution_bg.setPrefSize(450, 190/4);
 		resolution_bg.setLayoutX(10);
 		resolution_bg.setLayoutY(750);
@@ -515,7 +515,7 @@ public class GameStart {
 		//Ajout de la flèche retour en arrière
 		Button retour = new Button();
 		retour.setId("return");
-		retour.getStylesheets().addAll(this.getClass().getResource("settings.css").toExternalForm());
+		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		retour.setLayoutX(40);
 		retour.setLayoutY(40);
 		retour.setPrefSize(100, 100);
@@ -572,20 +572,6 @@ public class GameStart {
 	    });
 		
 	}
-
-	public void sound(String s) {
-    	// On joue le son
-    	try
-        {
-    		Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
-            clip.start();
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace(System.out);
-        }
-    }
 	
 	public void print_setting_ball_difficulty(Button [] tab1, Button[] tab2) {
 		Button title_s = new Button();
@@ -645,6 +631,7 @@ public class GameStart {
 	
 	
 	public void chose_difficulty() {
+		
 		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
 		visible_change(btn_accueil,false);
 		
@@ -653,9 +640,9 @@ public class GameStart {
 		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		easy.setCursor(Cursor.HAND);
 		
-		easy.setPrefSize(874/3,159/3);
+		easy.setPrefSize(1424/3,216/3);
 		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
-		easy.setLayoutY(50);
+		
 		
 		
 		Button medium = new Button();
@@ -663,27 +650,29 @@ public class GameStart {
 		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		medium.setCursor(Cursor.HAND);
 		
-		medium.setPrefSize(1183/3,157/3);
+		medium.setPrefSize(1424/3,216/3);
 		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
-		medium.setLayoutY(150);
+		medium.setLayoutY(height/2 - medium.getHeight()- 50);
+		
+		easy.setLayoutY(medium.getLayoutY()-medium.getHeight() - 100);
 		
 		Button hard = new Button();
 		hard.setId("button_hard");
 		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		hard.setCursor(Cursor.HAND);
 		
-		hard.setPrefSize(869/3,154/3);
+		hard.setPrefSize(1424/3,216/3);
 		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
-		hard.setLayoutY(250);
+		hard.setLayoutY(height/2 + hard.getHeight()+ 50);
 		
 		Button insane = new Button();
 		insane.setId("button_insane");
 		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		insane.setCursor(Cursor.HAND);
 		
-		insane.setPrefSize(1257/2,168/2);
+		insane.setPrefSize(1424/3,216/3);
 		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
-		insane.setLayoutY(350);
+		insane.setLayoutY(hard.getLayoutY()+hard.getHeight()+100);
 		
 		Button[] diff = {easy,medium,hard,insane};
 		
@@ -711,9 +700,6 @@ public class GameStart {
 			visible_change(diff,false);
 	    });
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
-			
-			
-		
 	}
 	
 	public void jouer_solo() {

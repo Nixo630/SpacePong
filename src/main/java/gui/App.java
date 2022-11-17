@@ -117,23 +117,6 @@ public class App extends Application {
             }
         });
         
-        
-               
-       
-        
-        /*
-        try
-        {
-    		Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/starting.wav")));
-            clip.start();
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace(System.out);
-        }
-        */
-        
         primaryStage.setScene(startScene);
         primaryStage.setFullScreen(true);
         primaryStage.show();
