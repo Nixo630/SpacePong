@@ -14,6 +14,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.control.ProgressBar;
 import model.Court;
@@ -36,6 +37,15 @@ public class GameStart {
 
 	private Button easy,medium,hard,insane;
 	
+	
+	//Mise en place d'un curseur
+	
+	private Circle curseur_droit;
+	private Circle curseur_gauche;
+	
+	//Cette variable permet de savoir où sont positionné les curseurs;
+	private int indice = 0;
+	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
 		this.startRoot = startRoot;
@@ -43,6 +53,8 @@ public class GameStart {
 		this.gw = gw;
 		this.court = court;
 		this.courtScene = courtScene;
+		
+		
 		
 		gameRoot.setId("choix_galaxie");
 		
@@ -77,6 +89,24 @@ public class GameStart {
 		play.setOnAction(value ->  {
 			chose_difficulty();
 	    });
+		
+		//Mise en place du curseur droit
+		
+		curseur_droit= new Circle();
+		curseur_droit.setRadius(25);
+	    curseur_droit.setCenterX(play.getLayoutX()+play.getPrefWidth()+25);
+	    curseur_droit.setCenterY(play.getLayoutY()+play.getPrefHeight()/2);
+	    
+	    //Mise en place du curseur gauche;
+	    
+	    curseur_gauche= new Circle();
+		curseur_gauche.setRadius(25);
+	    curseur_gauche.setCenterX(play.getLayoutX()-25);
+	    curseur_gauche.setCenterY(play.getLayoutY()+play.getPrefHeight()/2);
+	    
+	    startRoot.getChildren().addAll(curseur_droit,curseur_gauche);
+	    curseur_gauche.setVisible(false);
+	    curseur_droit.setVisible(false);
 		
 		//Mise en place du bouton pour jouer à deux 
 		
@@ -150,9 +180,6 @@ public class GameStart {
 		progressBar.setLayoutY(350);
 		
 		
-		
-		
-		
 		//Mise en place du boutton start
 		
 		Button start_button = new Button();
@@ -190,6 +217,8 @@ public class GameStart {
 						if (time ==0) {
 							charge=true;
 							progressBar.setVisible(false);
+							curseur_droit.setVisible(true);
+							curseur_gauche.setVisible(true);
 							visible_change(tab,true);
 				        	chrono.cancel();
 				        	
@@ -732,6 +761,53 @@ public class GameStart {
 	public Button[] getButtonDificulty() {
 		Button[] tab = {easy,medium,hard,insane};
 		return tab;
+	}
+	
+	//Mise en place de la fonction pour placer les curseur en fonction d'un bouton
+	
+	public void bouger_curseur(Button btn) {
+		//On supprime les curseur
+		
+		startRoot.getChildren().removeAll(curseur_droit,curseur_gauche);
+		
+		//Changement de la position des curseurs en fonction du btn mis en paramètre
+
+	    curseur_droit.setCenterX(btn.getLayoutX()+btn.getPrefWidth()+25);
+	    curseur_droit.setCenterY(btn.getLayoutY()+btn.getPrefHeight()/2);
+	    
+	    //Mise en place du curseur gauche;
+	    
+		curseur_gauche.setCenterX(btn.getLayoutX()-25);
+	    curseur_gauche.setCenterY(btn.getLayoutY()+btn.getPrefHeight()/2);
+	    
+	    //On réaffiche les curseurs
+	    startRoot.getChildren().addAll(curseur_droit,curseur_gauche);
+	}
+	
+	//Fonction pour incrémenter ou décrémenter l'indice des curseurs en fonction de la taille du tableau de bouton
+	
+	public void IncrementeIndice(Button[] btn) {
+		if(indice==btn.length-1) {
+			indice = 0;
+		}
+		else {
+			indice+=1;
+		}
+	}
+	
+	public void DecrementeIndice(Button[] btn) {
+		if(indice==0) {
+			indice = btn.length-1;
+		}
+		else {
+			indice-=1;
+		}
+	}
+	
+	//Fonction pour récuppérer l'indice du curseur
+	
+	public int getCurseurIndice() {
+		return indice;
 	}
 }
 

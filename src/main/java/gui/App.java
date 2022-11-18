@@ -10,6 +10,7 @@ import javax.sound.sampled.Clip;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -64,17 +65,22 @@ public class App extends Application {
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
-        int indice=0;
+ 
+        
+        
         startScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
-                case UP:
-                    playerA.state = RacketController.State.GOING_UP;
+                case C:
+                    gameStart.IncrementeIndice(gameStart.getMenuButton());
+                    System.out.println(gameStart.getCurseurIndice());
+                    gameStart.bouger_curseur(gameStart.getMenuButton()[gameStart.getCurseurIndice()]);
                     break;
-                case DOWN:
-                    playerA.state = RacketController.State.GOING_DOWN;
+                case D:
+                	gameStart.DecrementeIndice(gameStart.getMenuButton());
+                    gameStart.bouger_curseur(gameStart.getMenuButton()[gameStart.getCurseurIndice()]);
                     break;
-                case ENTER:
-                	gameView.pause();
+                case E:
+                	System.out.println("f");
                 	break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
