@@ -352,41 +352,44 @@ public class Court {
      * @return true if a player lost
      */
      private boolean updateBall2(double deltaT) {
-         double nextBallX = ballX + deltaT * ballSpeedX;
+
+
+         // first, compute possible next position if nothing stands in the way
+        double nextBallX = ballX + deltaT * ballSpeedX;
         double nextBallY = ballY + deltaT * ballSpeedY;
         // next, see if the ball would meet some obstacle
 
-        if ((nextBallY < 70 && nextBallX > (racketC*2) && nextBallX < (racketC*2) + racketSize )|| 
-            (nextBallY > height - 50 && nextBallX > (racketD*2)  && nextBallX < (racketD *2)+ racketSize )) {
+        if ((nextBallY < 50 && nextBallX > (racketC*2)- racketSize && nextBallX < (racketC*2) + racketSize )|| 
+            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize && nextBallX < (racketD *2)+ racketSize )) {
             ballSpeedY = -ballSpeedY;
             nextBallY = ballY + deltaT * ballSpeedY;}
             else {
 
-            if (nextBallY < 70) {
+            if (nextBallY < 50) {
             setScoreB(scoreB+1);
             playerLost();
             return true;
-            }
-
-            else if (nextBallY > height-50) {
-            ballSpeedY = -ballSpeedY;
-            nextBallY = ballY + deltaT * ballSpeedY;
+            
+            } else if (nextBallY > height-50) {
+            setScoreA(scoreB+1);
+            playerLost();
+            return true;
             }
             }
         
-     if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
+            if ((nextBallX < 10 && nextBallY > racketA && nextBallY < racketA + racketSize)
+                || (nextBallX > width +10 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
             else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {ballSpeedY += 25;}
             else {ballSpeedY -= 25;}
             nextBallX = ballX + deltaT * ballSpeedX;
-        } else if (nextBallX < 50) {
-            setScoreB(scoreB+1);
+        } else if (nextBallX < 10) {
+            setScoreB(scoreA+1);
             playerLost();
             return true;
             
-        } else if (nextBallX > width+50) {
+        } else if (nextBallX > width+10) {
             setScoreA(scoreA+1);
             playerLost();
             return true; 
@@ -396,6 +399,8 @@ public class Court {
         ballY = nextBallY;
         return false;
     }
+
+
 
 
 
