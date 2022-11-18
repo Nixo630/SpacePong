@@ -23,7 +23,7 @@ public class Court {
     private double ballSpeedX, ballSpeedY; // m 
     private int scoreA = 0;
     private int scoreB = 0;
-    private int scoreFinal;
+    private int scoreFinal = 5;
     private double racketSize; // m
     private RacketController.State botDirection;//direction du bot
     private double directionPoint;//coordonee en y ou la balle se dirige

@@ -26,7 +26,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
-        int longueur = tailleMoniteur.width;
+        int longueur = tailleMoniteur.width-100;
         int hauteur = tailleMoniteur.height;
 
     	guiStage = primaryStage;
@@ -63,6 +63,23 @@ public class App extends Application {
         var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
+        
+        int indice=0;
+        startScene.setOnKeyPressed(ev -> {
+            switch (ev.getCode()) {
+                case UP:
+                    playerA.state = RacketController.State.GOING_UP;
+                    break;
+                case DOWN:
+                    playerA.state = RacketController.State.GOING_DOWN;
+                    break;
+                case ENTER:
+                	gameView.pause();
+                	break;
+                default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
+                	break;
+            }
+        });
         
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {

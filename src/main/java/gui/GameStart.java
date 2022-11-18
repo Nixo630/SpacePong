@@ -34,7 +34,7 @@ public class GameStart {
 	private Court court;
 	private Scene courtScene;
 
-	
+	private Button easy,medium,hard,insane;
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
@@ -492,25 +492,6 @@ public class GameStart {
 
 		startRoot.getChildren().add(points_bg);
 
-		//Ajout du choix de redimmension de l'écran
-		ChoiceBox<String> choiceBox_screen = new ChoiceBox<>();
-		choiceBox_screen.getItems().addAll("Plein ecran fenetre", "Plein ecran");
-		choiceBox_screen.setPrefSize(400/4,190/4);
-		choiceBox_screen.setLayoutX(490);
-		choiceBox_screen.setLayoutY(750);
-		choiceBox_screen.setValue("Plein ecran");
-		
-		startRoot.getChildren().add(choiceBox_screen);
-
-		Button resolution_bg = new Button();
-		resolution_bg.setId("resolution_background");
-		resolution_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		resolution_bg.setPrefSize(450, 190/4);
-		resolution_bg.setLayoutX(10);
-		resolution_bg.setLayoutY(750);
-
-		startRoot.getChildren().add(resolution_bg);
-
 
 		//Ajout de la flèche retour en arrière
 		Button retour = new Button();
@@ -524,9 +505,7 @@ public class GameStart {
 			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
 			choiceBox.setVisible(false);
-			choiceBox_screen.setVisible(false);
 			points_bg.setVisible(false);
-			resolution_bg.setVisible(false);
 			retour.setVisible(false);
 			visible_change(tab_init,true);
 	    });
@@ -537,9 +516,7 @@ public class GameStart {
 			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
 			choiceBox.setVisible(false);
-			choiceBox_screen.setVisible(false);
 			points_bg.setVisible(false);
-			resolution_bg.setVisible(false);
 			retour.setVisible(false);
 			print_setting_ball_difficulty(tab_setting,tab_skin);
 			
@@ -549,26 +526,10 @@ public class GameStart {
 			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
 			choiceBox.setVisible(false);
-			choiceBox_screen.setVisible(false);
 			points_bg.setVisible(false);
-			resolution_bg.setVisible(false);
 			retour.setVisible(false);
 			visible_change(tab_init,true);
 			gw.getCourt().setScoreFinal(choiceBox.getValue());
-
-			switch(choiceBox_screen.getValue()){
-				case "Plein ecran fenetre": 
-					App.getStage().setFullScreen(false);
-					break;
-
-				case "Plein ecran":
-					App.getStage().setFullScreen(true);
-					break;
-
-				default:
-					break;
-			}
-			
 	    });
 		
 	}
@@ -635,7 +596,7 @@ public class GameStart {
 		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
 		visible_change(btn_accueil,false);
 		
-		Button easy = new Button();
+		easy = new Button();
 		easy.setId("button_easy");
 		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		easy.setCursor(Cursor.HAND);
@@ -645,7 +606,7 @@ public class GameStart {
 		
 		
 		
-		Button medium = new Button();
+		medium = new Button();
 		medium.setId("button_medium");
 		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		medium.setCursor(Cursor.HAND);
@@ -656,7 +617,7 @@ public class GameStart {
 		
 		easy.setLayoutY(medium.getLayoutY()-medium.getHeight() - 100);
 		
-		Button hard = new Button();
+		hard = new Button();
 		hard.setId("button_hard");
 		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		hard.setCursor(Cursor.HAND);
@@ -665,7 +626,7 @@ public class GameStart {
 		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
 		hard.setLayoutY(height/2 + hard.getHeight()+ 50);
 		
-		Button insane = new Button();
+		insane = new Button();
 		insane.setId("button_insane");
 		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		insane.setCursor(Cursor.HAND);
@@ -708,6 +669,7 @@ public class GameStart {
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
 		App.getStage().setScene(courtScene);
+		App.getStage().setFullScreen(true);
 		gw.startAnimation();
 	}
 
@@ -760,6 +722,16 @@ public class GameStart {
 		if (x){
 		gw.startAnimation2();}
 		else {gw.startAnimation(); }
+	}
+	
+	public Button[] getMenuButton() {
+		Button[] tab = {setting_button,play,multiplay,quit};
+		return tab;
+	}
+	
+	public Button[] getButtonDificulty() {
+		Button[] tab = {easy,medium,hard,insane};
+		return tab;
 	}
 }
 

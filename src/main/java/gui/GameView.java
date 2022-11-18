@@ -420,6 +420,7 @@ public class GameView {
 	    	racketD.setVisible(true);
 	    	ball.setVisible(true);
 			App.getStage().setScene(start);
+			App.getStage().setFullScreen(true);
 	    });
 		
 		replay.setOnAction(value ->  {
@@ -448,5 +449,10 @@ public class GameView {
     	String t = "Ball_skin/"+s;
     	Image i = new Image(getClass().getResourceAsStream(t));
         ball.setFill(new ImagePattern(i));
+    }
+    
+    public Button[] getPauseButton() {
+    	Button[] tab = {resume,quit};
+    	return tab;
     }
 }
