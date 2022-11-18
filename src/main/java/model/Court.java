@@ -145,6 +145,7 @@ public class Court {
         }
     }
 
+
     public void update(double deltaT) {
         switch (playerA.getState()) {
             case GOING_UP:
@@ -287,7 +288,7 @@ public class Court {
     
 
 
-        public void update2(double deltaT) {
+    public void update2(double deltaT) {
         switch (playerA.getState()) {
             case GOING_UP:
                 racketA -= racketSpeed * deltaT;
@@ -312,40 +313,46 @@ public class Court {
                 if (racketB + racketSize > height) racketB = height - racketSize;
                 break;
         }
-        switch (playerC.getState()) {
+
+        if (updateBall2(deltaT)) reset();
+
+        if (ballX < racketC*2  ){
+            botDirection = RacketController.State.GOING_LEFT;
+        }
+        else {
+            if (ballX > racketC* 2 + racketSize/2) {
+
+                botDirection = RacketController.State.GOING_RIGHT;
+        }
+        else {
+            botDirection = RacketController.State.IDLE;
+        }
+
+        }
+        switch (botDirection) {
             case GOING_LEFT:
                 racketC -= racketSpeed * deltaT;
                 if (racketC < 0.0) racketC = 0.0;
-                break;
-            case IDLE:
-                break;
-            case GOING_RIGHT:
-                racketC += racketSpeed * deltaT;
-                if (racketC + racketSize > height) racketC = height - racketSize;
-                break;
-        }
-        switch (playerD.getState()) {
-            case GOING_LEFT:
                 racketD -= racketSpeed * deltaT;
                 if (racketD < 0.0) racketD = 0.0;
                 break;
             case IDLE:
                 break;
             case GOING_RIGHT:
+                racketC += racketSpeed * deltaT;
+                if (racketC + racketSize > width) racketC = width - racketSize;
                 racketD += racketSpeed * deltaT;
-                if (racketD + racketSize > height) racketD = height - racketSize;
+                if (racketD + racketSize > width) racketD = width - racketSize;
                 break;
         }
-        
-        if (updateBall2(deltaT)) reset();
-    }
+    
+}
        
     /**
      * @return true if a player lost
      */
      private boolean updateBall2(double deltaT) {
-        // first, compute possible next position if nothing stands in the way
-        double nextBallX = ballX + deltaT * ballSpeedX;
+         double nextBallX = ballX + deltaT * ballSpeedX;
         double nextBallY = ballY + deltaT * ballSpeedY;
         // next, see if the ball would meet some obstacle
 
@@ -359,16 +366,16 @@ public class Court {
             setScoreB(scoreB+1);
             playerLost();
             return true;
-            
-            } else if (nextBallY > height-50) {
-            setScoreA(scoreA+1);
-            playerLost();
-            return true;
+            }
+
+            else if (nextBallY > height-50) {
+            ballSpeedY = -ballSpeedY;
+            nextBallY = ballY + deltaT * ballSpeedY;
             }
             }
         
-            if ((nextBallX < 50 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width +50 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
+     if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSize)
+                || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
             else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {ballSpeedY += 25;}
@@ -389,7 +396,6 @@ public class Court {
         ballY = nextBallY;
         return false;
     }
-
 
 
 
