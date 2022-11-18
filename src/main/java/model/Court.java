@@ -285,6 +285,118 @@ public class Court {
         return false;
     }
     
+
+
+        public void update2(double deltaT) {
+        switch (playerA.getState()) {
+            case GOING_UP:
+                racketA -= racketSpeed * deltaT;
+                if (racketA < 0.0) racketA = 0.0;
+                break;
+            case IDLE:
+                break;
+            case GOING_DOWN:
+                racketA += racketSpeed * deltaT;
+                if (racketA + racketSize > height) racketA = height - racketSize;
+                break;
+        }
+        switch (playerB.getState()) {
+            case GOING_UP:
+                racketB -= racketSpeed * deltaT;
+                if (racketB < 0.0) racketB = 0.0;
+                break;
+            case IDLE:
+                break;
+            case GOING_DOWN:
+                racketB += racketSpeed * deltaT;
+                if (racketB + racketSize > height) racketB = height - racketSize;
+                break;
+        }
+        switch (playerC.getState()) {
+            case GOING_LEFT:
+                racketC -= racketSpeed * deltaT;
+                if (racketC < 0.0) racketC = 0.0;
+                break;
+            case IDLE:
+                break;
+            case GOING_RIGHT:
+                racketC += racketSpeed * deltaT;
+                if (racketC + racketSize > height) racketC = height - racketSize;
+                break;
+        }
+        switch (playerD.getState()) {
+            case GOING_LEFT:
+                racketD -= racketSpeed * deltaT;
+                if (racketD < 0.0) racketD = 0.0;
+                break;
+            case IDLE:
+                break;
+            case GOING_RIGHT:
+                racketD += racketSpeed * deltaT;
+                if (racketD + racketSize > height) racketD = height - racketSize;
+                break;
+        }
+        
+        if (updateBall2(deltaT)) reset();
+    }
+       
+    /**
+     * @return true if a player lost
+     */
+     private boolean updateBall2(double deltaT) {
+        // first, compute possible next position if nothing stands in the way
+        double nextBallX = ballX + deltaT * ballSpeedX;
+        double nextBallY = ballY + deltaT * ballSpeedY;
+        // next, see if the ball would meet some obstacle
+
+        if ((nextBallY < 70 && nextBallX > (racketC*2) && nextBallX < (racketC*2) + racketSize )|| 
+            (nextBallY > height - 50 && nextBallX > (racketD*2)  && nextBallX < (racketD *2)+ racketSize )) {
+            ballSpeedY = -ballSpeedY;
+            nextBallY = ballY + deltaT * ballSpeedY;}
+            else {
+
+            if (nextBallY < 70) {
+            setScoreB(scoreB+1);
+            playerLost();
+            return true;
+            
+            } else if (nextBallY > height-50) {
+            setScoreA(scoreA+1);
+            playerLost();
+            return true;
+            }
+            }
+        
+            if ((nextBallX < 50 && nextBallY > racketA && nextBallY < racketA + racketSize)
+                || (nextBallX > width +50 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
+            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
+            else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
+            if (ballSpeedY > 0) {ballSpeedY += 25;}
+            else {ballSpeedY -= 25;}
+            nextBallX = ballX + deltaT * ballSpeedX;
+        } else if (nextBallX < 50) {
+            setScoreB(scoreB+1);
+            playerLost();
+            return true;
+            
+        } else if (nextBallX > width+50) {
+            setScoreA(scoreA+1);
+            playerLost();
+            return true; 
+        }
+        
+        ballX = nextBallX;
+        ballY = nextBallY;
+        return false;
+    }
+
+
+
+
+
+
+
+
     public void sound(String s) {
         // On joue le son
         try
