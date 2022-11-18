@@ -615,6 +615,7 @@ public class GameStart {
 	
 	public void jouer_solo() {
 		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		gw.setmulti(false);
 		visible_change(btn_accueil,true);
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
@@ -653,6 +654,7 @@ public class GameStart {
 
 		
 		button_1vs1.setOnAction(value ->  {
+			gw.setmulti(false);
 			visible_change(btn_accueil,true);
 			visible_change(btn_multi,false);
 			jouer_multi(false);
@@ -672,8 +674,19 @@ public class GameStart {
 		App.getStage().setScene(courtScene);
 		App.getStage().setFullScreen(true);
 		if (x){
+			gw.setmulti(true);
 		gw.startAnimation2();}
-		else {gw.startAnimation(); }
+		else {
+			gw.startAnimation();
+			gw.setmulti(false); }
+	}
+
+
+	//Mise en place des curseurs
+
+	public Button[] getButtonStart(){
+		Button[] tab ={setting_button,play,multiplay,quit};
+		return tab;
 	}
 }
 
