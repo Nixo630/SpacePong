@@ -72,15 +72,24 @@ public class App extends Application {
             switch (ev.getCode()) {
                 case C:
                     gameStart.IncrementeIndice(gameStart.getMenuButton());
-                    System.out.println(gameStart.getCurseurIndice());
                     gameStart.bouger_curseur(gameStart.getMenuButton()[gameStart.getCurseurIndice()]);
                     break;
                 case D:
                 	gameStart.DecrementeIndice(gameStart.getMenuButton());
                     gameStart.bouger_curseur(gameStart.getMenuButton()[gameStart.getCurseurIndice()]);
                     break;
-                case E:
-                	System.out.println("f");
+                case M:
+                	System.out.println("Entrer");
+                	switch (gameStart.getMenuButton()[gameStart.getCurseurIndice()].getId()) {
+                	case "solo_play_button": gameStart.chose_difficulty();
+                		break; 
+                	case "multiplay_play_button": gameStart.choose_multiplay();
+                		break;
+                	case "settings_button": gameStart.parametre();
+                		break;
+                	case "quit_button": System.exit(0);break;
+                	default: break;
+                	}
                 	break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;

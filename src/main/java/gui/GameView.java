@@ -310,7 +310,6 @@ public class GameView {
     		court.setPartiEnCours(false);
 	    	stopAnimation();
 	    	
-			quit.setCancelButton(true);
 			quit.setId("quit_button");
 			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
