@@ -210,7 +210,7 @@ public class GameView {
                     affScoreB.setText(""+court.getScoreB());
                     
                 	
-                	court.setRacketSize(100);
+                	court.setRacketSize(150);
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	court.resetScored();
@@ -268,7 +268,7 @@ public class GameView {
                     affScoreB.setText(""+court.getScoreB());
                     
                 	
-                	court.setRacketSize(100);
+                	court.setRacketSize(150);
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	racketC.setHeight(racketThickness);
