@@ -35,8 +35,12 @@ public class GameStart {
 	private Court court;
 	private Scene courtScene;
 
+	//Boutton pour les parties en solo
 	private Button easy,medium,hard,insane;
 	
+	//Boutton pour les parties en multijoueur
+	private Button button_1vs1;
+	private Button button_2vs2;
 	
 	//Mise en place d'un curseur
 	
@@ -45,6 +49,9 @@ public class GameStart {
 	
 	//Cette variable permet de savoir où sont positionné les curseurs;
 	private int indice = 0;
+	
+	//Ce tableau est le tableau des button courant
+    Button[] current_button;
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
@@ -237,6 +244,8 @@ public class GameStart {
 		  });
 		
 		startRoot.getChildren().addAll(title,start_button);
+		
+		this.current_button = getMenuButton();
 	}
 	
 	//Cette fonction fait apparaitre les bouton de jeu et pour quitter
@@ -548,7 +557,7 @@ public class GameStart {
 			choiceBox.setVisible(false);
 			points_bg.setVisible(false);
 			retour.setVisible(false);
-			print_setting_ball_difficulty(tab_setting,tab_skin);
+			print_setting_racket_difficulty(tab_setting,tab_skin);
 			
 	    });
 		
@@ -564,7 +573,7 @@ public class GameStart {
 		
 	}
 	
-	public void print_setting_ball_difficulty(Button [] tab1, Button[] tab2) {
+	public void print_setting_racket_difficulty(Button [] tab1, Button[] tab2) {
 		Button title_s = new Button();
 		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		title_s.setId("ball_difficulty");
@@ -623,7 +632,7 @@ public class GameStart {
 	
 	public void chose_difficulty() {
 		
-		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		Button[] btn_accueil = getMenuButton();
 		visible_change(btn_accueil,false);
 		
 		easy = new Button();
@@ -665,36 +674,30 @@ public class GameStart {
 		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
 		insane.setLayoutY(hard.getLayoutY()+hard.getHeight()+100);
 		
-		Button[] diff = {easy,medium,hard,insane};
-		
 		insane.setOnAction(value ->  {
-			court.setDifficulty(4);
-			jouer_solo();
-			visible_change(diff,false);
+			jouer_solo(4);
 	    });
 		
 		easy.setOnAction(value ->  {
-			court.setDifficulty(1);
-			jouer_solo();
-			visible_change(diff,false);
+			jouer_solo(1);
 	    });
 		
 		hard.setOnAction(value ->  {
-			court.setDifficulty(3);
-			jouer_solo();
-			visible_change(diff,false);
+			jouer_solo(3);
 	    });
 		
 		medium.setOnAction(value ->  {
-			court.setDifficulty(2);
-			jouer_solo();
-			visible_change(diff,false);
+			jouer_solo(2);
 	    });
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
 	
-	public void jouer_solo() {
-		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+	public void jouer_solo(int i) {
+		court.setDifficulty(i);
+		visible_change(getButtonDifficulty(),false);
+		
+		
+		Button[] btn_accueil = getMenuButton();
 		visible_change(btn_accueil,true);
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
@@ -705,10 +708,10 @@ public class GameStart {
 
 		//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
 	public void choose_multiplay() {
-		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
+		Button[] btn_accueil = getMenuButton();
 		visible_change(btn_accueil,false);
 		
-		Button button_1vs1 = new Button();
+		button_1vs1 = new Button();
 		button_1vs1.setId("button_1vs1");
 		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		button_1vs1.setCursor(Cursor.HAND);
@@ -718,7 +721,7 @@ public class GameStart {
 		button_1vs1.setLayoutY(height/2 - 100);
 		
 		
-		Button button_2vs2 = new Button();
+		button_2vs2 = new Button();
 		button_2vs2.setId("button_2vs2");
 		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		button_2vs2.setCursor(Cursor.HAND);
@@ -727,7 +730,7 @@ public class GameStart {
 		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
 		button_2vs2.setLayoutY(height/2 + 100);
 		
-		Button[] btn_multi = {button_1vs1,button_2vs2};
+		Button[] btn_multi = getButtonMulti();
 		
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
 		
@@ -759,8 +762,13 @@ public class GameStart {
 		return tab;
 	}
 	
-	public Button[] getButtonDificulty() {
+	public Button[] getButtonDifficulty() {
 		Button[] tab = {easy,medium,hard,insane};
+		return tab;
+	}
+	
+	public Button[] getButtonMulti() {
+		Button[] tab = {button_1vs1,button_2vs2};
 		return tab;
 	}
 	
@@ -810,5 +818,18 @@ public class GameStart {
 	public int getCurseurIndice() {
 		return indice;
 	}
+	
+	//Fonction pour recuperer le tableau des boutons courant
+	
+	public Button[] getCurrentButton() {
+		return current_button;
+	}
+	
+	public void setCurrentButton(Button[] btn) {
+		indice=0;
+		current_button = btn;
+		bouger_curseur(current_button[indice]);
+	}
+	
 }
 

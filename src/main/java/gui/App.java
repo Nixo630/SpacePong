@@ -71,23 +71,26 @@ public class App extends Application {
         startScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case C:
-                    gameStart.IncrementeIndice(gameStart.getMenuButton());
-                    gameStart.bouger_curseur(gameStart.getMenuButton()[gameStart.getCurseurIndice()]);
+                    gameStart.IncrementeIndice(gameStart.getCurrentButton());
+                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()]);
                     break;
                 case D:
-                	gameStart.DecrementeIndice(gameStart.getMenuButton());
-                    gameStart.bouger_curseur(gameStart.getMenuButton()[gameStart.getCurseurIndice()]);
+                	gameStart.DecrementeIndice(gameStart.getCurrentButton());
+                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()]);
                     break;
                 case M:
-                	System.out.println("Entrer");
-                	switch (gameStart.getMenuButton()[gameStart.getCurseurIndice()].getId()) {
-                	case "solo_play_button": gameStart.chose_difficulty();
+                	switch (gameStart.getCurrentButton()[gameStart.getCurseurIndice()].getId()) {
+                	case "solo_play_button": gameStart.chose_difficulty();gameStart.setCurrentButton(gameStart.getButtonDifficulty());
                 		break; 
-                	case "multiplay_play_button": gameStart.choose_multiplay();
+                	case "multiplay_play_button": gameStart.choose_multiplay();gameStart.setCurrentButton(gameStart.getButtonMulti());
                 		break;
                 	case "settings_button": gameStart.parametre();
                 		break;
                 	case "quit_button": System.exit(0);break;
+                	case "button_easy": gameStart.jouer_solo(1);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_medium": gameStart.jouer_solo(2);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_hard": gameStart.jouer_solo(3);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_insane": gameStart.jouer_solo(4);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	default: break;
                 	}
                 	break;
