@@ -91,6 +91,8 @@ public class App extends Application {
                 	case "button_medium": gameStart.jouer_solo(2);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_hard": gameStart.jouer_solo(3);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_insane": gameStart.jouer_solo(4);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_1vs1": gameStart.jouer_multi(false);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_2vs2": gameStart.jouer_multi(true);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	default: break;
                 	}
                 	break;

@@ -735,20 +735,22 @@ public class GameStart {
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
 		
 		button_1vs1.setOnAction(value ->  {
-			visible_change(btn_accueil,true);
-			visible_change(btn_multi,false);
 			jouer_multi(false);
 	    });
 		
 		button_2vs2.setOnAction(value ->  {
-			visible_change(btn_accueil,true);
-			visible_change(btn_multi,false);
 			jouer_multi(true);
 	    });
 		
 	}
 	
+	public void VisibleMiseAJourMultiButton() {
+		visible_change(getMenuButton(),true);
+		visible_change(getButtonMulti(),false);
+	}
+	
 	public void jouer_multi(boolean x) {
+		VisibleMiseAJourMultiButton();
 		court.setIsBot(false);
 		court.setPartiEnCours(true);
 		App.getStage().setScene(courtScene);
