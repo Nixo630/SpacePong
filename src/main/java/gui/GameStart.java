@@ -52,10 +52,30 @@ public class GameStart {
 	private Button retour;
 	
 	//Cette variable permet de savoir où sont positionné les curseurs;
-	private int indice = 0;
+	private int indice = 1;
 	
 	//Ce tableau est le tableau des button courant
-    Button[] current_button;
+    private Button[] current_button;
+    
+    //Mise en place de tous les boutons pour les paramètres
+    private Button title_s;
+    private Button title_middle_bar;
+    private Button finish_button;
+    private Button title_ball_skin;
+    private Button title_racket_difficult;
+    private Button title_choix_bg;
+    private Button points_bg;
+    
+    //Boutton pour la barre du milieu
+    
+    private Button middle_bar_no;
+    private Button middle_bar_yes;
+    
+    //Boutton pour le changement de skin de la ball
+    private Button choix_ball_sun,choix_ball_green,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,choix_ball_earth;
+    
+    //Boutton pour changer le background de la game
+    private Button choix_galaxie,choix_trou_noir,choix_earth,choix_earth2;
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
@@ -166,9 +186,6 @@ public class GameStart {
 		retour.setLayoutY(40);
 		retour.setPrefSize(100, 100);
 		retour.setCursor(Cursor.HAND);
-		retour.setOnAction(value ->  {
-			retour();
-	    });
 		
 		startRoot.getChildren().addAll(play, quit,multiplay,retour);
 		
@@ -285,15 +302,18 @@ public class GameStart {
 		
 	}
 	
+	public void setBackground(String s) {
+		gameRoot.setId(s);
+	}
 	
 	public void parametre() {
-		Button[] tab_init = {quit,play,setting_button,multiplay,title};
-		visible_change(tab_init,false);
+		visible_change(getMenuButton(),false);
+		title.setVisible(false);
 		
 		
 		//Mise en place des settings
 		
-		Button title_s = new Button();
+		title_s = new Button();
 		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		title_s.setId("title");
 		
@@ -303,7 +323,7 @@ public class GameStart {
 		
 		
 		//Mise en place du choix de l'arriere plan
-		Button title_choix_bg = new Button();
+		title_choix_bg = new Button();
 		title_choix_bg.setId("title_choix_bg");
 		title_choix_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
@@ -312,7 +332,7 @@ public class GameStart {
 		title_choix_bg.setLayoutY(200);
 		
 		
-		Button choix_galaxie = new Button();
+		choix_galaxie = new Button();
 		choix_galaxie.setId("choix_galaxie");
 		choix_galaxie.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_galaxie.setCursor(Cursor.HAND);
@@ -324,7 +344,7 @@ public class GameStart {
 			gameRoot.setId("choix_galaxie");
 	    });
 		
-		Button choix_trou_noir = new Button();
+		choix_trou_noir = new Button();
 		choix_trou_noir.setId("choix_trou_noir");
 		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_trou_noir.setCursor(Cursor.HAND);
@@ -337,7 +357,7 @@ public class GameStart {
 	    });
 		
 		
-		Button choix_earth = new Button();
+		choix_earth = new Button();
 		choix_earth.setId("choix_earth");
 		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth.setCursor(Cursor.HAND);
@@ -350,7 +370,7 @@ public class GameStart {
 	    });
 		
 		
-		Button choix_earth2 = new Button();
+		choix_earth2 = new Button();
 		choix_earth2.setId("choix_earth2");
 		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth2.setCursor(Cursor.HAND);
@@ -362,7 +382,7 @@ public class GameStart {
 			gameRoot.setId("choix_earth2");
 	    });
 		
-		Button finish_button = new Button();
+		finish_button = new Button();
 		finish_button.setId("finish_button");
 		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		finish_button.setCursor(Cursor.HAND);
@@ -377,7 +397,7 @@ public class GameStart {
 		
 		// User can choose between with middle bar or without middle bar 
 		
-		Button title_middle_bar = new Button();
+		title_middle_bar = new Button();
 		title_middle_bar.setId("title_middle_bar");
 		title_middle_bar.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
@@ -385,7 +405,7 @@ public class GameStart {
 		title_middle_bar.setLayoutX(20);
 		title_middle_bar.setLayoutY(450);
 		
-		Button middle_bar_yes = new Button();
+		middle_bar_yes = new Button();
 		middle_bar_yes.setId("middle_bar_yes");
 		middle_bar_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		middle_bar_yes.setCursor(Cursor.HAND);
@@ -394,10 +414,10 @@ public class GameStart {
 		middle_bar_yes.setLayoutY(400);
 		
 		middle_bar_yes.setOnAction(value ->  {
-			gw.Visible_middle_bar(true);
+			VisibleMiddleBar(true);
 	    });
 		
-		Button middle_bar_no = new Button();
+		middle_bar_no = new Button();
 		middle_bar_no.setId("middle_bar_no");
 		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		middle_bar_no.setCursor(Cursor.HAND);
@@ -406,14 +426,13 @@ public class GameStart {
 		middle_bar_no.setLayoutY(400);
 		
 		middle_bar_no.setOnAction(value ->  {
-			gw.Visible_middle_bar(false);
+			VisibleMiddleBar(false);
 	    });
-		
 		
 		
 		//Mise en place du choix du skin de la balle pour le joueur
 		
-		Button title_ball_skin = new Button();
+		title_ball_skin = new Button();
 		title_ball_skin.setId("title_ball_skin");
 		title_ball_skin.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
@@ -422,7 +441,7 @@ public class GameStart {
 		title_ball_skin.setLayoutY(550);
 		
 		
-		Button choix_ball_sun = new Button();
+		choix_ball_sun = new Button();
 		choix_ball_sun.setId("choix_ball_sun");
 		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		choix_ball_sun.setCursor(Cursor.HAND);
@@ -434,7 +453,7 @@ public class GameStart {
 			gw.setBallSkin("sun_ball.png");
 	    });
 		
-		Button choix_ball_green = new Button();
+		choix_ball_green = new Button();
 		choix_ball_green.setId("choix_ball_green");
 		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		choix_ball_green.setCursor(Cursor.HAND);
@@ -446,7 +465,7 @@ public class GameStart {
 			gw.setBallSkin("green_ball.png");
 	    });
 		
-		Button choix_ball_moon = new Button();
+		choix_ball_moon = new Button();
 		choix_ball_moon.setId("choix_ball_moon");
 		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		choix_ball_moon.setCursor(Cursor.HAND);
@@ -458,7 +477,7 @@ public class GameStart {
 			gw.setBallSkin("moon_ball.png");
 	    });
 		
-		Button choix_ball_jupiter = new Button();
+		choix_ball_jupiter = new Button();
 		choix_ball_jupiter.setId("choix_ball_jupiter");
 		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		choix_ball_jupiter.setCursor(Cursor.HAND);
@@ -470,7 +489,7 @@ public class GameStart {
 			gw.setBallSkin("jupiter_ball.png");
 	    });
 		
-		Button choix_ball_saturne = new Button();
+		choix_ball_saturne = new Button();
 		choix_ball_saturne.setId("choix_ball_saturne");
 		choix_ball_saturne.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		choix_ball_saturne.setCursor(Cursor.HAND);
@@ -482,7 +501,7 @@ public class GameStart {
 			gw.setBallSkin("saturne_ball.png");
 	    });
 		
-		Button choix_ball_lila = new Button();
+		choix_ball_lila = new Button();
 		choix_ball_lila.setId("choix_ball_lila");
 		choix_ball_lila.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		choix_ball_lila.setCursor(Cursor.HAND);
@@ -494,7 +513,7 @@ public class GameStart {
 			gw.setBallSkin("lila_ball.png");
 	    });
 		
-		Button choix_ball_earth = new Button();
+		choix_ball_earth = new Button();
 		choix_ball_earth.setId("choix_ball_earth");
 		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		choix_ball_earth.setCursor(Cursor.HAND);
@@ -517,20 +536,20 @@ public class GameStart {
 				choix_ball_earth);
 		
 		
-		Button title_ball_difficult = new Button ();
-		title_ball_difficult.setId("ball_difficulty");
-		title_ball_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_ball_difficult.setCursor(Cursor.HAND);
+		title_racket_difficult = new Button ();
+		title_racket_difficult.setId("racket_difficulty");
+		title_racket_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		title_racket_difficult.setCursor(Cursor.HAND);
 		
-		title_ball_difficult.setPrefSize(3222/9,492/9);
-		title_ball_difficult.setLayoutX(middle_bar_no.getLayoutX()+middle_bar_no.getPrefWidth()+100);
-		title_ball_difficult.setLayoutY(450);
+		title_racket_difficult.setPrefSize(3222/9,492/9);
+		title_racket_difficult.setLayoutX(middle_bar_no.getLayoutX()+middle_bar_no.getPrefWidth()+100);
+		title_racket_difficult.setLayoutY(450);
 		
-		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no,title_ball_difficult);
+		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no,title_racket_difficult);
 		
 		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,
 				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
-				middle_bar_no,title_ball_difficult};
+				middle_bar_no,title_racket_difficult};
 
 		//Ajout du nombre de points pour finir une partie
 		ChoiceBox<Integer> choiceBox = new ChoiceBox<>();
@@ -543,7 +562,7 @@ public class GameStart {
 
 		startRoot.getChildren().add(choiceBox);
 
-		Button points_bg = new Button();
+		points_bg = new Button();
 		points_bg.setId("points_background");
 		points_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		points_bg.setPrefSize(450, 190/4);
@@ -554,7 +573,7 @@ public class GameStart {
 
 
 		//Ajout de la flèche retour en arrière
-		/*
+		
 		retour = new Button();
 		retour.setId("return");
 		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
@@ -562,19 +581,11 @@ public class GameStart {
 		retour.setLayoutY(40);
 		retour.setPrefSize(100, 100);
 		retour.setCursor(Cursor.HAND);
-		retour.setOnAction(value ->  {
-			visible_change(tab_skin,false);
-			visible_change(tab_setting,false);
-			choiceBox.setVisible(false);
-			points_bg.setVisible(false);
-			retour.setVisible(false);
-			visible_change(tab_init,true);
-	    });
-	    */
+	    
 
 		startRoot.getChildren().add(retour);
 		
-		title_ball_difficult.setOnAction(value ->  {
+		title_racket_difficult.setOnAction(value ->  {
 			visible_change(tab_skin,false);
 			visible_change(tab_setting,false);
 			choiceBox.setVisible(false);
@@ -590,13 +601,26 @@ public class GameStart {
 			choiceBox.setVisible(false);
 			points_bg.setVisible(false);
 			retour.setVisible(false);
-			visible_change(tab_init,true);
+			visible_change(getMenuButton(),true);
+			title.setVisible(true);
 			gw.getCourt().setScoreFinal(choiceBox.getValue());
 	    });
 		
 	}
 	
-	public void retour() {
+	public void VisibleMiddleBar(boolean b) {
+		gw.Visible_middle_bar(b);
+	}
+	
+	//Cette fonction est rataché au boutton retour qu'on retrouve dans les settings, dans le choix de la difficulté et dans le choix du multijoueur
+	public void retour(Button[] btn) {
+		if (egal(btn,getButtonParametre())) {
+			visible_change(getButtonSkinBall(),false);
+			visible_change(getButtonBackground(),false);
+			visible_change(getButtonYesNo(),false);
+			title_s.setVisible(false);
+			
+		}
 		visible_change(getCurrentButton(),false);
 		visible_change(getMenuButton(),true);
 		title.setVisible(true);
@@ -801,6 +825,31 @@ public class GameStart {
 		return tab;
 	}
 	
+	public Button[] getButtonParametre() {
+		Button[] tab = {retour,title_choix_bg,title_middle_bar,title_ball_skin,title_racket_difficult,points_bg,finish_button};
+		return tab;
+	}
+	
+	public Button[] getButtonSkinBall() {
+		Button[] tab_skin= {choix_ball_sun,choix_ball_green,
+				choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
+				choix_ball_earth};
+		
+		return tab_skin;
+	}
+	
+	public Button[] getButtonBackground() {
+		Button[] tab_setting = {choix_galaxie,choix_trou_noir,choix_earth,choix_earth2};
+		
+		return tab_setting;
+	}
+	
+	public Button[] getButtonYesNo(){
+		Button[] tab = {middle_bar_no,middle_bar_yes};
+		
+		return tab;
+	}
+	
 	//Mise en place de la fonction pour placer les curseur en fonction d'un bouton
 	
 	public void bouger_curseur(Button btn) {
@@ -860,5 +909,18 @@ public class GameStart {
 		bouger_curseur(current_button[indice]);
 	}
 	
+	//Fonction auxilliaire permettant de determiner si 2 tableaux ont le même contenu
+	
+	public static boolean egal(Button[] b1, Button[] b2) {
+		if (b1.length!=b2.length) {
+			return false;
+		}
+		for (int i = 0;i<b1.length;i++) {
+			if (b1[i] != b2[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
 

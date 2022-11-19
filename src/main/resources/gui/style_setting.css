@@ -60,7 +60,7 @@
 }
 
 
-#ball_difficulty{
+#racket_difficulty{
     -fx-background-image: url("raquet_difficulty.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;

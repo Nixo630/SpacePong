@@ -80,17 +80,43 @@ public class App extends Application {
                     break;
                 case M:
                 	switch (gameStart.getCurrentButton()[gameStart.getCurseurIndice()].getId()) {
+                	
                 	case "solo_play_button": gameStart.chose_difficulty();gameStart.setCurrentButton(gameStart.getButtonDifficulty());break; 
                 	case "multiplay_play_button": gameStart.choose_multiplay();gameStart.setCurrentButton(gameStart.getButtonMulti());break;
-                	case "settings_button": gameStart.parametre();break;
+                	case "settings_button": gameStart.parametre();gameStart.setCurrentButton(gameStart.getButtonParametre());break;
                 	case "quit_button": System.exit(0);break;
+                	
                 	case "button_easy": gameStart.jouer_solo(1);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_medium": gameStart.jouer_solo(2);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_hard": gameStart.jouer_solo(3);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_insane": gameStart.jouer_solo(4);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	
                 	case "button_1vs1": gameStart.jouer_multi(false);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_2vs2": gameStart.jouer_multi(true);gameStart.setCurrentButton(gameStart.getMenuButton());break;
-                	case "return":gameStart.retour();gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	
+                	case "return":gameStart.retour(gameStart.getCurrentButton());gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	
+                	case "title_ball_skin":gameStart.setCurrentButton(gameStart.getButtonSkinBall());break;
+                	case "title_middle_bar":gameStart.setCurrentButton(gameStart.getButtonYesNo());break;
+                	case "title_choix_bg":gameStart.setCurrentButton(gameStart.getButtonBackground());break;
+                	
+                	case "middle_bar_no":gameStart.VisibleMiddleBar(false);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "middle_bar_yes":gameStart.VisibleMiddleBar(true);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	
+                	case "choix_ball_sun":gameView.setBallSkin("sun_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_ball_green":gameView.setBallSkin("green_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_ball_moon":gameView.setBallSkin("moon_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_ball_jupiter":gameView.setBallSkin("jupiter_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_ball_saturne":gameView.setBallSkin("saturne_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_ball_lila":gameView.setBallSkin("lila_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_ball_earth":gameView.setBallSkin("earth_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	
+                	case "choix_galaxie":gameStart.setBackground("choix_galaxie");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_earth":gameStart.setBackground("earth_ball");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_trou_noir":gameStart.setBackground("choix_trou_noir");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_earth2":gameStart.setBackground("choix_earth2");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	
+                	
                 	default: break;
                 	}
                 	break;
