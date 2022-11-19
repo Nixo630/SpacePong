@@ -48,8 +48,13 @@ public class GameView {
     private Button resume;
     
     //Boutton pour les options lors de la fin du jeu
-    
+    private boolean endGame=false;
+    private Button title_end;
     private Button menu,replay;
+    
+    //Boolean pour vérifier qu'une partie est en cours
+    
+    private boolean PartiEnCours=false;;
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
@@ -175,7 +180,7 @@ public class GameView {
                     last = now;
                     return;
                 }
-                System.out.println (court.getRacketC());                                
+                                       
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);
@@ -228,8 +233,7 @@ public class GameView {
 				if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
-                }
-                System.out.println (court.getRacketC());                                
+                }                             
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);
@@ -290,6 +294,7 @@ public class GameView {
     }
     
     public void startAnimation() {
+    	PartiEnCours = true;
     	animate();
     }
 
@@ -309,7 +314,9 @@ public class GameView {
     
     public void pause() {
     	enPause = true;
-    	if (court.getPartiEnCours()) {
+    	if (PartiEnCours) {
+    		System.out.println("lfrlfhs");
+    		PartiEnCours=false;
     		court.setPartiEnCours(false);
 	    	stopAnimation();
 	    	
@@ -345,21 +352,28 @@ public class GameView {
     } 
     
     public void resume() {
-    	enPause = false;
-    	court.setPartiEnCours(true);
-		startAnimation();
-		gameRoot.getChildren().removeAll(quit,resume);	
+    	if(enPause) {
+    		enPause = false;
+        	court.setPartiEnCours(true);
+    		startAnimation();
+    		gameRoot.getChildren().removeAll(quit,resume);	
+    	}
     }
     
     public void quitter() {
-    	enPause = false;
-		reset();
-		gameRoot.getChildren().removeAll(quit,resume);	
-		court.setPartiEnCours(false);
-		lost_game();
+    	if(enPause) {
+    		PartiEnCours=false;
+    		court.setPartiEnCours(false);
+	    	enPause = false;
+	    	endGame=true;
+			reset();
+			gameRoot.getChildren().removeAll(quit,resume);	
+			lost_game();
+    	}
     }
     
     public void lost_game() {
+    	endGame=true;
     	stopAnimation();
     	racketA.setVisible(false);
     	racketB.setVisible(false);
@@ -375,7 +389,7 @@ public class GameView {
 	
 		//Ici c'est le bouton qui affiche que la partie est termine
 		
-    	Button title_end = new Button();
+    	title_end = new Button();
 		title_end.setId("title_end");
 		title_end.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
@@ -413,8 +427,38 @@ public class GameView {
 		
 		menu.setCursor(Cursor.HAND);
 		menu.setOnAction(value ->  {
-			reset();
-			
+			menu();
+	    });
+		
+		replay.setOnAction(value ->  {
+			replay();
+	    });
+		
+		gameRoot.getChildren().addAll(replay,title_end,menu);
+    }
+    
+    public void replay() {
+    	if(endGame) {
+    		endGame=false;
+    		reset();
+			court.setPartiEnCours(true);
+			menu.setVisible(false);
+			replay.setVisible(false);
+			title_end.setVisible(false);
+			court.setLost(false);
+			racketA.setVisible(true);
+	    	racketB.setVisible(true);
+	    	racketC.setVisible(true);
+	    	racketD.setVisible(true);
+	    	ball.setVisible(true);
+			startAnimation();
+    	}
+    }
+    
+    public void menu() {
+    	if(endGame) {
+    		reset();
+			endGame=false;
 			menu.setVisible(false);
 			replay.setVisible(false);
 			title_end.setVisible(false);
@@ -426,24 +470,7 @@ public class GameView {
 	    	ball.setVisible(true);
 			App.getStage().setScene(start);
 			App.getStage().setFullScreen(true);
-	    });
-		
-		replay.setOnAction(value ->  {
-			reset();
-			court.setPartiEnCours(true);
-			quit.setVisible(false);
-			replay.setVisible(false);
-			title_end.setVisible(false);
-			court.setLost(false);
-			racketA.setVisible(true);
-	    	racketB.setVisible(true);
-	    	racketC.setVisible(true);
-	    	racketD.setVisible(true);
-	    	ball.setVisible(true);
-			startAnimation();
-	    });
-		
-		gameRoot.getChildren().addAll(replay,title_end,menu);
+    	}
     }
     
     public void setChangeRacketSize(boolean b) {

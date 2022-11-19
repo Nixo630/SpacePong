@@ -146,12 +146,15 @@ public class App extends Application {
                     break;
                 case P:
                 	gameView.pause();
+                	gameView.menu();
                 	break;
                 case R:
-                	if(gameView.getEnPause()) gameView.resume(); gameView.setEnPause(false);
+                	gameView.resume();
+                	gameView.replay();
                 	break;
-                case ESCAPE:
-                	System.exit(0);
+                case E:
+                	gameView.quitter();
+                	break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
