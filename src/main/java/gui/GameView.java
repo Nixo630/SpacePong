@@ -42,11 +42,14 @@ public class GameView {
     private boolean changement_taille_racket;
     private final Scene start;
     
+    //Boutton lorsque le jeu est en Pause
     private boolean enPause = false;
     private Button quit ;
     private Button resume;
     
-
+    //Boutton pour les options lors de la fin du jeu
+    
+    private Button menu,replay;
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
@@ -334,12 +337,7 @@ public class GameView {
 			
 			quit.setCursor(Cursor.HAND);
 			quit.setOnAction(value ->  {
-				enPause = false;
-				reset();
-				gameRoot.getChildren().removeAll(quit,resume);	
-				court.setPartiEnCours(false);
-				lost_game();
-				
+				quitter();
 		    });
 			
 			gameRoot.getChildren().addAll(quit,resume);
@@ -351,6 +349,14 @@ public class GameView {
     	court.setPartiEnCours(true);
 		startAnimation();
 		gameRoot.getChildren().removeAll(quit,resume);	
+    }
+    
+    public void quitter() {
+    	enPause = false;
+		reset();
+		gameRoot.getChildren().removeAll(quit,resume);	
+		court.setPartiEnCours(false);
+		lost_game();
     }
     
     public void lost_game() {
@@ -383,7 +389,7 @@ public class GameView {
 		affScoreB.setLayoutY(200);
 		
 		//Bouton pour rejouer
-		Button replay = new Button();
+		replay = new Button();
 		replay.setCursor(Cursor.HAND);
 		replay.setId("replay_button");
 		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -396,20 +402,20 @@ public class GameView {
 		
 		
 		
-		Button quit = new Button();
+		menu = new Button();
 		
-		quit.setId("menu_button");
-		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		menu.setId("menu_button");
+		menu.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		quit.setPrefSize(1003/3,165/3);
-		quit.setLayoutX(width/2 + width/2/2 - quit.getPrefWidth()/2);
-		quit.setLayoutY(610);
+		menu.setPrefSize(1003/3,165/3);
+		menu.setLayoutX(width/2 + width/2/2 - menu.getPrefWidth()/2);
+		menu.setLayoutY(610);
 		
-		quit.setCursor(Cursor.HAND);
-		quit.setOnAction(value ->  {
+		menu.setCursor(Cursor.HAND);
+		menu.setOnAction(value ->  {
 			reset();
 			
-			quit.setVisible(false);
+			menu.setVisible(false);
 			replay.setVisible(false);
 			title_end.setVisible(false);
 			court.setLost(false);
@@ -437,7 +443,7 @@ public class GameView {
 			startAnimation();
 	    });
 		
-		gameRoot.getChildren().addAll(replay,title_end,quit);
+		gameRoot.getChildren().addAll(replay,title_end,menu);
     }
     
     public void setChangeRacketSize(boolean b) {
@@ -450,8 +456,13 @@ public class GameView {
         ball.setFill(new ImagePattern(i));
     }
     
-    public Button[] getPauseButton() {
+    public Button[] getButtonPause() {
     	Button[] tab = {resume,quit};
+    	return tab;
+    }
+    
+    public Button[] getButtonEnd() {
+    	Button[] tab = {replay,menu};
     	return tab;
     }
 }

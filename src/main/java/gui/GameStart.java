@@ -4,9 +4,6 @@ import java.awt.Dimension;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import java.io.File;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -76,6 +73,10 @@ public class GameStart {
     
     //Boutton pour changer le background de la game
     private Button choix_galaxie,choix_trou_noir,choix_earth,choix_earth2;
+    
+    //ChoseBox pour permettre à l'utilisateur de choisir en combien de points il veut finir la partie
+    private ChoiceBox<Integer> choiceBox;
+
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
@@ -84,7 +85,6 @@ public class GameStart {
 		this.gw = gw;
 		this.court = court;
 		this.courtScene = courtScene;
-		
 		
 		
 		gameRoot.setId("choix_galaxie");
@@ -108,7 +108,6 @@ public class GameStart {
 		
 		//Mise en place du boutton Play pour jouer au jeu en solo
 		play = new Button();
-		play.setCursor(Cursor.HAND);
 		
 		play.setId("solo_play_button");
 		play.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -116,10 +115,6 @@ public class GameStart {
 		play.setPrefSize(1920/4.5,463/4.5);
 		play.setLayoutX(width/2 - play.getPrefWidth()/2);
 		play.setLayoutY(280);
-		
-		play.setOnAction(value ->  {
-			chose_difficulty();
-	    });
 		
 		//Mise en place du curseur droit
 		
@@ -146,7 +141,6 @@ public class GameStart {
 		//Mise en place du bouton pour jouer à deux 
 		
 		multiplay = new Button();
-		multiplay.setCursor(Cursor.HAND);
 		
 		multiplay.setId("multiplay_play_button");
 		multiplay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -155,12 +149,6 @@ public class GameStart {
 		multiplay.setPrefSize(3376/3.5,574/3.5);
 		multiplay.setLayoutX(width/2 - multiplay.getPrefWidth()/2);
 		multiplay.setLayoutY(400);
-		
-		multiplay.setOnAction(value ->  {
-			choose_multiplay();
-	    });
-
-		
 		
 		//Boutton pour quitter le jeu
 		quit = new Button();
@@ -173,19 +161,12 @@ public class GameStart {
 		quit.setLayoutX(width/2 - quit.getPrefWidth()/2);
 		quit.setLayoutY(650);
 		
-		quit.setCursor(Cursor.HAND);
-		quit.setOnAction(value ->  {
-	           System.exit(0);
-	    });
-		
-		
 		retour = new Button();
 		retour.setId("return");
 		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		retour.setLayoutX(40);
 		retour.setLayoutY(40);
 		retour.setPrefSize(100, 100);
-		retour.setCursor(Cursor.HAND);
 		
 		startRoot.getChildren().addAll(play, quit,multiplay,retour);
 		
@@ -197,7 +178,7 @@ public class GameStart {
 		//Mise en place du boutton setting
 		
 		setting_button = new Button();
-		setting_button.setCursor(Cursor.HAND);
+		
 		setting_button.setId("settings_button");
 		setting_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
@@ -205,10 +186,6 @@ public class GameStart {
 		
 		setting_button.setLayoutX(width-setting_button.getPrefWidth());
 		setting_button.setLayoutY(0);
-		
-		setting_button.setOnAction(value ->  {
-			parametre();
-	    });
 		
 		
 		startRoot.getChildren().addAll(setting_button);
@@ -335,26 +312,19 @@ public class GameStart {
 		choix_galaxie = new Button();
 		choix_galaxie.setId("choix_galaxie");
 		choix_galaxie.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_galaxie.setCursor(Cursor.HAND);
+		
 		choix_galaxie.setPrefSize(1600/8,1200/10);
 		choix_galaxie.setLayoutX(20+title_choix_bg.getPrefWidth()+25);
 		choix_galaxie.setLayoutY(200);
 		
-		choix_galaxie.setOnAction(value ->  {
-			gameRoot.setId("choix_galaxie");
-	    });
 		
 		choix_trou_noir = new Button();
 		choix_trou_noir.setId("choix_trou_noir");
 		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_trou_noir.setCursor(Cursor.HAND);
+		
 		choix_trou_noir.setPrefSize(1600/8,1200/10);
 		choix_trou_noir.setLayoutX(20 + choix_galaxie.getLayoutX()+choix_galaxie.getPrefWidth()+25);
 		choix_trou_noir.setLayoutY(200);
-		
-		choix_trou_noir.setOnAction(value ->  {
-			gameRoot.setId("choix_trou_noir");
-	    });
 		
 		
 		choix_earth = new Button();
@@ -385,7 +355,7 @@ public class GameStart {
 		finish_button = new Button();
 		finish_button.setId("finish_button");
 		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		finish_button.setCursor(Cursor.HAND);
+		
 		finish_button.setPrefSize(1795/8,332/8);
 		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
 		finish_button.setLayoutY(height-100);
@@ -408,27 +378,20 @@ public class GameStart {
 		middle_bar_yes = new Button();
 		middle_bar_yes.setId("middle_bar_yes");
 		middle_bar_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		middle_bar_yes.setCursor(Cursor.HAND);
+		
 		middle_bar_yes.setPrefSize(497/4,464/4);
 		middle_bar_yes.setLayoutX(20+title_middle_bar.getPrefWidth()+25);
 		middle_bar_yes.setLayoutY(400);
 		
-		middle_bar_yes.setOnAction(value ->  {
-			VisibleMiddleBar(true);
-	    });
+		
 		
 		middle_bar_no = new Button();
 		middle_bar_no.setId("middle_bar_no");
 		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		middle_bar_no.setCursor(Cursor.HAND);
+		
 		middle_bar_no.setPrefSize(497/4,464/4);
 		middle_bar_no.setLayoutX(middle_bar_yes.getLayoutX()+middle_bar_yes.getPrefWidth()+25);
 		middle_bar_no.setLayoutY(400);
-		
-		middle_bar_no.setOnAction(value ->  {
-			VisibleMiddleBar(false);
-	    });
-		
 		
 		//Mise en place du choix du skin de la balle pour le joueur
 		
@@ -444,7 +407,6 @@ public class GameStart {
 		choix_ball_sun = new Button();
 		choix_ball_sun.setId("choix_ball_sun");
 		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_sun.setCursor(Cursor.HAND);
 		
 		choix_ball_sun.setPrefSize(202/4,202/4);
 		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+25);
@@ -456,80 +418,54 @@ public class GameStart {
 		choix_ball_green = new Button();
 		choix_ball_green.setId("choix_ball_green");
 		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_green.setCursor(Cursor.HAND);
 		
 		choix_ball_green.setPrefSize(196/4,217/4);
 		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+25);
 		choix_ball_green.setLayoutY(550);
-		choix_ball_green.setOnAction(value ->  {
-			gw.setBallSkin("green_ball.png");
-	    });
+		
 		
 		choix_ball_moon = new Button();
 		choix_ball_moon.setId("choix_ball_moon");
 		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_moon.setCursor(Cursor.HAND);
 		
 		choix_ball_moon.setPrefSize(208/4,237/4);
 		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+25);
 		choix_ball_moon.setLayoutY(550);
-		choix_ball_moon.setOnAction(value ->  {
-			gw.setBallSkin("moon_ball.png");
-	    });
+		
 		
 		choix_ball_jupiter = new Button();
 		choix_ball_jupiter.setId("choix_ball_jupiter");
 		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_jupiter.setCursor(Cursor.HAND);
 		
 		choix_ball_jupiter.setPrefSize(158/4,234/4);
 		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+25);
 		choix_ball_jupiter.setLayoutY(550);
-		choix_ball_jupiter.setOnAction(value ->  {
-			gw.setBallSkin("jupiter_ball.png");
-	    });
+		
 		
 		choix_ball_saturne = new Button();
 		choix_ball_saturne.setId("choix_ball_saturne");
 		choix_ball_saturne.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_saturne.setCursor(Cursor.HAND);
 		
 		choix_ball_saturne.setPrefSize(239/4,214/4);
 		choix_ball_saturne.setLayoutX(choix_ball_jupiter.getLayoutX()+choix_ball_jupiter.getPrefWidth()+25);
 		choix_ball_saturne.setLayoutY(550);
-		choix_ball_saturne.setOnAction(value ->  {
-			gw.setBallSkin("saturne_ball.png");
-	    });
 		
 		choix_ball_lila = new Button();
 		choix_ball_lila.setId("choix_ball_lila");
 		choix_ball_lila.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_lila.setCursor(Cursor.HAND);
 		
 		choix_ball_lila.setPrefSize(199/4,214/4);
 		choix_ball_lila.setLayoutX(choix_ball_saturne.getLayoutX()+choix_ball_saturne.getPrefWidth()+25);
 		choix_ball_lila.setLayoutY(550);
-		choix_ball_lila.setOnAction(value ->  {
-			gw.setBallSkin("lila_ball.png");
-	    });
+		
 		
 		choix_ball_earth = new Button();
 		choix_ball_earth.setId("choix_ball_earth");
 		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_earth.setCursor(Cursor.HAND);
 		
 		choix_ball_earth.setPrefSize(168/4,234/4);
 		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+25);
 		choix_ball_earth.setLayoutY(550);
-		choix_ball_earth.setOnAction(value ->  {
-			gw.setBallSkin("earth_ball.png");
-	    });
-		
-		
-		Button[] tab_skin= {title_ball_skin,choix_ball_sun,choix_ball_green,
-				choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
-				choix_ball_earth};
-		
 		
 		startRoot.getChildren().addAll(title_ball_skin,choix_ball_sun,choix_ball_green
 				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
@@ -539,7 +475,6 @@ public class GameStart {
 		title_racket_difficult = new Button ();
 		title_racket_difficult.setId("racket_difficulty");
 		title_racket_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_racket_difficult.setCursor(Cursor.HAND);
 		
 		title_racket_difficult.setPrefSize(3222/9,492/9);
 		title_racket_difficult.setLayoutX(middle_bar_no.getLayoutX()+middle_bar_no.getPrefWidth()+100);
@@ -547,12 +482,9 @@ public class GameStart {
 		
 		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no,title_racket_difficult);
 		
-		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,
-				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
-				middle_bar_no,title_racket_difficult};
 
 		//Ajout du nombre de points pour finir une partie
-		ChoiceBox<Integer> choiceBox = new ChoiceBox<>();
+		choiceBox = new ChoiceBox<>();
 		choiceBox.getItems().addAll(5, 6, 7, 8, 9, 10, 15, 20);
 
 		choiceBox.setPrefSize(168/4,234/4);
@@ -580,32 +512,17 @@ public class GameStart {
 		retour.setLayoutX(40);
 		retour.setLayoutY(40);
 		retour.setPrefSize(100, 100);
-		retour.setCursor(Cursor.HAND);
-	    
+		
 
 		startRoot.getChildren().add(retour);
 		
-		title_racket_difficult.setOnAction(value ->  {
-			visible_change(tab_skin,false);
-			visible_change(tab_setting,false);
-			choiceBox.setVisible(false);
-			points_bg.setVisible(false);
-			retour.setVisible(false);
-			print_setting_racket_difficulty(tab_setting,tab_skin);
-			
-	    });
-		
-		finish_button.setOnAction(value ->  {
-			visible_change(tab_skin,false);
-			visible_change(tab_setting,false);
-			choiceBox.setVisible(false);
-			points_bg.setVisible(false);
-			retour.setVisible(false);
-			visible_change(getMenuButton(),true);
-			title.setVisible(true);
-			gw.getCourt().setScoreFinal(choiceBox.getValue());
-	    });
-		
+	}
+	
+	public void finish() {
+		choiceBox.setVisible(false);
+		points_bg.setVisible(false);
+		gw.getCourt().setScoreFinal(choiceBox.getValue());
+		retour(getButtonParametre());
 	}
 	
 	public void VisibleMiddleBar(boolean b) {
@@ -615,6 +532,7 @@ public class GameStart {
 	//Cette fonction est rataché au boutton retour qu'on retrouve dans les settings, dans le choix de la difficulté et dans le choix du multijoueur
 	public void retour(Button[] btn) {
 		if (egal(btn,getButtonParametre())) {
+			choiceBox.setVisible(false);
 			visible_change(getButtonSkinBall(),false);
 			visible_change(getButtonBackground(),false);
 			visible_change(getButtonYesNo(),false);
@@ -692,7 +610,6 @@ public class GameStart {
 		easy = new Button();
 		easy.setId("button_easy");
 		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		easy.setCursor(Cursor.HAND);
 		
 		easy.setPrefSize(1424/3,216/3);
 		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
@@ -702,7 +619,6 @@ public class GameStart {
 		medium = new Button();
 		medium.setId("button_medium");
 		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		medium.setCursor(Cursor.HAND);
 		
 		medium.setPrefSize(1424/3,216/3);
 		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
@@ -713,7 +629,6 @@ public class GameStart {
 		hard = new Button();
 		hard.setId("button_hard");
 		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		hard.setCursor(Cursor.HAND);
 		
 		hard.setPrefSize(1424/3,216/3);
 		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
@@ -722,27 +637,11 @@ public class GameStart {
 		insane = new Button();
 		insane.setId("button_insane");
 		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		insane.setCursor(Cursor.HAND);
 		
 		insane.setPrefSize(1424/3,216/3);
 		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
 		insane.setLayoutY(hard.getLayoutY()+hard.getHeight()+100);
 		
-		insane.setOnAction(value ->  {
-			jouer_solo(4);
-	    });
-		
-		easy.setOnAction(value ->  {
-			jouer_solo(1);
-	    });
-		
-		hard.setOnAction(value ->  {
-			jouer_solo(3);
-	    });
-		
-		medium.setOnAction(value ->  {
-			jouer_solo(2);
-	    });
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
 	
@@ -753,6 +652,7 @@ public class GameStart {
 		visible_change(getMenuButton(),true);
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
+		App.getStage().setFullScreen(true);
 		App.getStage().setScene(courtScene);
 		App.getStage().setFullScreen(true);
 		gw.startAnimation();
@@ -766,7 +666,6 @@ public class GameStart {
 		button_1vs1 = new Button();
 		button_1vs1.setId("button_1vs1");
 		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		button_1vs1.setCursor(Cursor.HAND);
 		
 		button_1vs1.setPrefSize(1424/3,216/3);
 		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
@@ -776,7 +675,6 @@ public class GameStart {
 		button_2vs2 = new Button();
 		button_2vs2.setId("button_2vs2");
 		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		button_2vs2.setCursor(Cursor.HAND);
 		
 		button_2vs2.setPrefSize(1424/3,216/3);
 		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
@@ -784,15 +682,6 @@ public class GameStart {
 		
 		
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
-		
-		button_1vs1.setOnAction(value ->  {
-			jouer_multi(false);
-	    });
-		
-		button_2vs2.setOnAction(value ->  {
-			jouer_multi(true);
-	    });
-		
 	}
 	
 	public void VisibleMiseAJourMultiButton() {
@@ -852,10 +741,10 @@ public class GameStart {
 	
 	//Mise en place de la fonction pour placer les curseur en fonction d'un bouton
 	
-	public void bouger_curseur(Button btn) {
+	public void bouger_curseur(Button btn,Pane p) {
 		//On supprime les curseur
 		
-		startRoot.getChildren().removeAll(curseur_droit,curseur_gauche);
+		p.getChildren().removeAll(curseur_droit,curseur_gauche);
 		
 		//Changement de la position des curseurs en fonction du btn mis en paramètre
 
@@ -868,7 +757,7 @@ public class GameStart {
 	    curseur_gauche.setCenterY(btn.getLayoutY()+btn.getPrefHeight()/2);
 	    
 	    //On réaffiche les curseurs
-	    startRoot.getChildren().addAll(curseur_droit,curseur_gauche);
+	    p.getChildren().addAll(curseur_droit,curseur_gauche);
 	}
 	
 	//Fonction pour incrémenter ou décrémenter l'indice des curseurs en fonction de la taille du tableau de bouton
@@ -906,7 +795,7 @@ public class GameStart {
 	public void setCurrentButton(Button[] btn) {
 		indice=0;
 		current_button = btn;
-		bouger_curseur(current_button[indice]);
+		bouger_curseur(current_button[indice],startRoot);
 	}
 	
 	//Fonction auxilliaire permettant de determiner si 2 tableaux ont le même contenu

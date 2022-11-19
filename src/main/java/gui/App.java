@@ -72,11 +72,11 @@ public class App extends Application {
             switch (ev.getCode()) {
                 case C:
                     gameStart.IncrementeIndice(gameStart.getCurrentButton());
-                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()]);
+                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
                     break;
                 case D:
                 	gameStart.DecrementeIndice(gameStart.getCurrentButton());
-                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()]);
+                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
                     break;
                 case M:
                 	switch (gameStart.getCurrentButton()[gameStart.getCurseurIndice()].getId()) {
@@ -112,10 +112,11 @@ public class App extends Application {
                 	case "choix_ball_earth":gameView.setBallSkin("earth_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
                 	
                 	case "choix_galaxie":gameStart.setBackground("choix_galaxie");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_earth":gameStart.setBackground("earth_ball");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_earth":gameStart.setBackground("choix_earth");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
                 	case "choix_trou_noir":gameStart.setBackground("choix_trou_noir");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
                 	case "choix_earth2":gameStart.setBackground("choix_earth2");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
                 	
+                	case "finish_button":gameStart.finish();gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	
                 	default: break;
                 	}
