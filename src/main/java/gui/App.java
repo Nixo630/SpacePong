@@ -80,12 +80,9 @@ public class App extends Application {
                     break;
                 case M:
                 	switch (gameStart.getCurrentButton()[gameStart.getCurseurIndice()].getId()) {
-                	case "solo_play_button": gameStart.chose_difficulty();gameStart.setCurrentButton(gameStart.getButtonDifficulty());
-                		break; 
-                	case "multiplay_play_button": gameStart.choose_multiplay();gameStart.setCurrentButton(gameStart.getButtonMulti());
-                		break;
-                	case "settings_button": gameStart.parametre();
-                		break;
+                	case "solo_play_button": gameStart.chose_difficulty();gameStart.setCurrentButton(gameStart.getButtonDifficulty());break; 
+                	case "multiplay_play_button": gameStart.choose_multiplay();gameStart.setCurrentButton(gameStart.getButtonMulti());break;
+                	case "settings_button": gameStart.parametre();break;
                 	case "quit_button": System.exit(0);break;
                 	case "button_easy": gameStart.jouer_solo(1);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_medium": gameStart.jouer_solo(2);gameStart.setCurrentButton(gameStart.getMenuButton());break;
@@ -93,6 +90,7 @@ public class App extends Application {
                 	case "button_insane": gameStart.jouer_solo(4);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_1vs1": gameStart.jouer_multi(false);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_2vs2": gameStart.jouer_multi(true);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "return":gameStart.retour();gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	default: break;
                 	}
                 	break;

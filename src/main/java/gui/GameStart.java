@@ -14,9 +14,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import model.Court;
 
 
@@ -43,9 +45,11 @@ public class GameStart {
 	private Button button_2vs2;
 	
 	//Mise en place d'un curseur
-	
 	private Circle curseur_droit;
 	private Circle curseur_gauche;
+	
+	//Mise en place d'un boutton retour
+	private Button retour;
 	
 	//Cette variable permet de savoir où sont positionné les curseurs;
 	private int indice = 0;
@@ -103,6 +107,8 @@ public class GameStart {
 		curseur_droit.setRadius(25);
 	    curseur_droit.setCenterX(play.getLayoutX()+play.getPrefWidth()+25);
 	    curseur_droit.setCenterY(play.getLayoutY()+play.getPrefHeight()/2);
+	    Image j = new Image(getClass().getResourceAsStream("curseur_droit.png"));
+	    curseur_droit.setFill(new ImagePattern(j));
 	    
 	    //Mise en place du curseur gauche;
 	    
@@ -110,6 +116,8 @@ public class GameStart {
 		curseur_gauche.setRadius(25);
 	    curseur_gauche.setCenterX(play.getLayoutX()-25);
 	    curseur_gauche.setCenterY(play.getLayoutY()+play.getPrefHeight()/2);
+	    Image i = new Image(getClass().getResourceAsStream("curseur_gauche.png"));
+	    curseur_gauche.setFill(new ImagePattern(i));
 	    
 	    startRoot.getChildren().addAll(curseur_droit,curseur_gauche);
 	    curseur_gauche.setVisible(false);
@@ -150,11 +158,24 @@ public class GameStart {
 	           System.exit(0);
 	    });
 		
-		startRoot.getChildren().addAll(play, quit,multiplay);
+		
+		retour = new Button();
+		retour.setId("return");
+		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		retour.setLayoutX(40);
+		retour.setLayoutY(40);
+		retour.setPrefSize(100, 100);
+		retour.setCursor(Cursor.HAND);
+		retour.setOnAction(value ->  {
+			retour();
+	    });
+		
+		startRoot.getChildren().addAll(play, quit,multiplay,retour);
 		
 		play.setVisible(false);
 		multiplay.setVisible(false);
 		quit.setVisible(false);
+		retour.setVisible(false);
 		
 		//Mise en place du boutton setting
 		
@@ -533,7 +554,8 @@ public class GameStart {
 
 
 		//Ajout de la flèche retour en arrière
-		Button retour = new Button();
+		/*
+		retour = new Button();
 		retour.setId("return");
 		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		retour.setLayoutX(40);
@@ -548,6 +570,7 @@ public class GameStart {
 			retour.setVisible(false);
 			visible_change(tab_init,true);
 	    });
+	    */
 
 		startRoot.getChildren().add(retour);
 		
@@ -571,6 +594,12 @@ public class GameStart {
 			gw.getCourt().setScoreFinal(choiceBox.getValue());
 	    });
 		
+	}
+	
+	public void retour() {
+		visible_change(getCurrentButton(),false);
+		visible_change(getMenuButton(),true);
+		title.setVisible(true);
 	}
 	
 	public void print_setting_racket_difficulty(Button [] tab1, Button[] tab2) {
@@ -634,6 +663,7 @@ public class GameStart {
 		
 		Button[] btn_accueil = getMenuButton();
 		visible_change(btn_accueil,false);
+		retour.setVisible(true);
 		
 		easy = new Button();
 		easy.setId("button_easy");
@@ -696,9 +726,7 @@ public class GameStart {
 		court.setDifficulty(i);
 		visible_change(getButtonDifficulty(),false);
 		
-		
-		Button[] btn_accueil = getMenuButton();
-		visible_change(btn_accueil,true);
+		visible_change(getMenuButton(),true);
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
 		App.getStage().setScene(courtScene);
@@ -708,8 +736,8 @@ public class GameStart {
 
 		//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
 	public void choose_multiplay() {
-		Button[] btn_accueil = getMenuButton();
-		visible_change(btn_accueil,false);
+		retour.setVisible(true);
+		visible_change(getMenuButton(),false);
 		
 		button_1vs1 = new Button();
 		button_1vs1.setId("button_1vs1");
@@ -730,7 +758,6 @@ public class GameStart {
 		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
 		button_2vs2.setLayoutY(height/2 + 100);
 		
-		Button[] btn_multi = getButtonMulti();
 		
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
 		
@@ -765,12 +792,12 @@ public class GameStart {
 	}
 	
 	public Button[] getButtonDifficulty() {
-		Button[] tab = {easy,medium,hard,insane};
+		Button[] tab = {retour,easy,medium,hard,insane};
 		return tab;
 	}
 	
 	public Button[] getButtonMulti() {
-		Button[] tab = {button_1vs1,button_2vs2};
+		Button[] tab = {retour,button_1vs1,button_2vs2};
 		return tab;
 	}
 	
