@@ -100,4 +100,21 @@
     -fx-background-size: cover;
 }
 
+#button_1vs1{
+    -fx-background-image: url("button_1vs1.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_2vs2{
+    -fx-background-image: url("button_2vs2.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#button_online{
+    -fx-background-image: url("online.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
 

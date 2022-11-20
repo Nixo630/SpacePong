@@ -80,6 +80,7 @@ public class GameStart {
 
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
+		App.getStage().setResizable(false);
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
@@ -101,21 +102,21 @@ public class GameStart {
 		title.setId("title");
 		title.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		title.setPrefSize(1082/2,332/2);
+		title.setPrefSize(width*26/100,height*15/100);
 		title.setLayoutX(width/2 - title.getPrefWidth()/2);
-		title.setLayoutY(50);
+		title.setLayoutY(height*10/100);
 		
 		
 		
 		//Mise en place du boutton Play pour jouer au jeu en solo
 		play = new Button();
-		
+		play.setCursor(Cursor.HAND);		
 		play.setId("solo_play_button");
 		play.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		play.setPrefSize(1920/4.5,463/4.5);
+		play.setPrefSize(width*30/100,height*10/100);
 		play.setLayoutX(width/2 - play.getPrefWidth()/2);
-		play.setLayoutY(280);
+		play.setLayoutY(height*30/100);
 		
 		//Mise en place du curseur droit
 		
@@ -147,9 +148,9 @@ public class GameStart {
 		multiplay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		multiplay.setPrefSize(3376/3.5,574/3.5);
+		multiplay.setPrefSize(width*70/100,height*15/100);
 		multiplay.setLayoutX(width/2 - multiplay.getPrefWidth()/2);
-		multiplay.setLayoutY(400);
+		multiplay.setLayoutY(height*45/100);
 		
 		//Boutton pour quitter le jeu
 		quit = new Button();
@@ -158,9 +159,9 @@ public class GameStart {
 		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		quit.setPrefSize(1238/4,461/4);
+		quit.setPrefSize(width*25/100,height*15/100);
 		quit.setLayoutX(width/2 - quit.getPrefWidth()/2);
-		quit.setLayoutY(650);
+		quit.setLayoutY(height*65/100);
 		
 		retour = new Button();
 		retour.setId("return");
@@ -183,7 +184,7 @@ public class GameStart {
 		setting_button.setId("settings_button");
 		setting_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		setting_button.setPrefSize(360/2,360/2);
+		setting_button.setPrefSize(height*20/100, height*20/100);
 		
 		setting_button.setLayoutX(width-setting_button.getPrefWidth());
 		setting_button.setLayoutY(0);
@@ -212,7 +213,7 @@ public class GameStart {
 		start_button.setDefaultButton(true);
 		
 		
-		start_button.setPrefSize(2965/4.5,491/4.5);
+		start_button.setPrefSize(width*35/100,height*10/100);
 		
 		start_button.setLayoutX(width/2 - start_button.getPrefWidth()/2);
 		start_button.setLayoutY(height/2 - start_button.getPrefHeight()/2);

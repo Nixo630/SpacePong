@@ -27,7 +27,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
-        int longueur = tailleMoniteur.width-100;
+        int longueur = tailleMoniteur.width;
         int hauteur = tailleMoniteur.height;
 
     	guiStage = primaryStage;
