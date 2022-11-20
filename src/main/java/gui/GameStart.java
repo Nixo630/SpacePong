@@ -618,8 +618,9 @@ public class GameStart {
 		easy.setId("button_easy");
 		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		easy.setPrefSize(1424/3,216/3);
+		easy.setPrefSize(width*45/100,height*10/100);
 		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
+		easy.setLayoutY(height*30/100);
 		
 		
 		
@@ -627,27 +628,26 @@ public class GameStart {
 		medium.setId("button_medium");
 		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		medium.setPrefSize(1424/3,216/3);
+		medium.setPrefSize(width*45/100,height*10/100);
 		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
-		medium.setLayoutY(height/2 - medium.getHeight()- 50);
+		medium.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*45/100);
 		
-		easy.setLayoutY(medium.getLayoutY()-medium.getHeight() - 100);
 		
 		hard = new Button();
 		hard.setId("button_hard");
 		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		hard.setPrefSize(1424/3,216/3);
+		hard.setPrefSize(width*45/100,height*10/100);
 		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
-		hard.setLayoutY(height/2 + hard.getHeight()+ 50);
+		hard.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*85/100);
 		
 		insane = new Button();
 		insane.setId("button_insane");
 		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		insane.setPrefSize(1424/3,216/3);
+		insane.setPrefSize(width*45/100,height*10/100);
 		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
-		insane.setLayoutY(hard.getLayoutY()+hard.getHeight()+100);
+		insane.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*125/100);
 		
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
