@@ -675,8 +675,9 @@ public class GameStart {
 		button_1vs1.setId("button_1vs1");
 		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		button_1vs1.setPrefSize(1424/3,216/3);
+		button_1vs1.setPrefSize(width*45/100,height*10/100);
 		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
+		button_1vs1.setLayoutY(height*30/100);
 		
 		
 		
@@ -684,19 +685,18 @@ public class GameStart {
 		button_2vs2.setId("button_2vs2");
 		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		button_2vs2.setPrefSize(1424/3,216/3);
+		button_2vs2.setPrefSize(width*45/100,height*10/100);
 		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
-		button_2vs2.setLayoutY(height/2 - button_2vs2.getPrefHeight()/2);
+		button_2vs2.setLayoutY(button_1vs1.getLayoutY() + button_1vs1.getLayoutY()*45/100);
 		
-		button_1vs1.setLayoutY(button_2vs2.getLayoutY()-50-button_1vs1.getPrefHeight());
 		
 		online = new Button();
 		online.setId("button_online");
 		online.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		online.setPrefSize(1424/3,216/3);
+		online.setPrefSize(width*45/100,height*10/100);
 		online.setLayoutX(width/2 - online.getPrefWidth()/2);
-		online.setLayoutY(button_2vs2.getLayoutY()+50+button_2vs2.getPrefHeight());
+		online.setLayoutY(button_1vs1.getLayoutY() + button_1vs1.getLayoutY()*85/100);
 		
 		
 		
