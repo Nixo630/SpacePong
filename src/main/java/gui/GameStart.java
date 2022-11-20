@@ -102,9 +102,9 @@ public class GameStart {
 		title.setId("title");
 		title.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		title.setPrefSize(width*26/100,height*15/100);
+		title.setPrefSize(width*50/100,height*25/100);
 		title.setLayoutX(width/2 - title.getPrefWidth()/2);
-		title.setLayoutY(height*10/100);
+		title.setLayoutY(0);
 		
 		
 		
@@ -114,7 +114,7 @@ public class GameStart {
 		play.setId("solo_play_button");
 		play.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		play.setPrefSize(width*30/100,height*10/100);
+		play.setPrefSize(width*35/100,height*15/100);
 		play.setLayoutX(width/2 - play.getPrefWidth()/2);
 		play.setLayoutY(height*30/100);
 		
@@ -159,7 +159,7 @@ public class GameStart {
 		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		quit.setPrefSize(width*25/100,height*15/100);
+		quit.setPrefSize(width*30/100,height*15/100);
 		quit.setLayoutX(width/2 - quit.getPrefWidth()/2);
 		quit.setLayoutY(height*65/100);
 		
@@ -213,7 +213,7 @@ public class GameStart {
 		start_button.setDefaultButton(true);
 		
 		
-		start_button.setPrefSize(width*35/100,height*10/100);
+		start_button.setPrefSize(width*75/100,height*20/100);
 		
 		start_button.setLayoutX(width/2 - start_button.getPrefWidth()/2);
 		start_button.setLayoutY(height/2 - start_button.getPrefHeight()/2);
