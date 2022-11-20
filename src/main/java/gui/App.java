@@ -93,6 +93,7 @@ public class App extends Application {
                 	
                 	case "button_1vs1": gameStart.jouer_multi(false);gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_2vs2": gameStart.jouer_multi(true);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_online":gameStart.jouer_online();gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	
                 	case "return":gameStart.retour(gameStart.getCurrentButton());gameStart.setCurrentButton(gameStart.getMenuButton());break;
                 	

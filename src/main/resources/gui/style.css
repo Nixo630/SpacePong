@@ -112,3 +112,9 @@
     -fx-background-size: cover;
 }
 
+#button_online{
+    -fx-background-image: url("online.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+

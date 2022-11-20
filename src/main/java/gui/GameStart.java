@@ -40,6 +40,7 @@ public class GameStart {
 	//Boutton pour les parties en multijoueur
 	private Button button_1vs1;
 	private Button button_2vs2;
+	private Button online;
 	
 	//Mise en place d'un curseur
 	private Circle curseur_droit;
@@ -669,7 +670,7 @@ public class GameStart {
 		
 		button_1vs1.setPrefSize(1424/3,216/3);
 		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
-		button_1vs1.setLayoutY(height/2 - 100);
+		
 		
 		
 		button_2vs2 = new Button();
@@ -678,10 +679,25 @@ public class GameStart {
 		
 		button_2vs2.setPrefSize(1424/3,216/3);
 		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
-		button_2vs2.setLayoutY(height/2 + 100);
+		button_2vs2.setLayoutY(height/2 - button_2vs2.getPrefHeight()/2);
+		
+		button_1vs1.setLayoutY(button_2vs2.getLayoutY()-50-button_1vs1.getPrefHeight());
+		
+		online = new Button();
+		online.setId("button_online");
+		online.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		online.setPrefSize(1424/3,216/3);
+		online.setLayoutX(width/2 - online.getPrefWidth()/2);
+		online.setLayoutY(button_2vs2.getLayoutY()+50+button_2vs2.getPrefHeight());
 		
 		
-		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
+		
+		startRoot.getChildren().addAll(button_1vs1,button_2vs2,online);
+	}
+	
+	public void jouer_online() {
+		
 	}
 	
 	public void VisibleMiseAJourMultiButton() {
@@ -710,7 +726,7 @@ public class GameStart {
 	}
 	
 	public Button[] getButtonMulti() {
-		Button[] tab = {retour,button_1vs1,button_2vs2};
+		Button[] tab = {retour,button_1vs1,button_2vs2,online};
 		return tab;
 	}
 	
