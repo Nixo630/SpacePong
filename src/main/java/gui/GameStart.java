@@ -53,7 +53,7 @@ public class GameStart {
 	private int indice = 1;
 	
 	//Ce tableau est le tableau des button courant
-    private Button[] current_button;
+    private Button[] current_button= {};
     
     //Mise en place de tous les boutons pour les paramètres
     private Button title_s;
@@ -224,7 +224,7 @@ public class GameStart {
 			court.sound("starting.wav");
 			startRoot.getChildren().removeAll(start_button);
 			startRoot.getChildren().addAll(progressBar);
-			Button[] tab = {quit,play,setting_button,multiplay};
+			
 			
 			if (charge == false) {
 				charge = true;
@@ -243,7 +243,8 @@ public class GameStart {
 							progressBar.setVisible(false);
 							curseur_droit.setVisible(true);
 							curseur_gauche.setVisible(true);
-							visible_change(tab,true);
+							visible_change(getMenuButton(),true);
+							initCurrentButton();
 				        	chrono.cancel();
 				        	
 				        	
@@ -254,13 +255,17 @@ public class GameStart {
 				}, 100,15);
 			}
 			else {
-				visible_change(tab,true);
+				visible_change(getMenuButton(),true);
 			}
 				
 		  });
 		
 		startRoot.getChildren().addAll(title,start_button);
 		
+		
+	}
+	
+	public void initCurrentButton() {
 		this.current_button = getMenuButton();
 	}
 	
