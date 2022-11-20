@@ -77,8 +77,14 @@ public class GameStart {
     
     //ChoseBox pour permettre à l'utilisateur de choisir en combien de points il veut finir la partie
     private ChoiceBox<Integer> choiceBox;
+    
+    //Boutton pour l'option du changement aléatoire de la taille de la raquette
+    
+    private Button title_racket_difficulty;
+    private Label explication;
+    private Button button_yes;
+    private Button button_no;
 
-	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		
 		this.startRoot = startRoot;
@@ -541,7 +547,7 @@ public class GameStart {
 			choiceBox.setVisible(false);
 			visible_change(getButtonSkinBall(),false);
 			visible_change(getButtonBackground(),false);
-			visible_change(getButtonYesNo(),false);
+			visible_change(getMBButtonYesNo(),false);
 			title_s.setVisible(false);
 			
 		}
@@ -550,60 +556,64 @@ public class GameStart {
 		title.setVisible(true);
 	}
 	
-	public void print_setting_racket_difficulty(Button [] tab1, Button[] tab2) {
-		Button title_s = new Button();
-		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_s.setId("ball_difficulty");
+	public void print_setting_racket_difficulty() {
+		visible_change(getButtonParametre(),false);
+		visible_change(getButtonBackground(),false);
+		visible_change(getButtonSkinBall(),false);
+		visible_change(getMBButtonYesNo(),false);
+		choiceBox.setVisible(false);
+		title_s.setVisible(false);
 		
-		title_s.setPrefSize(3222/7,492/7);
-		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_s.setLayoutY(50);
+		title_racket_difficulty = new Button();
+		title_racket_difficulty.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		title_racket_difficulty.setId("racket_difficulty");
 		
-		Label explication = new Label("Ici vous pouvez choisir si voulez un changent aleatoire de la taille des rackets a chaque rebond");
+		title_racket_difficulty.setPrefSize(3222/7,492/7);
+		title_racket_difficulty.setLayoutX(width/2 - title_s.getPrefWidth()/2);
+		title_racket_difficulty.setLayoutY(50);
+		
+		explication = new Label("Ici vous pouvez choisir si voulez un changent aleatoire de la taille des rackets a chaque rebond");
 		explication.setFont(Font.font("Cambria",25));
 		explication.setTextFill(Color.DARKGREY);
 		explication.setPrefWidth(1025);
 		explication.setLayoutX(width/2 - explication.getPrefWidth()/2);
 		explication.setLayoutY(150);
 		
-		Button button_yes = new Button();
-		button_yes.setId("middle_bar_yes");
+		button_yes = new Button();
+		button_yes.setId("RD_yes");
 		button_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		button_yes.setCursor(Cursor.HAND);
+		
 		
 		button_yes.setPrefSize(497/4,464/4);
 		button_yes.setLayoutX(width/2 - button_yes.getPrefWidth()-25);
 		button_yes.setLayoutY(250);
 		
-		Button button_no = new Button();
-		button_no.setId("middle_bar_no");
+		button_no = new Button();
+		button_no.setId("RD_no");
 		button_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		button_no.setCursor(Cursor.HAND);
+		
 		
 		button_no.setPrefSize(497/4,464/4);
 		button_no.setLayoutX(width/2 + button_no.getPrefWidth()+25);
 		button_no.setLayoutY(250);
 		
-		startRoot.getChildren().addAll(title_s,explication,button_yes,button_no);
+		startRoot.getChildren().addAll(title_racket_difficulty,explication,button_yes,button_no);
 		
-		Button[] difficulty= {title_s,button_yes,button_no};
+	}
+	
+	public void reponseRacketDifficuly(boolean b) {
+		title_racket_difficulty.setVisible(false);
+		gw.setChangeRacketSize(b);
+		explication.setVisible(false);
+		title_racket_difficulty.setVisible(false);
+		choiceBox.setVisible(true);
+		title_s.setVisible(true);
 		
-		button_yes.setOnAction(value ->  {
-			gw.setChangeRacketSize(true);
-			visible_change(tab1,true);
-			visible_change(tab2,true);
-			visible_change(difficulty,false);
-			explication.setVisible(false);
-	    });
-		
-		button_no.setOnAction(value ->  {
-			gw.setChangeRacketSize(false);
-			visible_change(tab1,true);
-			visible_change(tab2,true);
-			visible_change(difficulty,false);
-			explication.setVisible(false);
-	    });
-		
+		visible_change(getRDButtonYesNo(),false);
+		visible_change(getButtonParametre(),true);
+		visible_change(getButtonBackground(),true);
+		visible_change(getButtonSkinBall(),true);
+		visible_change(getMBButtonYesNo(),true);
 	}
 	
 	
@@ -754,8 +764,14 @@ public class GameStart {
 		return tab_setting;
 	}
 	
-	public Button[] getButtonYesNo(){
+	public Button[] getMBButtonYesNo(){
 		Button[] tab = {middle_bar_no,middle_bar_yes};
+		
+		return tab;
+	}
+	
+	public Button[] getRDButtonYesNo(){
+		Button[] tab = {button_yes,button_no};
 		
 		return tab;
 	}

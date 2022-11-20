@@ -99,7 +99,7 @@ public class App extends Application {
 	                	case "return":gameStart.retour(gameStart.getCurrentButton());gameStart.setCurrentButton(gameStart.getMenuButton());break;
 	                	
 	                	case "title_ball_skin":gameStart.setCurrentButton(gameStart.getButtonSkinBall());break;
-	                	case "title_middle_bar":gameStart.setCurrentButton(gameStart.getButtonYesNo());break;
+	                	case "title_middle_bar":gameStart.setCurrentButton(gameStart.getMBButtonYesNo());break;
 	                	case "title_choix_bg":gameStart.setCurrentButton(gameStart.getButtonBackground());break;
 	                	
 	                	case "middle_bar_no":gameStart.VisibleMiddleBar(false);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
@@ -118,9 +118,14 @@ public class App extends Application {
 	                	case "choix_trou_noir":gameStart.setBackground("choix_trou_noir");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
 	                	case "choix_earth2":gameStart.setBackground("choix_earth2");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
 	                	
-	                	case "finish_button":gameStart.finish();gameStart.setCurrentButton(gameStart.getMenuButton());break;
 	                	
-                	
+	                	case "racket_difficulty":gameStart.print_setting_racket_difficulty();gameStart.setCurrentButton(gameStart.getRDButtonYesNo());break;
+	                	
+	                	case "RD_yes" : gameStart.reponseRacketDifficuly(true);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "RD_no" : gameStart.reponseRacketDifficuly(false);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                
+	                	case "finish_button":gameStart.finish();gameStart.setCurrentButton(gameStart.getMenuButton());break;
+
 	                	default: break;
 	                	}
                 	}

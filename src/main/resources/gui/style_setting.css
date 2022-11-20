@@ -85,5 +85,16 @@
 }
 
 
+#RD_yes{
+    -fx-background-image: url("yes_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#RD_no{
+    -fx-background-image: url("no_button.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
 
 
