@@ -30,6 +30,7 @@ public class App extends Application {
         int longueur = tailleMoniteur.width;
         int hauteur = tailleMoniteur.height;
 
+
     	guiStage = primaryStage;
         guiStage.setHeight(hauteur);
         guiStage.setWidth(longueur);
@@ -60,8 +61,14 @@ public class App extends Application {
         var playerB = new Player();
         var playerC = new Player();
         var playerD = new Player();
+
+        if(longueur == 1920 && hauteur == 1080){
+            longueur = 1810; hauteur = 1070;
+        }else{
+            longueur =  longueur*95/100; hauteur = hauteur*99/100;
+        }
         		
-        var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
+        var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         

@@ -81,6 +81,7 @@ public class GameStart {
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		App.getStage().setResizable(false);
+		App.getStage().setFullScreenExitHint("appuyer sur 'c' et 'd' pour se deplacer\n appuyer sur 'm' pour accepter");
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
