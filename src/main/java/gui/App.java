@@ -3,15 +3,8 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
@@ -27,8 +20,8 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
-        int longueur = tailleMoniteur.width;
-        int hauteur = tailleMoniteur.height;
+        double longueur = tailleMoniteur.width;
+        double hauteur = tailleMoniteur.height;
 
 
     	guiStage = primaryStage;
@@ -61,12 +54,9 @@ public class App extends Application {
         var playerB = new Player();
         var playerC = new Player();
         var playerD = new Player();
-
-        if(longueur == 1920 && hauteur == 1080){
-            longueur = 1810; hauteur = 1070;
-        }else{
-            longueur =  longueur*95/100; hauteur = hauteur*99/100;
-        }
+        
+        longueur = longueur*(94.2709/100);
+        hauteur = hauteur*(99.0741/100);
         		
         var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
