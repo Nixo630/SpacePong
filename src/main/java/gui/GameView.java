@@ -1,692 +1,489 @@
 package gui;
 
-import java.awt.Dimension;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
+import javafx.scene.image.Image;
+
+import java.awt.Dimension;
+import java.util.Random;
+
+import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.control.ProgressBar;
 import model.Court;
 
+public class GameView {
+    // class parameters
+    private final Court court;
+    private final Pane gameRoot; // main node of the game
+    private final double scale;
+    private final double xMargin = 50.0, racketThickness = 10.0,
+    		murThickness = 10.0; // pixels
 
-public class GameStart {
-	
-	//Boolean pour savoir si la barre de chargement à deja été charge
-	private boolean charge= false;
-	
-	private final Button quit,play,setting_button,multiplay,title;
-	private int height;
-	private int width;
-	private Pane startRoot;
-	private Pane gameRoot;
-	
-	private GameView gw;
-	private Court court;
-	private Scene courtScene;
-	
-	
-	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
-		
-		this.startRoot = startRoot;
-		this.gameRoot = root;
-		this.gw = gw;
-		this.court = court;
-		this.courtScene = courtScene;
-		
-		gameRoot.setId("choix_galaxie");
-		
-		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		height = (int)dimension.getHeight();
-		width  = (int)dimension.getWidth();
-		
-		
-		//Le titre est un bouton sans commande dessus
-		title = new Button();
-		title.setId("title");
-		title.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		title.setPrefSize(1082/2,332/2);
-		title.setLayoutX(width/2 - title.getPrefWidth()/2);
-		title.setLayoutY(50);
-		
-		
-		
-		//Mise en place du boutton Play pour jouer au jeu en solo
-		play = new Button();
-		play.setCursor(Cursor.HAND);
-		
-		play.setId("solo_play_button");
-		play.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		play.setPrefSize(1920/4.5,463/4.5);
-		play.setLayoutX(width/2 - play.getPrefWidth()/2);
-		play.setLayoutY(280);
-		
-		play.setOnAction(value ->  {
-			chose_difficulty();
-	    });
-		
-		//Mise en place du bouton pour jouer à deux 
-		
-		multiplay = new Button();
-		multiplay.setCursor(Cursor.HAND);
-		
-		multiplay.setId("multiplay_play_button");
-		multiplay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		
-		multiplay.setPrefSize(3376/3.5,574/3.5);
-		multiplay.setLayoutX(width/2 - multiplay.getPrefWidth()/2);
-		multiplay.setLayoutY(400);
-		
-		multiplay.setOnAction(value ->  {
-			choose_multiplay();
-	    });
+    // children of the game main node
+    private final Rectangle racketA, racketB, racketC, racketD, racketE, murA, murB, murC, murD, murE;
+    private final Circle ball;
+    
+    private Label affScoreA, affScoreB;   
+    private static AnimationTimer aTimer;
+    
+    public final Color[] colorList = {Color.BLACK, Color.BLUE,
+    		Color.BROWN, Color.CYAN, Color.GOLD, Color.GREEN, Color.LIME,
+    		Color.MAGENTA, Color.ORANGE, Color.PURPLE, Color.RED, Color.WHITE,
+    		Color.YELLOW}; // liste de couleurs possibles pour la balle
+    
+    
+    private boolean changement_taille_racket;
+    private final Scene start;
+    
+    private boolean enPause = false;
+    private Button quit ;
+    private Button resume;
+    private boolean multi ;
+    
 
+    /**
+     * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
+     * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
+     * @param scale le facteur d'échelle entre les distances du modèle et le nombre de pixels correspondants dans la vue
+     */
+    public GameView(Court court, Pane root, double scale,Scene startScene) {
+        this.court = court;
+        this.gameRoot = root;
+        this.scale = scale;
+        start = startScene;
+        
+        changement_taille_racket = false;
+        quit = new Button();
+        resume = new Button();
+
+        root.setMinWidth(court.getWidth() * scale + 2 * xMargin);
+        root.setMinHeight(court.getHeight() * scale);
+
+        racketA = new Rectangle();
+        racketA.setHeight(court.getRacketSize() * scale);
+        racketA.setWidth(racketThickness);
+        racketA.setFill(Color.DARKGREY);
+
+        racketA.setX(xMargin - racketThickness);
+        racketA.setY(court.getRacketA() * scale);
+
+        racketB = new Rectangle();
+        racketB.setHeight(court.getRacketSize() * scale);
+        racketB.setWidth(racketThickness);
+        racketB.setFill(Color.DARKGREY);
+
+        racketB.setX(court.getWidth() * scale + xMargin);
+        racketB.setY(court.getRacketB() * scale);
+
+        racketC = new Rectangle();
+        racketC.setWidth(court.getRacketSize() * scale);
+        racketC.setHeight(racketThickness);
+        racketC.setFill(Color.DARKGREY);
+
+        racketC.setX(court.getRacketC() * scale);
+        racketC.setY(xMargin - racketThickness);
+
+        racketC.setVisible(false);
+
+        racketE = new Rectangle();
+        racketE.setHeight(court.getRacketSize() * scale);
+        racketE.setWidth(racketThickness);
+        racketE.setFill(Color.DARKGREY);
+
+        racketE.setX(court.getRacketC() * scale );
+        racketE.setY(xMargin - racketThickness);
+
+        racketE.setVisible(true);
+
+        
+
+        racketD = new Rectangle();
+        racketD.setWidth(court.getRacketSize() * scale);
+        racketD.setHeight(racketThickness);
+        racketD.setFill(Color.DARKGREY);
+
+        racketD.setX(court.getRacketD() * scale);
+        racketD.setY(court.getHeight() * scale - xMargin + racketThickness);
+
+        racketD.setVisible(false);
+
+
+        ball = new Circle();
+        ball.setRadius(court.getBallRadius());
+        ball.getStyleClass().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
+        
+        ball.setCenterX(court.getBallX() * scale + xMargin);
+        ball.setCenterY(court.getBallY() * scale);
+        
+        setBallSkin("saturne_ball.png");
+        
+        murA = new Rectangle();//mur du haut
+        murA.setWidth(court.getWidth() * scale + 2 * xMargin);
+        murA.setHeight(murThickness);
+        murA.setFill(Color.BLACK);
+        murA.setX(0);
+        murA.setY(0);
+        
+        murB = new Rectangle();//mur du bas
+        murB.setWidth(court.getWidth() * scale + 2 * xMargin);
+        murB.setHeight(murThickness);
+        murB.setFill(Color.BLACK);
+        murB.setX(0);
+        murB.setY(court.getHeight());
+        
+        murC = new Rectangle();//mur de gauche
+        murC.setWidth(murThickness);
+        murC.setHeight(court.getHeight() * scale);
+        murC.setFill(Color.BLACK);
+        murC.setX(0);
+        murC.setY(0);
+        
+        murD = new Rectangle();//mur de droite
+        murD.setWidth(murThickness);
+        murD.setHeight(court.getHeight() * scale + murThickness);
+        murD.setFill(Color.BLACK);
+        murD.setX(court.getWidth() * scale + 2 * xMargin);
+        murD.setY(0);
+        
+        murE = new Rectangle();//mur du milieu
+        murE.setWidth(murThickness);
+        murE.setHeight(court.getHeight() * scale + murThickness);
+        murE.setFill(Color.BLACK);
+        murE.setX(court.getBallX() * scale + xMargin-(court.getBallRadius()/2));
+        murE.setY(0);
+        
+        
+        affScoreA = new Label(""+court.getScoreA());
+        affScoreA.setFont(Font.font("Cambria",250));
+        affScoreA.setTextFill(Color.DARKGREY);
+        affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/2);
+        
+        affScoreB = new Label(""+court.getScoreB());
+        affScoreB.setFont(Font.font("Cambria",250));
+        affScoreB.setTextFill(Color.DARKGREY);
+        affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
+        
+        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD,racketE, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);}
+    
+    public void Visible_middle_bar(boolean b) {
+    	murE.setVisible(b);
+    }
+
+    public void visRacketC(boolean x) {racketC.setVisible(x);}
+    public void visRacketD(boolean x) {racketD.setVisible(x);}
+    public void setmulti (boolean x) { multi = x;}
+    
+    public void animate() {
+    	aTimer = new AnimationTimer() {
+    		long last = 0;
+			@Override
+			public void handle(long now) {
+				// TODO Auto-generated method stub
+				
+				if (last == 0) { // ignore the first tick, just compute the first deltaT
+                    last = now;
+                    return;
+                }
+                System.out.println (court.getRacketC());                                
+                court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
+                last = now;
+                racketA.setY(court.getRacketA() * scale);
+                racketB.setY(court.getRacketB() * scale);
+
+                ball.setCenterX(court.getBallX() * scale + xMargin);
+                ball.setCenterY(court.getBallY() * scale);
+                 
+                if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
+                	
+                	Random rd = new Random();
+                	
+                	// Changement de tailles de raquettes
+                	int h = rd.nextInt(50, 201);
+                	court.setRacketSize(h);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+            		        	
+                	court.resetBallTouched();
+                }
+                             
+                if(court.scored()) {             
+                	affScoreA.setText(""+court.getScoreA());
+                    affScoreB.setText(""+court.getScoreB());
+                    
+                	
+                	court.setRacketSize(150);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+                	court.resetScored();
+                }
+                if(court.getLost()) {   	
+                	lost_game();
+                }
+			}
+    		
+    	};
+    	aTimer.start();
+    }
+
+        public void animate2() {
+     	racketD.setVisible(true);
+    	racketC.setVisible(true);
+    	aTimer = new AnimationTimer() {
+    		long last = 0;
+			@Override
+			public void handle(long now) {
+				// TODO Auto-generated method stub
+				
+				if (last == 0) { // ignore the first tick, just compute the first deltaT
+                    last = now;
+                    return;
+                }
+                System.out.println (court.getRacketC());                                
+                court.update2((now - last) * 1.0e-9); // convert nanoseconds to seconds
+                last = now;
+                racketA.setY(court.getRacketA() * scale);
+                racketB.setY(court.getRacketB() * scale);
+                racketC.setX(court.getRacketC() * scale * 2);
+                racketE.setX(court.getRacketC() * scale * 2);
+                racketD.setX(court.getRacketD() * scale * 2);
+
+                ball.setCenterX(court.getBallX() * scale + xMargin);
+                ball.setCenterY(court.getBallY() * scale);
+                 
+                if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
+                	
+                	Random rd = new Random();
+                	
+                	// Changement de tailles de raquettes
+                	int h = rd.nextInt(50, 201);
+                	court.setRacketSize(h);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+                	racketC.setHeight(racketThickness);
+                    racketE.setHeight(court.getRacketSize() * scale);
+                	racketD.setHeight(racketThickness);
+            		        	
+                	court.resetBallTouched();
+                }
+                             
+                if(court.scored()) {             
+                	affScoreA.setText(""+court.getScoreA());
+                    affScoreB.setText(""+court.getScoreB());
+                    
+                	
+                	court.setRacketSize(150);
+                	racketA.setHeight(court.getRacketSize() * scale);
+                	racketB.setHeight(court.getRacketSize() * scale);
+                	racketC.setHeight(racketThickness);
+                    racketE.setHeight(court.getRacketSize() * scale);
+                	racketD.setHeight(racketThickness);
+                	court.resetScored();
+                }
+                if(court.getLost()) {   	
+                	lost_game();
+                }
+			}
+    		
+    	};
+    	aTimer.start();
+
+    }
+    
+    public void reset() {
+    	affScoreA.setLayoutY(25);
+		affScoreB.setLayoutY(25);
+    	affScoreA.setText("0");
+    	affScoreB.setText("0");
+    	court.reset();
+    	court.reset_score();
+    }
+    
+    public static void stopAnimation() {
+    	aTimer.stop();
+    }
+    
+    public void startAnimation() {
+    	animate();
+    }
+
+    public void startAnimation2() {
+    	animate2();
+    }
+
+    
+    public boolean getEnPause() {
+    	return enPause;
+    }
+    
+    public void setEnPause(boolean b) {
+    	enPause = b;
+    }
+    
+    public void pause() {
+    	enPause = true;
+    	if (court.getPartiEnCours()) {
+    		court.setPartiEnCours(false);
+	    	stopAnimation();
+	    	
+			quit.setCancelButton(true);
+			quit.setId("quit_button");
+			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+			
+			
+			quit.setPrefSize(1238/4,461/4);
+			quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+			quit.setLayoutY(650);
+			
+			
+			resume.setId("resume_button");
+			resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+			
+			
+			resume.setPrefSize(1329/4,138/4);
+			resume.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+			resume.setLayoutY(450);
+			
+			resume.setCursor(Cursor.HAND);
+			resume.setOnAction(value ->  {
+				resume();
+		    });
+			
+			quit.setCursor(Cursor.HAND);
+			quit.setOnAction(value ->  {
+				fin_de_parti();
+				
+		    });
+			
+			gameRoot.getChildren().addAll(quit,resume);
+    	}
+    } 
+    
+    //Cette fonction permet de remettre en route le jeu après que l'utilisateur a fait pause
+    public void resume() {
+    	enPause = false;
+    	court.setPartiEnCours(true);
+		startAnimation();
+		gameRoot.getChildren().removeAll(quit,resume);	
+    }
+
+
+    //Cette fonction permet de quitter correctement la parti, si le joueur a mis en pause le jeu et veut arrêter de jouer
+    //Elle supprime de l'écran les boutons resume et exit, reset les paramètres de la balle
+    public void fin_de_parti(){
+        enPause = false;
+        reset();
+        gameRoot.getChildren().removeAll(quit,resume);  
+        court.setPartiEnCours(false);
+        lost_game();
+    }
+    
+    public void lost_game() {
+    	stopAnimation();
+    	racketA.setVisible(false);
+    	racketB.setVisible(false);
+    	racketC.setVisible(false);
+    	racketD.setVisible(false);
+    	ball.setVisible(false);
+    	
+    	Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
+		//Mise en place de l'affichage de la fin de partie
+	
+		//Ici c'est le bouton qui affiche que la partie est termine
+		
+    	Button title_end = new Button();
+		title_end.setId("title_end");
+		title_end.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		
+		title_end.setPrefSize(2111/3,477/3);
+		title_end.setLayoutX(width/2 - title_end.getPrefWidth()/2);
+		title_end.setLayoutY(50);
+		
+		//Affichage des score
+		
+		affScoreA.setLayoutY(200);
+		affScoreB.setLayoutY(200);
+		
+		//Bouton pour rejouer
+		Button replay = new Button();
+		replay.setCursor(Cursor.HAND);
+		replay.setId("replay_button");
+		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		//Boutton pour quitter le jeu
-		quit = new Button();
-		quit.setCancelButton(true);
-		quit.setId("quit_button");
+		replay.setPrefSize(1412/3,165/3);
+		
+		replay.setLayoutX(width/2 - width/2/2 - replay.getPrefWidth()/2);
+		replay.setLayoutY(610);
+		
+		
+		
+		Button quit = new Button();
+		
+		quit.setId("menu_button");
 		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		
-		quit.setPrefSize(1238/4,461/4);
-		quit.setLayoutX(width/2 - quit.getPrefWidth()/2);
-		quit.setLayoutY(650);
+		quit.setPrefSize(1003/3,165/3);
+		quit.setLayoutX(width/2 + width/2/2 - quit.getPrefWidth()/2);
+		quit.setLayoutY(610);
 		
 		quit.setCursor(Cursor.HAND);
 		quit.setOnAction(value ->  {
-	           System.exit(0);
-	    });
-		
-		startRoot.getChildren().addAll(play, quit,multiplay);
-		
-		play.setVisible(false);
-		multiplay.setVisible(false);
-		quit.setVisible(false);
-		
-		//Mise en place du boutton setting
-		
-		setting_button = new Button();
-		setting_button.setCursor(Cursor.HAND);
-		setting_button.setId("settings_button");
-		setting_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		setting_button.setPrefSize(360/2,360/2);
-		
-		setting_button.setLayoutX(width-setting_button.getPrefWidth());
-		setting_button.setLayoutY(0);
-		
-		setting_button.setOnAction(value ->  {
-			parametre();
-	    });
-		
-		
-		startRoot.getChildren().addAll(setting_button);
-		setting_button.setVisible(false);
-		
-		
-		//Mise en place de la barre de progression
-		
-		ProgressBar progressBar = new ProgressBar(0);
-		
-		progressBar.setPrefSize(width/2.5,75);
-		
-		progressBar.setLayoutX(width/2 - progressBar.getPrefWidth()/2);
-		progressBar.setLayoutY(350);
-		
-		
-		
-		
-		
-		//Mise en place du boutton start
-		
-		Button start_button = new Button();
-		start_button.setCursor(Cursor.HAND);
-		start_button.setId("start_button");
-		start_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		
-		start_button.setPrefSize(2965/4.5,491/4.5);
-		
-		start_button.setLayoutX(width/2 - start_button.getPrefWidth()/2);
-		start_button.setLayoutY(height/2 - start_button.getPrefHeight()/2);
-		
-		
-		//Lorsqu'on clique sur le bouton, on active une fonction qui fait augmenter la jauge de chargement
-		
-		start_button.setOnAction(value ->  {
-			startRoot.getChildren().removeAll(start_button);
-			startRoot.getChildren().addAll(progressBar);
-			Button[] tab = {quit,play,setting_button,multiplay};
+			reset();
 			
-			if (charge == false) {
-				charge = true;
-				Timer chrono = new Timer();
-				chrono.schedule(new TimerTask() {
-	
-					int time = 25;
-					@Override
-					public void run() {
-						
-						avancer(progressBar);
-						
-						
-						if (time ==0) {
-							charge=true;
-							progressBar.setVisible(false);
-							visible_change(tab,true);
-				        	chrono.cancel();
-				        	
-				        	
-						}
-						time--;
-					}
-					
-				}, 100,15);
-			}
-			else {
-				visible_change(tab,true);
-			}
-				
-		  });
-		
-		startRoot.getChildren().addAll(title,start_button);
-	}
-	
-	//Cette fonction fait apparaitre les bouton de jeu et pour quitter
-	public static void visible_change(Button [] t,boolean b) {
-		for (int i = 0;i<t.length;i++) {
-			t[i].setVisible(b);
-		}
-	}
-	
-	void setCharge(boolean t) {
-		charge = t;
-	}
-	//Cette fonction fait avancer la barre de chargmement
-	public static void avancer(ProgressBar pb) {
-		pb.setProgress(0.1+pb.getProgress());
-		
-	}
-	
-	
-	public void parametre() {
-		Button[] tab_init = {quit,play,setting_button,multiplay,title};
-		visible_change(tab_init,false);
-		
-		
-		//Mise en place des settings
-		
-		Button title_s = new Button();
-		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_s.setId("title");
-		
-		title_s.setPrefSize(2733/7,425/7);
-		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_s.setLayoutY(50);
-		
-		
-		//Mise en place du choix de l'arriere plan
-		Button title_choix_bg = new Button();
-		title_choix_bg.setId("title_choix_bg");
-		title_choix_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		title_choix_bg.setPrefSize(3366/8,343/8);
-		title_choix_bg.setLayoutX(20);
-		title_choix_bg.setLayoutY(200);
-		
-		
-		Button choix_galaxie = new Button();
-		choix_galaxie.setId("choix_galaxie");
-		choix_galaxie.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_galaxie.setCursor(Cursor.HAND);
-		choix_galaxie.setPrefSize(1600/8,1200/10);
-		choix_galaxie.setLayoutX(20+title_choix_bg.getPrefWidth()+25);
-		choix_galaxie.setLayoutY(200);
-		
-		choix_galaxie.setOnAction(value ->  {
-			gameRoot.setId("choix_galaxie");
+			quit.setVisible(false);
+			replay.setVisible(false);
+			title_end.setVisible(false);
+			court.setLost(false);
+			racketA.setVisible(true);
+	    	racketB.setVisible(true);
+	    	racketC.setVisible(false);
+	    	racketD.setVisible(false);
+	    	ball.setVisible(true);
+			App.getStage().setScene(start);
+			App.getStage().setFullScreen(true);
 	    });
 		
-		Button choix_trou_noir = new Button();
-		choix_trou_noir.setId("choix_trou_noir");
-		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_trou_noir.setCursor(Cursor.HAND);
-		choix_trou_noir.setPrefSize(1600/8,1200/10);
-		choix_trou_noir.setLayoutX(20 + choix_galaxie.getLayoutX()+choix_galaxie.getPrefWidth()+25);
-		choix_trou_noir.setLayoutY(200);
-		
-		choix_trou_noir.setOnAction(value ->  {
-			gameRoot.setId("choix_trou_noir");
+		replay.setOnAction(value ->  {
+			reset();
+			court.setPartiEnCours(true);
+			quit.setVisible(false);
+			replay.setVisible(false);
+			title_end.setVisible(false);
+			court.setLost(false);
+			racketA.setVisible(true);
+	    	racketB.setVisible(true);
+            if (multi){
+            ball.setVisible(true);
+            startAnimation2();
+            }
+            else {
+            ball.setVisible(true);
+            startAnimation();    
+            }
+	    	
 	    });
 		
-		
-		Button choix_earth = new Button();
-		choix_earth.setId("choix_earth");
-		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_earth.setCursor(Cursor.HAND);
-		choix_earth.setPrefSize(1600/8,1200/10);
-		choix_earth.setLayoutX(20 + choix_trou_noir.getLayoutX()+choix_trou_noir.getPrefWidth()+25);
-		choix_earth.setLayoutY(200);
-		
-		choix_earth.setOnAction(value ->  {
-			gameRoot.setId("choix_earth");
-	    });
-		
-		
-		Button choix_earth2 = new Button();
-		choix_earth2.setId("choix_earth2");
-		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_earth2.setCursor(Cursor.HAND);
-		choix_earth2.setPrefSize(1600/8,1200/10);
-		choix_earth2.setLayoutX(20 + choix_earth.getLayoutX()+choix_earth.getPrefWidth()+25);
-		choix_earth2.setLayoutY(200);
-		
-		choix_earth2.setOnAction(value ->  {
-			gameRoot.setId("choix_earth2");
-	    });
-		
-		Button finish_button = new Button();
-		finish_button.setId("finish_button");
-		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		finish_button.setCursor(Cursor.HAND);
-		finish_button.setPrefSize(1795/8,332/8);
-		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
-		finish_button.setLayoutY(height-100);
-		
-		
-		startRoot.getChildren().addAll(title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button);
-		
-		
-		
-		// User can choose between with middle bar or without middle bar 
-		
-		Button title_middle_bar = new Button();
-		title_middle_bar.setId("title_middle_bar");
-		title_middle_bar.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		title_middle_bar.setPrefSize(2872/8,311/8);
-		title_middle_bar.setLayoutX(20);
-		title_middle_bar.setLayoutY(450);
-		
-		Button middle_bar_yes = new Button();
-		middle_bar_yes.setId("middle_bar_yes");
-		middle_bar_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		middle_bar_yes.setCursor(Cursor.HAND);
-		middle_bar_yes.setPrefSize(497/4,464/4);
-		middle_bar_yes.setLayoutX(20+title_middle_bar.getPrefWidth()+25);
-		middle_bar_yes.setLayoutY(400);
-		
-		middle_bar_yes.setOnAction(value ->  {
-			gw.Visible_middle_bar(true);
-	    });
-		
-		Button middle_bar_no = new Button();
-		middle_bar_no.setId("middle_bar_no");
-		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		middle_bar_no.setCursor(Cursor.HAND);
-		middle_bar_no.setPrefSize(497/4,464/4);
-		middle_bar_no.setLayoutX(middle_bar_yes.getLayoutX()+middle_bar_yes.getPrefWidth()+25);
-		middle_bar_no.setLayoutY(400);
-		
-		middle_bar_no.setOnAction(value ->  {
-			gw.Visible_middle_bar(false);
-	    });
-		
-		
-		
-		//Mise en place du choix du skin de la balle pour le joueur
-		
-		Button title_ball_skin = new Button();
-		title_ball_skin.setId("title_ball_skin");
-		title_ball_skin.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		
-		title_ball_skin.setPrefSize(3213/9,375/9);
-		title_ball_skin.setLayoutX(20);
-		title_ball_skin.setLayoutY(550);
-		
-		
-		Button choix_ball_sun = new Button();
-		choix_ball_sun.setId("choix_ball_sun");
-		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_sun.setCursor(Cursor.HAND);
-		
-		choix_ball_sun.setPrefSize(202/4,202/4);
-		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+25);
-		choix_ball_sun.setLayoutY(550);
-		choix_ball_sun.setOnAction(value ->  {
-			gw.setBallSkin("sun_ball.png");
-	    });
-		
-		Button choix_ball_green = new Button();
-		choix_ball_green.setId("choix_ball_green");
-		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_green.setCursor(Cursor.HAND);
-		
-		choix_ball_green.setPrefSize(196/4,217/4);
-		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+25);
-		choix_ball_green.setLayoutY(550);
-		choix_ball_green.setOnAction(value ->  {
-			gw.setBallSkin("green_ball.png");
-	    });
-		
-		Button choix_ball_moon = new Button();
-		choix_ball_moon.setId("choix_ball_moon");
-		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_moon.setCursor(Cursor.HAND);
-		
-		choix_ball_moon.setPrefSize(208/4,237/4);
-		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+25);
-		choix_ball_moon.setLayoutY(550);
-		choix_ball_moon.setOnAction(value ->  {
-			gw.setBallSkin("moon_ball.png");
-	    });
-		
-		Button choix_ball_jupiter = new Button();
-		choix_ball_jupiter.setId("choix_ball_jupiter");
-		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_jupiter.setCursor(Cursor.HAND);
-		
-		choix_ball_jupiter.setPrefSize(158/4,234/4);
-		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+25);
-		choix_ball_jupiter.setLayoutY(550);
-		choix_ball_jupiter.setOnAction(value ->  {
-			gw.setBallSkin("jupiter_ball.png");
-	    });
-		
-		Button choix_ball_saturne = new Button();
-		choix_ball_saturne.setId("choix_ball_saturne");
-		choix_ball_saturne.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_saturne.setCursor(Cursor.HAND);
-		
-		choix_ball_saturne.setPrefSize(239/4,214/4);
-		choix_ball_saturne.setLayoutX(choix_ball_jupiter.getLayoutX()+choix_ball_jupiter.getPrefWidth()+25);
-		choix_ball_saturne.setLayoutY(550);
-		choix_ball_saturne.setOnAction(value ->  {
-			gw.setBallSkin("saturne_ball.png");
-	    });
-		
-		Button choix_ball_lila = new Button();
-		choix_ball_lila.setId("choix_ball_lila");
-		choix_ball_lila.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_lila.setCursor(Cursor.HAND);
-		
-		choix_ball_lila.setPrefSize(199/4,214/4);
-		choix_ball_lila.setLayoutX(choix_ball_saturne.getLayoutX()+choix_ball_saturne.getPrefWidth()+25);
-		choix_ball_lila.setLayoutY(550);
-		choix_ball_lila.setOnAction(value ->  {
-			gw.setBallSkin("lila_ball.png");
-	    });
-		
-		Button choix_ball_earth = new Button();
-		choix_ball_earth.setId("choix_ball_earth");
-		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_earth.setCursor(Cursor.HAND);
-		
-		choix_ball_earth.setPrefSize(168/4,234/4);
-		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+25);
-		choix_ball_earth.setLayoutY(550);
-		choix_ball_earth.setOnAction(value ->  {
-			gw.setBallSkin("earth_ball.png");
-	    });
-		
-		
-		Button[] tab_skin= {title_ball_skin,choix_ball_sun,choix_ball_green,
-				choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
-				choix_ball_earth};
-		
-		
-		startRoot.getChildren().addAll(title_ball_skin,choix_ball_sun,choix_ball_green
-				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
-				choix_ball_earth);
-		
-		
-		Button title_ball_difficult = new Button ();
-		title_ball_difficult.setId("ball_difficulty");
-		title_ball_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_ball_difficult.setCursor(Cursor.HAND);
-		
-		title_ball_difficult.setPrefSize(3222/9,492/9);
-		title_ball_difficult.setLayoutX(middle_bar_no.getLayoutX()+middle_bar_no.getPrefWidth()+100);
-		title_ball_difficult.setLayoutY(450);
-		
-		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no,title_ball_difficult);
-		
-		Button[] tab_setting = {title_s,title_choix_bg,choix_galaxie,choix_trou_noir,
-				choix_earth,choix_earth2,finish_button,title_middle_bar,middle_bar_yes,
-				middle_bar_no,title_ball_difficult};
-		
-		
-		title_ball_difficult.setOnAction(value ->  {
-			visible_change(tab_skin,false);
-			visible_change(tab_setting,false);
-			print_setting_ball_difficulty(tab_setting,tab_skin);
-			
-	    });
-		
-		finish_button.setOnAction(value ->  {
-			visible_change(tab_skin,false);
-			visible_change(tab_setting,false);
-			visible_change(tab_init,true);
-			
-	    });
-		
-	}
-	
-	public void print_setting_ball_difficulty(Button [] tab1, Button[] tab2) {
-		Button title_s = new Button();
-		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_s.setId("ball_difficulty");
-		
-		title_s.setPrefSize(3222/7,492/7);
-		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_s.setLayoutY(50);
-		
-		Label explication = new Label("Ici vous pouvez choisir si voulez un changent aleatoire de la taille des rackets a chaque rebond");
-		explication.setFont(Font.font("Cambria",25));
-		explication.setTextFill(Color.DARKGREY);
-		explication.setPrefWidth(1025);
-		explication.setLayoutX(width/2 - explication.getPrefWidth()/2);
-		explication.setLayoutY(150);
-		
-		Button button_yes = new Button();
-		button_yes.setId("middle_bar_yes");
-		button_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		button_yes.setCursor(Cursor.HAND);
-		
-		button_yes.setPrefSize(497/4,464/4);
-		button_yes.setLayoutX(width/2 - button_yes.getPrefWidth()-25);
-		button_yes.setLayoutY(250);
-		
-		Button button_no = new Button();
-		button_no.setId("middle_bar_no");
-		button_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		button_no.setCursor(Cursor.HAND);
-		
-		button_no.setPrefSize(497/4,464/4);
-		button_no.setLayoutX(width/2 + button_no.getPrefWidth()+25);
-		button_no.setLayoutY(250);
-		
-		startRoot.getChildren().addAll(title_s,explication,button_yes,button_no);
-		
-		Button[] difficulty= {title_s,button_yes,button_no};
-		
-		button_yes.setOnAction(value ->  {
-			gw.setChangeRacketSize(true);
-			visible_change(tab1,true);
-			visible_change(tab2,true);
-			visible_change(difficulty,false);
-			explication.setVisible(false);
-	    });
-		
-		button_no.setOnAction(value ->  {
-			gw.setChangeRacketSize(false);
-			visible_change(tab1,true);
-			visible_change(tab2,true);
-			visible_change(difficulty,false);
-			explication.setVisible(false);
-	    });
-		
-	}
-	
-	public void chose_difficulty() {
-		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
-		visible_change(btn_accueil,false);
-		
-		Button easy = new Button();
-		easy.setId("button_easy");
-		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		easy.setCursor(Cursor.HAND);
-		
-		easy.setPrefSize(874/3,159/3);
-		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
-		easy.setLayoutY(50);
-		
-		
-		Button medium = new Button();
-		medium.setId("button_medium");
-		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		medium.setCursor(Cursor.HAND);
-		
-		medium.setPrefSize(1183/3,157/3);
-		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
-		medium.setLayoutY(150);
-		
-		Button hard = new Button();
-		hard.setId("button_hard");
-		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		hard.setCursor(Cursor.HAND);
-		
-		hard.setPrefSize(869/3,154/3);
-		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
-		hard.setLayoutY(250);
-		
-		Button insane = new Button();
-		insane.setId("button_insane");
-		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		insane.setCursor(Cursor.HAND);
-		
-		insane.setPrefSize(1257/2,168/2);
-		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
-		insane.setLayoutY(350);
-		
-		Button[] diff = {easy,medium,hard,insane};
-		
-		insane.setOnAction(value ->  {
-			court.setDifficulty(4);
-			jouer_solo();
-			visible_change(diff,false);
-	    });
-		
-		easy.setOnAction(value ->  {
-			court.setDifficulty(1);
-			jouer_solo();
-			visible_change(diff,false);
-	    });
-		
-		hard.setOnAction(value ->  {
-			court.setDifficulty(3);
-			jouer_solo();
-			visible_change(diff,false);
-	    });
-		
-		medium.setOnAction(value ->  {
-			court.setDifficulty(2);
-			jouer_solo();
-			visible_change(diff,false);
-	    });
-		startRoot.getChildren().addAll(easy,medium,hard,insane);
-			
-			
-		
-	}
-	
-	public void jouer_solo() {
-		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
-		gw.setmulti(false);
-		visible_change(btn_accueil,true);
-		court.setPartiEnCours(true);
-		court.setIsBot(true);
-		App.getStage().setScene(courtScene);
-		App.getStage().setFullScreen(true);
-		gw.startAnimation();
-	}
-
-		//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
-	public void choose_multiplay() {
-		Button[] btn_accueil = {quit,play,setting_button,multiplay,title};
-		visible_change(btn_accueil,false);
-		
-		Button button_1vs1 = new Button();
-		button_1vs1.setId("button_1vs1");
-		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		button_1vs1.setCursor(Cursor.HAND);
-		
-		button_1vs1.setPrefSize(1424/3,216/3);
-		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
-		button_1vs1.setLayoutY(height/2 - 100);
-		
-		
-		Button button_2vs2 = new Button();
-		button_2vs2.setId("button_2vs2");
-		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		button_2vs2.setCursor(Cursor.HAND);
-		
-		button_2vs2.setPrefSize(1424/3,216/3);
-		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
-		button_2vs2.setLayoutY(height/2 + 100);
-		
-		Button[] btn_multi = {button_1vs1,button_2vs2};
-		
-		startRoot.getChildren().addAll(button_1vs1,button_2vs2);
-
-		
-		button_1vs1.setOnAction(value ->  {
-			gw.setmulti(false);
-			visible_change(btn_accueil,true);
-			visible_change(btn_multi,false);
-			jouer_multi(false);
-	    });
-		
-		button_2vs2.setOnAction(value ->  {
-			visible_change(btn_accueil,true);
-			visible_change(btn_multi,false);
-			jouer_multi(true);
-	    });
-		
-	}
-	
-	public void jouer_multi(boolean x) {
-		court.setIsBot(false);
-		court.setPartiEnCours(true);
-		App.getStage().setScene(courtScene);
-		App.getStage().setFullScreen(true);
-		if (x){
-			gw.setmulti(true);
-		gw.startAnimation2();}
-		else {
-			gw.startAnimation();
-			gw.setmulti(false); }
-	}
-
-
-	//Mise en place des curseurs
-
-	public Button[] getButtonStart(){
-		Button[] tab ={setting_button,play,multiplay,quit};
-		return tab;
-	}
+		gameRoot.getChildren().addAll(replay,title_end,quit);
+    }
+    
+    public void setChangeRacketSize(boolean b) {
+    	changement_taille_racket = b;
+    }
+    
+    public void setBallSkin(String s) {
+    	String t = "Ball_skin/"+s;
+    	Image i = new Image(getClass().getResourceAsStream(t));
+        ball.setFill(new ImagePattern(i));
+    }
 }
-
