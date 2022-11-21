@@ -134,7 +134,7 @@ public class Court {
         return scoreB;
     }
 
-    private void direction() {
+    private void direction() { // pour le mode 1v1
         if ((racketB + racketSize/2) > directionPoint) {
             botDirection = RacketController.State.GOING_UP;
         }
@@ -146,45 +146,68 @@ public class Court {
         }
     }
 
+    private void direction2() { // pour le mode 2v2
+
+         if (directionPoint < racketC*2 + racketSize/2){
+            botDirection = RacketController.State.GOING_LEFT;
+        }   
+        else {
+            if (directionPoint > racketC*2 + racketSize/2) {
+
+                botDirection = RacketController.State.GOING_RIGHT;
+        }
+        else {
+            botDirection = RacketController.State.IDLE;
+            }
+        }
+    }
+
+    public void deplacement(double deltaT){
+
+        switch (playerA.getState()) {
+                    case GOING_UP:
+                        racketA -= racketSpeed * deltaT;
+                        if (racketA < 0.0) racketA = 0.0;
+                        break;
+                    case IDLE:
+                        break;
+                    case GOING_DOWN:
+                        racketA += racketSpeed * deltaT;
+                        if (racketA + racketSize > height) racketA = height - racketSize;
+                        break;
+                }
+                if(!isBot){
+                    switch (playerB.getState()) {
+                        case GOING_UP:
+                            racketB -= racketSpeed * deltaT;
+                            if (racketB < 0.0) racketB = 0.0;
+                            break;
+                        case IDLE:
+                            break;
+                        case GOING_DOWN:
+                            racketB += racketSpeed * deltaT;
+                            if (racketB + racketSize > height) racketB = height - racketSize;
+                            break;
+                    }
+            }
+    }
+
 
     public void update(double deltaT) {
-        switch (playerA.getState()) {
-            case GOING_UP:
-                racketA -= racketSpeed * deltaT;
-                if (racketA < 0.0) racketA = 0.0;
-                break;
-            case IDLE:
-                break;
-            case GOING_DOWN:
-                racketA += racketSpeed * deltaT;
-                if (racketA + racketSize > height) racketA = height - racketSize;
-                break;
-        }
-        if(!isBot){
-            switch (playerB.getState()) {
-            case GOING_UP:
-                racketB -= racketSpeed * deltaT;
-                if (racketB < 0.0) racketB = 0.0;
-                break;
-            case IDLE:
-                break;
-            case GOING_DOWN:
-                racketB += racketSpeed * deltaT;
-                if (racketB + racketSize > height) racketB = height - racketSize;
-                break;
-            }
-            if (updateBall(deltaT)) reset();
-            return;
-        }
+        deplacement(deltaT);
+
         //La suite est pour le fonctionnement du bot
+
         if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY < racketB + racketSize/2) {//si la balle est dans la premiere moitie du terrain et que les coordonées de la balle sont en dessous du milieu de la raquette alors on monte pour suivre la balle
             //mais il faut aussi que la balle aille dans la direction du bot
-//            System.out.println((width/4)*difficulty);
             racketB -= racketSpeed * deltaT;
             if (racketB < 0.0) racketB = 0.0;
         }
-        else if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
-//          System.out.println((width/4)*difficulty);
+
+        else if 
+        ((ballX < (width/4)*(4-difficulty) || 
+        (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) 
+        && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
             racketB += racketSpeed * deltaT;
             if (racketB + racketSize > height) racketB = height - racketSize;
         }
@@ -290,63 +313,33 @@ public class Court {
 
 
     public void update2(double deltaT) {
-        switch (playerA.getState()) { // on récupère le déplacement du joueur A pour déplacer la hitbox de sa racket
-            case GOING_UP:
-                racketA -= racketSpeed * deltaT;
-                if (racketA < 0.0) racketA = 0.0;
-                break;
-            case IDLE:
-                break;
-            case GOING_DOWN:
-                racketA += racketSpeed * deltaT;
-                if (racketA + racketSize > height) racketA = height - racketSize;
-                break;
-        }
-        switch (playerB.getState()) {  // on récupère le déplacement du joueur B pour déplacer la hitbox de sa racket
-            case GOING_UP:
-                racketB -= racketSpeed * deltaT;
-                if (racketB < 0.0) racketB = 0.0;
-                break;
-            case IDLE:
-                break;
-            case GOING_DOWN:
-                racketB += racketSpeed * deltaT;
-                if (racketB + racketSize > height) racketB = height - racketSize;
-                break;
-        }
+
+        deplacement(deltaT); // fonction pour déplacer les joueurs A et B
 
         if (updateBall2(deltaT)) reset(); // on actualise l'état de la balle
 
         // on déplace les bots en fonction de la position de la balle, les deux resteront aux même coordonées, pas besoin de comparer avec les deux 
         // on décide de déplacer les bots en fonction du milieu de la racket et pas des bords pour qu'ils soient plus réactifs 
 
-        if (ballX < (racketC*2) ){
-            botDirection = RacketController.State.GOING_LEFT;
-        }   
-        else {
-            if (ballX > (racketC)*2 +racketSize/2) {
+        directionPoint = ballX;
+        direction2(); // fonction pour déterminer la direction que va prendre le bot
 
-                botDirection = RacketController.State.GOING_RIGHT;
-        }
-        else {
-            botDirection = RacketController.State.IDLE;
-        }
-
-        }
         switch (botDirection) { // déplacement du bot
             case GOING_LEFT:
+
                 racketC -= racketSpeed * deltaT  ;
                 if (racketC < 0.0) racketC = 0.0;
-
                 racketD -= racketSpeed * deltaT  ;
                 if (racketD < 0.0) racketD = 0.0;
                 break;
+
             case IDLE:
                 break;
+
             case GOING_RIGHT:
+
                 racketC += racketSpeed * deltaT ;
                 if (racketC + racketSize > width) racketC = width - racketSize;
-
                 racketD += racketSpeed * deltaT ;
                 if (racketD + racketSize > width) racketD = width - racketSize;
                 break;
@@ -365,53 +358,63 @@ public class Court {
 
         // les lignes suivantes sont le cas où la balle rencontre un obstacle
 
-        if ((nextBallY < 50 && nextBallX > (racketC*2)-racketSize&& nextBallX < (racketC*2)+racketSize  )|| 
-            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize && nextBallX < (racketD *2) + racketSize )) {
+        if ((nextBallY < 50 && nextBallX > racketC*2 -racketSize && nextBallX < racketC*2+racketSize )|| // si la balle touche la racket du haute 
+            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize/2&& nextBallX < (racketD *2) + racketSize )) { // si la balle touche la racket du bas
+            // la balle rembondit 
             ballSpeedY = -ballSpeedY;
-            nextBallY = ballY + deltaT * ballSpeedY;}
-            else {
-
-            if (nextBallY < 50) {
-            setScoreA(scoreA+1);
-            playerLost();
-            return true;
-            
-            } else if (nextBallY > height-50) {
-            setScoreA(scoreA+1);
-            playerLost();
-            return true;
+            nextBallY = ballY + deltaT * ballSpeedY;
             }
+
+            else { // sinon on relance la partie et on augmente le score des joueur
+
+                if (nextBallY < 50) { 
+                    setScoreA(scoreA+1);
+                    playerLost();
+                    return true;
+                } 
+                else 
+                    if (nextBallY > height-50) {
+                    setScoreA(scoreA+1);
+                    playerLost();
+                    return true;
+                    }
             }
         
-            if ((nextBallX < 10 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width +10 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
-            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
-            else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
-            if (ballSpeedY > 0) {ballSpeedY += 25;}
-            else {ballSpeedY -= 25;}
+            if ((nextBallX < 10 && nextBallY > racketA && nextBallY < racketA + racketSize) // si la balle touche le joueur A
+                || (nextBallX > width +10 && nextBallY > racketB && nextBallY < racketB + racketSize)) { // si la balle touche le joueur B
+
+                if (ballSpeedX > 0){ // MAJ vitesse de la balle après avoir touché un joueur
+                    ballSpeedX = - ballSpeedX - 25;
+                    } 
+
+                else {  // MAJ gauche> droite quand la vitesse est dans le négatif
+                    ballSpeedX = - ballSpeedX + 25 ;
+                    } 
+
+                if (ballSpeedY > 0) {ballSpeedY += 25;} // augmentation de la vitesse de la balle si elle monte
+
+                else {ballSpeedY -= 25;}// augmentation de la vitesse de la balle si elle descend
+
             nextBallX = ballX + deltaT * ballSpeedX;
-        } else if (nextBallX < 10) {
-            setScoreB(scoreB+1);
-            playerLost();
-            return true;
-            
-        } else if (nextBallX > width+10) {
-            setScoreB(scoreB+1);
-            playerLost();
-            return true; 
-        }
+            }
+
+        else 
+            if (nextBallX < 10) {
+                setScoreB(scoreB+1);
+                playerLost();
+                return true;  
+            } 
+        else
+            if (nextBallX > width+10) {
+                setScoreB(scoreB+1);
+                playerLost();
+                return true; 
+            }
         
         ballX = nextBallX;
         ballY = nextBallY;
         return false;
     }
-
-
-
-
-
-
-
 
 
     public void sound(String s) {
