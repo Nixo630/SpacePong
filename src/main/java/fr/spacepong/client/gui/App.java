@@ -1,21 +1,14 @@
-package gui;
+package fr.spacepong.client.gui;
 
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
+import fr.spacepong.client.model.Court;
+import fr.spacepong.client.model.RacketController;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import model.Court;
-import model.RacketController;
 
 public class App extends Application {
 	
@@ -38,13 +31,13 @@ public class App extends Application {
     	start.setId("pane");
     	
     	var startScene = new Scene(start);
-    	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+    	startScene.getStylesheets().addAll(this.getClass().getResource("/gui/style.css").toExternalForm());
     	
         
         var root = new Pane();
         
         var gameScene = new Scene(root);
-        gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+        gameScene.getStylesheets().addAll(this.getClass().getResource("/gui/style_setting.css").toExternalForm());
         
         
         

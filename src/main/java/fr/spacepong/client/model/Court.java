@@ -1,11 +1,9 @@
-package model;
+package fr.spacepong.client.model;
 
 import java.io.File;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import gui.App;
-import gui.GameView;
 import javafx.scene.Scene;
 
 public class Court {
@@ -162,6 +160,8 @@ public class Court {
                 racketA += racketSpeed * deltaT;
                 if (racketA + racketSize > height) racketA = height - racketSize;
                 break;
+		default:
+			break;
         }
         if(!isBot){
             switch (playerB.getState()) {
@@ -175,6 +175,8 @@ public class Court {
                 racketB += racketSpeed * deltaT;
                 if (racketB + racketSize > height) racketB = height - racketSize;
                 break;
+			default:
+				break;
             }
             if (updateBall(deltaT)) reset();
             return;
@@ -226,6 +228,8 @@ public class Court {
                     racketB += racketSpeed * deltaT;
                     if (racketB + racketSize > height) racketB = height - racketSize;
                     break;
+			default:
+				break;
             }
         }
         if (updateBall(deltaT)) reset();
@@ -293,9 +297,9 @@ public class Court {
     public void sound(String s) {
     	// On joue le son
     	try
-        {
-            Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
+        {    		
+            Clip clip = AudioSystem.getClip();			
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/java/fr/spacepong/client/resources/sound/"+s)));
             clip.start();
         }
         catch (Exception exc)

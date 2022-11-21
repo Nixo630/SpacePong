@@ -1,4 +1,4 @@
-package gui;
+package fr.spacepong.client.gui;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import java.awt.Dimension;
 import java.util.Random;
 
+import fr.spacepong.client.model.Court;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -16,7 +17,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import model.Court;
 
 public class GameView {
     // class parameters
@@ -321,7 +321,7 @@ public class GameView {
 	    	stopAnimation();
 	    	
 			quit.setId("quit_button");
-			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+			quit.getStylesheets().addAll(this.getClass().getResource("/gui/style.css").toExternalForm());
 			
 			
 			quit.setPrefSize(1238/4,461/4);
@@ -330,7 +330,7 @@ public class GameView {
 			
 			
 			resume.setId("resume_button");
-			resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+			resume.getStylesheets().addAll(this.getClass().getResource("/gui/style.css").toExternalForm());
 			
 			
 			resume.setPrefSize(1329/4,138/4);
@@ -391,7 +391,7 @@ public class GameView {
 		
     	title_end = new Button();
 		title_end.setId("title_end");
-		title_end.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		title_end.getStylesheets().addAll(this.getClass().getResource("/gui/style.css").toExternalForm());
 		
 		title_end.setPrefSize(2111/3,477/3);
 		title_end.setLayoutX(width/2 - title_end.getPrefWidth()/2);
@@ -406,7 +406,7 @@ public class GameView {
 		replay = new Button();
 		replay.setCursor(Cursor.HAND);
 		replay.setId("replay_button");
-		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		replay.getStylesheets().addAll(this.getClass().getResource("/gui/style.css").toExternalForm());
 		
 		
 		replay.setPrefSize(1412/3,165/3);
@@ -419,7 +419,7 @@ public class GameView {
 		menu = new Button();
 		
 		menu.setId("menu_button");
-		menu.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		menu.getStylesheets().addAll(this.getClass().getResource("/gui/style.css").toExternalForm());
 		
 		menu.setPrefSize(1003/3,165/3);
 		menu.setLayoutX(width/2 + width/2/2 - menu.getPrefWidth()/2);
@@ -478,7 +478,7 @@ public class GameView {
     }
     
     public void setBallSkin(String s) {
-    	String t = "Ball_skin/"+s;
+    	String t = "/ball/"+s;
     	Image i = new Image(getClass().getResourceAsStream(t));
         ball.setFill(new ImagePattern(i));
     }
