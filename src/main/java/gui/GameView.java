@@ -1,4 +1,4 @@
-package gui;
+    package gui;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -28,7 +28,7 @@ public class GameView {
     		murThickness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB, racketC, racketD, racketE, murA, murB, murC, murD, murE;
+    private final Rectangle racketA, racketB, racketC, racketD, murA, murB, murC, murD, murE;
     private final Circle ball;
     
     private Label affScoreA, affScoreB;   
@@ -92,16 +92,6 @@ public class GameView {
         racketC.setY(xMargin - racketThickness);
 
         racketC.setVisible(false);
-
-        racketE = new Rectangle();
-        racketE.setHeight(court.getRacketSize() * scale);
-        racketE.setWidth(racketThickness);
-        racketE.setFill(Color.DARKGREY);
-
-        racketE.setX(court.getRacketC() * scale );
-        racketE.setY(xMargin - racketThickness);
-
-        racketE.setVisible(true);
 
         
 
@@ -171,15 +161,13 @@ public class GameView {
         affScoreB.setTextFill(Color.DARKGREY);
         affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
         
-        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD,racketE, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);}
+        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
+    }
     
     public void Visible_middle_bar(boolean b) {
     	murE.setVisible(b);
     }
 
-    public void visRacketC(boolean x) {racketC.setVisible(x);}
-    public void visRacketD(boolean x) {racketD.setVisible(x);}
-    public void setmulti (boolean x) { multi = x;}
     
     public void animate() {
     	aTimer = new AnimationTimer() {
@@ -252,7 +240,6 @@ public class GameView {
                 racketA.setY(court.getRacketA() * scale);
                 racketB.setY(court.getRacketB() * scale);
                 racketC.setX(court.getRacketC() * scale * 2);
-                racketE.setX(court.getRacketC() * scale * 2);
                 racketD.setX(court.getRacketD() * scale * 2);
 
                 ball.setCenterX(court.getBallX() * scale + xMargin);
@@ -268,7 +255,6 @@ public class GameView {
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	racketC.setHeight(racketThickness);
-                    racketE.setHeight(court.getRacketSize() * scale);
                 	racketD.setHeight(racketThickness);
             		        	
                 	court.resetBallTouched();
@@ -283,7 +269,6 @@ public class GameView {
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	racketC.setHeight(racketThickness);
-                    racketE.setHeight(court.getRacketSize() * scale);
                 	racketD.setHeight(racketThickness);
                 	court.resetScored();
                 }
@@ -365,6 +350,10 @@ public class GameView {
 			gameRoot.getChildren().addAll(quit,resume);
     	}
     } 
+
+    public void setmulti(boolean x) { 
+        multi = true;
+    }
     
     //Cette fonction permet de remettre en route le jeu après que l'utilisateur a fait pause
     public void resume() {
@@ -471,6 +460,7 @@ public class GameView {
             ball.setVisible(true);
             startAnimation();    
             }
+            multi = false;
 	    	
 	    });
 		
