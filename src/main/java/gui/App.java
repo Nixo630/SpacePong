@@ -3,19 +3,16 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
+
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
 import model.RacketController;
-
+ 
 public class App extends Application {
 	
 	private static Stage guiStage;
@@ -25,7 +22,13 @@ public class App extends Application {
 	
     @Override
     public void start(Stage primaryStage) {
+        Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
+        int longueur = tailleMoniteur.width-100;
+        int hauteur = tailleMoniteur.height;
+
     	guiStage = primaryStage;
+        guiStage.setHeight(hauteur);
+        guiStage.setWidth(longueur);
     	
     	var start = new Pane();
     	start.setId("pane");
@@ -53,17 +56,80 @@ public class App extends Application {
         var playerB = new Player();
         var playerC = new Player();
         var playerD = new Player();
-        
-        Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
-        int longueur = tailleMoniteur.width-100;
-        int hauteur = tailleMoniteur.height;
-        
-        System.out.println(longueur);
-        System.out.println(hauteur);
         		
-        var court = new Court(playerA, playerB, longueur, hauteur);
+        var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
+        
+ 
+        
+        
+        startScene.setOnKeyPressed(ev -> {
+            switch (ev.getCode()) {
+                case C:
+                    gameStart.IncrementeIndice(gameStart.getCurrentButton());
+                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
+                    break;
+                case D:
+                	gameStart.DecrementeIndice(gameStart.getCurrentButton());
+                    gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
+                    break;
+                case M:
+                	if(gameStart.getCurrentButton().length!=0) {
+	                	switch (gameStart.getCurrentButton()[gameStart.getCurseurIndice()].getId()) {
+	                	
+	                	case "solo_play_button": gameStart.chose_difficulty();gameStart.setCurrentButton(gameStart.getButtonDifficulty());break; 
+	                	case "multiplay_play_button": gameStart.choose_multiplay();gameStart.setCurrentButton(gameStart.getButtonMulti());break;
+	                	case "settings_button": gameStart.parametre();gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "quit_button": System.exit(0);break;
+	                	
+	                	case "button_easy": gameStart.jouer_solo(1);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	case "button_medium": gameStart.jouer_solo(2);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	case "button_hard": gameStart.jouer_solo(3);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	case "button_insane": gameStart.jouer_solo(4);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	
+	                	case "button_1vs1": gameStart.jouer_multi(false);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	case "button_2vs2": gameStart.jouer_multi(true);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	case "button_online":gameStart.jouer_online();gameStart.setCurrentButton(gameStart.getButtonMulti());break;
+	                	
+	                	case "return":gameStart.retour(gameStart.getCurrentButton());gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	
+	                	case "title_ball_skin":gameStart.setCurrentButton(gameStart.getButtonSkinBall());break;
+	                	case "title_middle_bar":gameStart.setCurrentButton(gameStart.getMBButtonYesNo());break;
+	                	case "title_choix_bg":gameStart.setCurrentButton(gameStart.getButtonBackground());break;
+	                	
+	                	case "middle_bar_no":gameStart.VisibleMiddleBar(false);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "middle_bar_yes":gameStart.VisibleMiddleBar(true);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	
+	                	case "choix_ball_sun":gameView.setBallSkin("sun_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_ball_green":gameView.setBallSkin("green_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_ball_moon":gameView.setBallSkin("moon_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_ball_jupiter":gameView.setBallSkin("jupiter_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_ball_saturne":gameView.setBallSkin("saturne_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_ball_lila":gameView.setBallSkin("lila_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_ball_earth":gameView.setBallSkin("earth_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	
+	                	case "choix_galaxie":gameStart.setBackground("choix_galaxie");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_earth":gameStart.setBackground("choix_earth");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_trou_noir":gameStart.setBackground("choix_trou_noir");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "choix_earth2":gameStart.setBackground("choix_earth2");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	
+	                	
+	                	case "racket_difficulty":gameStart.print_setting_racket_difficulty();gameStart.setCurrentButton(gameStart.getRDButtonYesNo());break;
+	                	
+	                	case "RD_yes" : gameStart.reponseRacketDifficuly(true);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                	case "RD_no" : gameStart.reponseRacketDifficuly(false);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+	                
+	                	case "finish_button":gameStart.finish();gameStart.setCurrentButton(gameStart.getMenuButton());break;
+
+	                	default: break;
+	                	}
+                	}
+                	break;
+                default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
+                	break;
+            }
+        });
         
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
@@ -85,12 +151,15 @@ public class App extends Application {
                     break;
                 case P:
                 	gameView.pause();
+                	gameView.menu();
                 	break;
                 case R:
-                	if(gameView.getEnPause()) gameView.resume(); gameView.setEnPause(false);
+                	gameView.resume();
+                	gameView.replay();
                 	break;
-                case ESCAPE:
-                	System.exit(0);
+                case Q:
+                	gameView.quitter();
+                	break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
@@ -117,23 +186,6 @@ public class App extends Application {
                 	break;
             }
         });
-        
-        
-               
-       
-        
-        /*
-        try
-        {
-    		Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/starting.wav")));
-            clip.start();
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace(System.out);
-        }
-        */
         
         primaryStage.setScene(startScene);
         primaryStage.setFullScreen(true);
