@@ -323,17 +323,23 @@ public class Court {
 
         if (ballX < (racketC*2) ){
             botDirection = RacketController.State.GOING_LEFT;
+            racketC = ballX;
+            racketE = ballX;
+            racketD = ballX;
         }
         else {
             if (ballX > (racketC)*2 +racketSize) {
 
                 botDirection = RacketController.State.GOING_RIGHT;
+                racketC = ballX;
+            racketE = ballX;
+            racketD = ballX;
         }
         else {
             botDirection = RacketController.State.IDLE;
         }
 
-        }
+        }/*
         switch (botDirection) { // déplacement du bot
             case GOING_LEFT:
                 racketC -= racketSpeed * deltaT  ;
@@ -357,7 +363,7 @@ public class Court {
                 racketD += racketSpeed * deltaT ;
                 if (racketD + racketSize > width) racketD = width - racketSize;
                 break;
-        }
+        }*/
     
 }
        
