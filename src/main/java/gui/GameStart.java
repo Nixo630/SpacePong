@@ -82,6 +82,9 @@ public class GameStart {
 	private Button points;
 	private TextField intInput;
 
+	//Message d'erreur si l'utilisateur n'entre pas une valeur entière
+	private Label error;
+
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		App.getStage().setResizable(false);
@@ -299,21 +302,19 @@ public class GameStart {
 		try{
 			int age = Integer.parseInt(input.getText());
 			if(!message.equals("")){
-				if(age<=0){
-					Alert errorAlert = new Alert(AlertType.ERROR);
-					errorAlert.setHeaderText("le nombre de points n'est pas valide");
-					errorAlert.showAndWait();
+				if(age>0){
+					error.setVisible(false);
+				}else{
+					error.setVisible(true);
 				}
 			}
 			return true;
 		}catch(NumberFormatException e){
-			System.out.println("yes");
 			if(message.equals("")){
+				error.setVisible(false);
 				return false;
 			}
-			Alert errorAlert = new Alert(AlertType.ERROR);
-			errorAlert.setHeaderText("le nombre de points n'est pas valide");
-			errorAlert.showAndWait();
+			error.setVisible(true);
 			return false;
 		}
 	}
@@ -522,20 +523,32 @@ public class GameStart {
 		intInput = new TextField();
 		points = new Button();
 		points.setOnAction(e -> isInt(intInput, intInput.getText()));
-		points.setPrefSize(width*(2.4714/100),height*(5.4/100));
+		points.setPrefSize(width*(3.5/100),height*(5.4/100));
 		points.setLayoutX(width*(28.13/100));
 		points.setLayoutY(width*(33.9/100));
 		points.setId("pointsFinaux");
 		points.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+		points.setCursor(Cursor.HAND);
 
 		intInput.setPrefSize(width*(2.4714/100),height*(5.4/100));
 		intInput.setLayoutX(width*(25.13/100));
 		intInput.setLayoutY(width*(33.9/100));
 
+		//Message d'erreur
+		error = new Label("incorrect, veuillez entrez un nombre superieur a 0");
+		error.setLayoutX(width*(32.292/100));
+		error.setLayoutY(height*(39.815/100));
+		error.setFont(new Font("Serif", height*(1.852/100)));
+		error.setTextFill(Color.web("#FF0000"));
+		error.setMinHeight(height*(46.3/100));
+		error.setMinWidth(height*(46.3/100));
+		error.setVisible(false);
 
 
-		startRoot.getChildren().add(intInput);
-		startRoot.getChildren().add(points);
+
+		startRoot.getChildren().addAll(intInput, points, error);
+
+
 
 		points_bg = new Button();
 		points_bg.setId("points_background");
@@ -568,6 +581,7 @@ public class GameStart {
 		if(isInt(intInput, intInput.getText())){
 			gw.getCourt().setScoreFinal(Integer.valueOf(intInput.getText()));
 		}
+		error.setVisible(false);
 		retour(getButtonParametre());
 	}
 	
