@@ -164,7 +164,7 @@ public class GameStart {
 		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		quit.setPrefSize(1238/4,461/4);
+		quit.setPrefSize(1424/3,216/3);
 		quit.setLayoutX(width/2 - quit.getPrefWidth()/2);
 		quit.setLayoutY(650);
 		

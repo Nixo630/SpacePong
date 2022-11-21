@@ -315,7 +315,6 @@ public class GameView {
     public void pause() {
     	enPause = true;
     	if (PartiEnCours) {
-    		System.out.println("lfrlfhs");
     		PartiEnCours=false;
     		court.setPartiEnCours(false);
 	    	stopAnimation();
@@ -324,7 +323,7 @@ public class GameView {
 			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
 			
-			quit.setPrefSize(1238/4,461/4);
+			quit.setPrefSize(1424/3,216/3);
 			quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
 			quit.setLayoutY(650);
 			
@@ -334,7 +333,7 @@ public class GameView {
 			
 			
 			resume.setPrefSize(1329/4,138/4);
-			resume.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
+			resume.setLayoutX(court.getWidth()/2 - resume.getPrefWidth()/2);
 			resume.setLayoutY(450);
 			
 			resume.setCursor(Cursor.HAND);
@@ -409,7 +408,7 @@ public class GameView {
 		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		replay.setPrefSize(1412/3,165/3);
+		replay.setPrefSize(1424/3,216/3);
 		
 		replay.setLayoutX(width/2 - width/2/2 - replay.getPrefWidth()/2);
 		replay.setLayoutY(610);
@@ -421,7 +420,7 @@ public class GameView {
 		menu.setId("menu_button");
 		menu.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		menu.setPrefSize(1003/3,165/3);
+		menu.setPrefSize(1424/3,216/3);
 		menu.setLayoutX(width/2 + width/2/2 - menu.getPrefWidth()/2);
 		menu.setLayoutY(610);
 		
