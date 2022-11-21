@@ -6,6 +6,7 @@ import java.util.TimerTask;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import model.Court;
 
@@ -75,13 +78,14 @@ public class GameStart {
     //Boutton pour changer le background de la game
     private Button choix_galaxie,choix_trou_noir,choix_earth,choix_earth2;
     
-    //ChoseBox pour permettre à l'utilisateur de choisir en combien de points il veut finir la partie
-    private ChoiceBox<Integer> choiceBox;
+    //Input du nombre de points souhaités par l'utilisateur
+	private Button points;
+	private TextField intInput;
 
 	
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
 		App.getStage().setResizable(false);
-		App.getStage().setFullScreenExitHint("appuyer sur 'c' et 'd' pour se deplacer\n appuyer sur 'm' pour accepter");
+		App.getStage().setFullScreenExitHint("appuyer sur 'd' et 'c' pour se deplacer\n appuyer sur 'm' pour accepter");
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
@@ -290,6 +294,29 @@ public class GameStart {
 	public void setBackground(String s) {
 		gameRoot.setId(s);
 	}
+
+	public boolean isInt(TextField input, String message){
+		try{
+			int age = Integer.parseInt(input.getText());
+			if(!message.equals("")){
+				if(age<=0){
+					Alert errorAlert = new Alert(AlertType.ERROR);
+					errorAlert.setHeaderText("le nombre de points n'est pas valide");
+					errorAlert.showAndWait();
+				}
+			}
+			return true;
+		}catch(NumberFormatException e){
+			System.out.println("yes");
+			if(message.equals("")){
+				return false;
+			}
+			Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText("le nombre de points n'est pas valide");
+			errorAlert.showAndWait();
+			return false;
+		}
+	}
 	
 	public void parametre() {
 		visible_change(getMenuButton(),false);
@@ -302,9 +329,9 @@ public class GameStart {
 		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		title_s.setId("title");
 		
-		title_s.setPrefSize(2733/7,425/7);
+		title_s.setPrefSize(width*21/100, height*6/100);
 		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_s.setLayoutY(50);
+		title_s.setLayoutY(height*5/100);
 		
 		
 		//Mise en place du choix de l'arriere plan
@@ -312,36 +339,36 @@ public class GameStart {
 		title_choix_bg.setId("title_choix_bg");
 		title_choix_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		title_choix_bg.setPrefSize(3366/8,343/8);
-		title_choix_bg.setLayoutX(20);
-		title_choix_bg.setLayoutY(200);
+		title_choix_bg.setPrefSize(width*22/100,height*4/100);
+		title_choix_bg.setLayoutX(width*1/100);
+		title_choix_bg.setLayoutY(height*19/100);
 		
 		
 		choix_galaxie = new Button();
 		choix_galaxie.setId("choix_galaxie");
 		choix_galaxie.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		choix_galaxie.setPrefSize(1600/8,1200/10);
-		choix_galaxie.setLayoutX(20+title_choix_bg.getPrefWidth()+25);
-		choix_galaxie.setLayoutY(200);
+		choix_galaxie.setPrefSize(width*(10.5/100),height*(11.2/100));
+		choix_galaxie.setLayoutX(width*(24.4/100));
+		choix_galaxie.setLayoutY(height*(18.6/100));
 		
 		
 		choix_trou_noir = new Button();
 		choix_trou_noir.setId("choix_trou_noir");
 		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		choix_trou_noir.setPrefSize(1600/8,1200/10);
-		choix_trou_noir.setLayoutX(20 + choix_galaxie.getLayoutX()+choix_galaxie.getPrefWidth()+25);
-		choix_trou_noir.setLayoutY(200);
+		choix_trou_noir.setPrefSize(width*(10.5/100),height*(11.2/100));
+		choix_trou_noir.setLayoutX(width*(36.9/100));
+		choix_trou_noir.setLayoutY(height*(18.6/100));
 		
 		
 		choix_earth = new Button();
 		choix_earth.setId("choix_earth");
 		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth.setCursor(Cursor.HAND);
-		choix_earth.setPrefSize(1600/8,1200/10);
-		choix_earth.setLayoutX(20 + choix_trou_noir.getLayoutX()+choix_trou_noir.getPrefWidth()+25);
-		choix_earth.setLayoutY(200);
+		choix_earth.setPrefSize(width*(10.5/100),height*(11.2/100));
+		choix_earth.setLayoutX(width*(49.8/100));
+		choix_earth.setLayoutY(height*(18.6/100));
 		
 		choix_earth.setOnAction(value ->  {
 			gameRoot.setId("choix_earth");
@@ -352,9 +379,9 @@ public class GameStart {
 		choix_earth2.setId("choix_earth2");
 		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		choix_earth2.setCursor(Cursor.HAND);
-		choix_earth2.setPrefSize(1600/8,1200/10);
-		choix_earth2.setLayoutX(20 + choix_earth.getLayoutX()+choix_earth.getPrefWidth()+25);
-		choix_earth2.setLayoutY(200);
+		choix_earth2.setPrefSize(width*(10.5/100),height*(11.2/100));
+		choix_earth2.setLayoutX(width*(62.7/100));
+		choix_earth2.setLayoutY(height*(18.6/100));
 		
 		choix_earth2.setOnAction(value ->  {
 			gameRoot.setId("choix_earth2");
@@ -364,9 +391,9 @@ public class GameStart {
 		finish_button.setId("finish_button");
 		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		finish_button.setPrefSize(1795/8,332/8);
+		finish_button.setPrefSize(width*(11.8/100),height*(3.8/100));
 		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
-		finish_button.setLayoutY(height-100);
+		finish_button.setLayoutY(height-height*(9.3/100));
 		
 		
 		startRoot.getChildren().addAll(title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button);
@@ -379,17 +406,17 @@ public class GameStart {
 		title_middle_bar.setId("title_middle_bar");
 		title_middle_bar.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		title_middle_bar.setPrefSize(2872/8,311/8);
-		title_middle_bar.setLayoutX(20);
-		title_middle_bar.setLayoutY(450);
+		title_middle_bar.setPrefSize(width*(18.7/100),height*(3.6/100));
+		title_middle_bar.setLayoutX(width*(1.05/100));
+		title_middle_bar.setLayoutY(height*(41.7/100));
 		
 		middle_bar_yes = new Button();
 		middle_bar_yes.setId("middle_bar_yes");
 		middle_bar_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		middle_bar_yes.setPrefSize(497/4,464/4);
-		middle_bar_yes.setLayoutX(20+title_middle_bar.getPrefWidth()+25);
-		middle_bar_yes.setLayoutY(400);
+		middle_bar_yes.setPrefSize(width*(6.5/100),height*(10.8/100));
+		middle_bar_yes.setLayoutX(width*(21.06/100));
+		middle_bar_yes.setLayoutY(width*(20.84/100));
 		
 		
 		
@@ -397,9 +424,9 @@ public class GameStart {
 		middle_bar_no.setId("middle_bar_no");
 		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		middle_bar_no.setPrefSize(497/4,464/4);
-		middle_bar_no.setLayoutX(middle_bar_yes.getLayoutX()+middle_bar_yes.getPrefWidth()+25);
-		middle_bar_no.setLayoutY(400);
+		middle_bar_no.setPrefSize(width*(6.5/100),height*(10.8/100));
+		middle_bar_no.setLayoutX(width*(28.86/100));
+		middle_bar_no.setLayoutY(width*(20.84/100));
 		
 		//Mise en place du choix du skin de la balle pour le joueur
 		
@@ -407,18 +434,18 @@ public class GameStart {
 		title_ball_skin.setId("title_ball_skin");
 		title_ball_skin.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		title_ball_skin.setPrefSize(3213/9,375/9);
-		title_ball_skin.setLayoutX(20);
-		title_ball_skin.setLayoutY(550);
+		title_ball_skin.setPrefSize(width*(18.6/100),height*(3.86/100));
+		title_ball_skin.setLayoutX(height*(3.86/100)/2);
+		title_ball_skin.setLayoutY(height*(50.926/100));
 		
 		
 		choix_ball_sun = new Button();
 		choix_ball_sun.setId("choix_ball_sun");
 		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_sun.setPrefSize(202/4,202/4);
-		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+25);
-		choix_ball_sun.setLayoutY(550);
+		choix_ball_sun.setPrefSize(width*(2.64/100),width*(2.64/100));
+		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+height*(3.86/100)/2);
+		choix_ball_sun.setLayoutY(height*(50.926/100));
 		choix_ball_sun.setOnAction(value ->  {
 			gw.setBallSkin("sun_ball.png");
 	    });
@@ -427,53 +454,53 @@ public class GameStart {
 		choix_ball_green.setId("choix_ball_green");
 		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_green.setPrefSize(196/4,217/4);
-		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+25);
-		choix_ball_green.setLayoutY(550);
+		choix_ball_green.setPrefSize(width*(2.553/100),height*(5.02/100));
+		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+height*(4.63/100)/2);
+		choix_ball_green.setLayoutY(height*(50.926/100));
 		
 		
 		choix_ball_moon = new Button();
 		choix_ball_moon.setId("choix_ball_moon");
 		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_moon.setPrefSize(208/4,237/4);
-		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+25);
-		choix_ball_moon.setLayoutY(550);
+		choix_ball_moon.setPrefSize(width*(2.71/100),height*(5.5/100));
+		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+height*(4.63/100)/2);
+		choix_ball_moon.setLayoutY(height*(50.926/100));
 		
 		
 		choix_ball_jupiter = new Button();
 		choix_ball_jupiter.setId("choix_ball_jupiter");
 		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_jupiter.setPrefSize(158/4,234/4);
-		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+25);
-		choix_ball_jupiter.setLayoutY(550);
+		choix_ball_jupiter.setPrefSize(width*(2.06/100),height*(5.4/100));
+		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+height*(4.63/100)/2);
+		choix_ball_jupiter.setLayoutY(height*(50.926/100));
 		
 		
 		choix_ball_saturne = new Button();
 		choix_ball_saturne.setId("choix_ball_saturne");
 		choix_ball_saturne.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_saturne.setPrefSize(239/4,214/4);
-		choix_ball_saturne.setLayoutX(choix_ball_jupiter.getLayoutX()+choix_ball_jupiter.getPrefWidth()+25);
-		choix_ball_saturne.setLayoutY(550);
+		choix_ball_saturne.setPrefSize(width*(3.1/100),height*(4.96/100));
+		choix_ball_saturne.setLayoutX(choix_ball_jupiter.getLayoutX()+choix_ball_jupiter.getPrefWidth()+height*(4.63/100)/2);
+		choix_ball_saturne.setLayoutY(height*(50.926/100));
 		
 		choix_ball_lila = new Button();
 		choix_ball_lila.setId("choix_ball_lila");
 		choix_ball_lila.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_lila.setPrefSize(199/4,214/4);
-		choix_ball_lila.setLayoutX(choix_ball_saturne.getLayoutX()+choix_ball_saturne.getPrefWidth()+25);
-		choix_ball_lila.setLayoutY(550);
+		choix_ball_lila.setPrefSize(width*(2.5912/100),height*(4.96/100));
+		choix_ball_lila.setLayoutX(choix_ball_saturne.getLayoutX()+choix_ball_saturne.getPrefWidth()+height*(4.63/100)/2);
+		choix_ball_lila.setLayoutY(height*(50.926/100));
 		
 		
 		choix_ball_earth = new Button();
 		choix_ball_earth.setId("choix_ball_earth");
 		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_earth.setPrefSize(168/4,234/4);
-		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+25);
-		choix_ball_earth.setLayoutY(550);
+		choix_ball_earth.setPrefSize(width*(2.188),height*(5.417/100));
+		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+height*(4.63/100)/2);
+		choix_ball_earth.setLayoutY(height*(50.926/100));
 		
 		startRoot.getChildren().addAll(title_ball_skin,choix_ball_sun,choix_ball_green
 				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
@@ -484,30 +511,38 @@ public class GameStart {
 		title_racket_difficult.setId("racket_difficulty");
 		title_racket_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
-		title_racket_difficult.setPrefSize(3222/9,492/9);
-		title_racket_difficult.setLayoutX(middle_bar_no.getLayoutX()+middle_bar_no.getPrefWidth()+100);
-		title_racket_difficult.setLayoutY(450);
+		title_racket_difficult.setPrefSize(width*(18.65/100),height*(5.247/100));
+		title_racket_difficult.setLayoutX(width*(40.52/100));
+		title_racket_difficult.setLayoutY(height*(41.7/100));
 		
 		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no,title_racket_difficult);
 		
 
 		//Ajout du nombre de points pour finir une partie
-		choiceBox = new ChoiceBox<>();
-		choiceBox.getItems().addAll(5, 6, 7, 8, 9, 10, 15, 20);
+		intInput = new TextField();
+		points = new Button();
+		points.setOnAction(e -> isInt(intInput, intInput.getText()));
+		points.setPrefSize(width*(2.4714/100),height*(5.4/100));
+		points.setLayoutX(width*(28.13/100));
+		points.setLayoutY(width*(33.9/100));
+		points.setId("pointsFinaux");
+		points.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 
-		choiceBox.setPrefSize(168/4,234/4);
-		choiceBox.setValue(5);
-		choiceBox.setLayoutX(490);
-		choiceBox.setLayoutY(650);
+		intInput.setPrefSize(width*(2.4714/100),height*(5.4/100));
+		intInput.setLayoutX(width*(25.13/100));
+		intInput.setLayoutY(width*(33.9/100));
 
-		startRoot.getChildren().add(choiceBox);
+
+
+		startRoot.getChildren().add(intInput);
+		startRoot.getChildren().add(points);
 
 		points_bg = new Button();
 		points_bg.setId("points_background");
 		points_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		points_bg.setPrefSize(450, 190/4);
-		points_bg.setLayoutX(10);
-		points_bg.setLayoutY(650);
+		points_bg.setPrefSize(width*(23.44/100), height*(4.4/100));
+		points_bg.setLayoutX(height*(0.93/100));
+		points_bg.setLayoutY(width*(33.9/100));
 
 		startRoot.getChildren().add(points_bg);
 
@@ -517,9 +552,9 @@ public class GameStart {
 		retour = new Button();
 		retour.setId("return");
 		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		retour.setLayoutX(40);
-		retour.setLayoutY(40);
-		retour.setPrefSize(100, 100);
+		retour.setLayoutX(height*(3.704/100));
+		retour.setLayoutY(height*(3.704/100));
+		retour.setPrefSize(height*(9.26/100), height*(9.26/100));
 		
 
 		startRoot.getChildren().add(retour);
@@ -527,9 +562,12 @@ public class GameStart {
 	}
 	
 	public void finish() {
-		choiceBox.setVisible(false);
+		intInput.setVisible(false);
+		points.setVisible(false);
 		points_bg.setVisible(false);
-		gw.getCourt().setScoreFinal(choiceBox.getValue());
+		if(isInt(intInput, intInput.getText())){
+			gw.getCourt().setScoreFinal(Integer.valueOf(intInput.getText()));
+		}
 		retour(getButtonParametre());
 	}
 	
@@ -540,7 +578,8 @@ public class GameStart {
 	//Cette fonction est rataché au boutton retour qu'on retrouve dans les settings, dans le choix de la difficulté et dans le choix du multijoueur
 	public void retour(Button[] btn) {
 		if (egal(btn,getButtonParametre())) {
-			choiceBox.setVisible(false);
+			intInput.setVisible(false);
+			points.setVisible(false);
 			visible_change(getButtonSkinBall(),false);
 			visible_change(getButtonBackground(),false);
 			visible_change(getButtonYesNo(),false);

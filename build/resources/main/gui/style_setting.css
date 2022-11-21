@@ -84,6 +84,12 @@
     -fx-background-size: cover;
 }
 
+#pointsFinaux{
+    -fx-background-image: url("ok.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
 
 
 

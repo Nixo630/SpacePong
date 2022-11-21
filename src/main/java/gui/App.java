@@ -126,6 +126,8 @@ public class App extends Application {
 	                	case "choix_earth2":gameStart.setBackground("choix_earth2");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
 	                	
 	                	case "finish_button":gameStart.finish();gameStart.setCurrentButton(gameStart.getMenuButton());break;
+
+                        case "pointsFinaux": break;
 	                	
                 	
 	                	default: break;
