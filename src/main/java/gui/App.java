@@ -3,20 +3,16 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
+
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
 import model.RacketController;
-
+ 
 public class App extends Application {
 	
 	private static Stage guiStage;
@@ -94,7 +90,7 @@ public class App extends Application {
 	                	
 	                	case "button_1vs1": gameStart.jouer_multi(false);gameStart.setCurrentButton(gameStart.getMenuButton());break;
 	                	case "button_2vs2": gameStart.jouer_multi(true);gameStart.setCurrentButton(gameStart.getMenuButton());break;
-	                	case "button_online":gameStart.jouer_online();gameStart.setCurrentButton(gameStart.getMenuButton());break;
+	                	case "button_online":gameStart.jouer_online();gameStart.setCurrentButton(gameStart.getButtonMulti());break;
 	                	
 	                	case "return":gameStart.retour(gameStart.getCurrentButton());gameStart.setCurrentButton(gameStart.getMenuButton());break;
 	                	
@@ -161,7 +157,7 @@ public class App extends Application {
                 	gameView.resume();
                 	gameView.replay();
                 	break;
-                case E:
+                case Q:
                 	gameView.quitter();
                 	break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif

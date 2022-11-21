@@ -720,14 +720,21 @@ public class GameStart {
 		visible_change(getButtonMulti(),false);
 	}
 	
-	public void jouer_multi(boolean x) {
+	public void jouer_multi(boolean choix2v2) {
+		
 		VisibleMiseAJourMultiButton();
 		court.setIsBot(false);
 		court.setPartiEnCours(true);
+		
 		App.getStage().setScene(courtScene);
-		if (x){
-		gw.startAnimation2();}
-		else {gw.startAnimation(); }
+		App.getStage().setFullScreen(true);
+		
+		if (choix2v2){
+			gw.startAnimation2();
+		}
+		else {
+			gw.startAnimation();
+		}
 	}
 	
 	public Button[] getMenuButton() {
