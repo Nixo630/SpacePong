@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 
 public class Court {
     // instance parameters
-    private final RacketController playerA, playerB, playerC, playerD;
+    private final RacketController playerA, playerB, playerC, playerD,playerE;
     private final double width, height; // m
     private final double racketSpeed = 350.0; // m/s
     private final double ballRadius = 15.0; // m
@@ -18,6 +18,7 @@ public class Court {
     private double racketA; // m
     private double racketB; // m
     private double racketC; // m
+    private double racketE;
     private double racketD; // m
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m 
@@ -45,12 +46,13 @@ public class Court {
     // Bien oublie pas quand tu appuis sur la touche p ou le bouton de Adem la fonction partieEnCours est égale à false
     // Comme ca y'a pas l'erreur d'apuiiyer plusieurs fois sur pause.
 
-    public Court(RacketController playerA, RacketController playerB,RacketController playerC, RacketController playerD,
+    public Court(RacketController playerA, RacketController playerB,RacketController playerC, RacketController playerD, RacketController playerE,
             double width, double height) {
         this.playerA = playerA;
         this.playerB = playerB;
         this.playerC = playerC;
         this.playerD = playerD;
+        this.playerE = playerE;
         this.width = width;
         this.height = height;
         
@@ -289,7 +291,7 @@ public class Court {
 
 
     public void update2(double deltaT) {
-        switch (playerA.getState()) {
+        switch (playerA.getState()) { // on récupère le déplacement du joueur A pour déplacer la hitbox de sa racket
             case GOING_UP:
                 racketA -= racketSpeed * deltaT;
                 if (racketA < 0.0) racketA = 0.0;
@@ -301,7 +303,7 @@ public class Court {
                 if (racketA + racketSize > height) racketA = height - racketSize;
                 break;
         }
-        switch (playerB.getState()) {
+        switch (playerB.getState()) {  // on récupère le déplacement du joueur B pour déplacer la hitbox de sa racket
             case GOING_UP:
                 racketB -= racketSpeed * deltaT;
                 if (racketB < 0.0) racketB = 0.0;
@@ -314,13 +316,16 @@ public class Court {
                 break;
         }
 
-        if (updateBall2(deltaT)) reset();
+        if (updateBall2(deltaT)) reset(); // on actualise l'état de la balle
 
-        if (ballX < racketC*2  ){
+        // on déplace les bots en fonction de la position de la balle, les deux resteront aux même coordonées, pas besoin de comparer avec les deux 
+        // on décide de déplacer les bots en fonction du milieu de la racket et pas des bords pour qu'ils soient plus réactifs 
+
+        if (ballX < (racketC*2) ){
             botDirection = RacketController.State.GOING_LEFT;
         }
         else {
-            if (ballX > racketC* 2 + racketSize/2) {
+            if (ballX > (racketC)*2 +racketSize) {
 
                 botDirection = RacketController.State.GOING_RIGHT;
         }
@@ -329,19 +334,27 @@ public class Court {
         }
 
         }
-        switch (botDirection) {
+        switch (botDirection) { // déplacement du bot
             case GOING_LEFT:
-                racketC -= racketSpeed * deltaT;
+                racketC -= racketSpeed * deltaT  ;
                 if (racketC < 0.0) racketC = 0.0;
-                racketD -= racketSpeed * deltaT;
+
+                racketE -= racketSpeed * deltaT  ;
+                if (racketE < 0.0) racketE = 0.0;
+
+                racketD -= racketSpeed * deltaT  ;
                 if (racketD < 0.0) racketD = 0.0;
                 break;
             case IDLE:
                 break;
             case GOING_RIGHT:
-                racketC += racketSpeed * deltaT;
+                racketC += racketSpeed * deltaT ;
                 if (racketC + racketSize > width) racketC = width - racketSize;
-                racketD += racketSpeed * deltaT;
+
+                racketE += racketSpeed * deltaT ;
+                if (racketE + racketSize > width) racketE = width - racketSize;
+
+                racketD += racketSpeed * deltaT ;
                 if (racketD + racketSize > width) racketD = width - racketSize;
                 break;
         }
@@ -353,25 +366,25 @@ public class Court {
      */
      private boolean updateBall2(double deltaT) {
 
-
-         // first, compute possible next position if nothing stands in the way
+         // prochaine position de la balle 
         double nextBallX = ballX + deltaT * ballSpeedX;
         double nextBallY = ballY + deltaT * ballSpeedY;
-        // next, see if the ball would meet some obstacle
 
-        if ((nextBallY < 50 && nextBallX > (racketC*2)- racketSize && nextBallX < (racketC*2) + racketSize )|| 
-            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize && nextBallX < (racketD *2)+ racketSize )) {
+        // les lignes suivantes sont le cas où la balle rencontre un obstacle
+
+        if ((nextBallY < 50 && nextBallX > (racketC*2)-racketSize&& nextBallX < (racketC*2)+racketSize  )|| 
+            (nextBallY > height - 50 && nextBallX > (racketD*2) && nextBallX < (racketD *2) + racketSize )) {
             ballSpeedY = -ballSpeedY;
             nextBallY = ballY + deltaT * ballSpeedY;}
             else {
 
             if (nextBallY < 50) {
-            setScoreB(scoreB+1);
+            setScoreA(scoreA+1);
             playerLost();
             return true;
             
             } else if (nextBallY > height-50) {
-            setScoreA(scoreB+1);
+            setScoreA(scoreA+1);
             playerLost();
             return true;
             }
@@ -385,12 +398,12 @@ public class Court {
             else {ballSpeedY -= 25;}
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 10) {
-            setScoreB(scoreA+1);
+            setScoreB(scoreB+1);
             playerLost();
             return true;
             
         } else if (nextBallX > width+10) {
-            setScoreA(scoreA+1);
+            setScoreB(scoreB+1);
             playerLost();
             return true; 
         }
@@ -471,6 +484,7 @@ public class Court {
         this.racketA = height / 2;
         this.racketB = height / 2;
         this.racketC = height / 2.5;
+        this.racketE = height / 2.5;
         this.racketD = height / 2.5; 
         
         double nb;
