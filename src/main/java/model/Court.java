@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 
 public class Court {
     // instance parameters
-    private final RacketController playerA, playerB, playerC, playerD,playerE;
+    private final RacketController playerA, playerB, playerC, playerD;
     private final double width, height; // m
     private final double racketSpeed = 350.0; // m/s
     private final double ballRadius = 15.0; // m
@@ -18,7 +18,6 @@ public class Court {
     private double racketA; // m
     private double racketB; // m
     private double racketC; // m
-    private double racketE;
     private double racketD; // m
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m 
@@ -46,18 +45,18 @@ public class Court {
     // Bien oublie pas quand tu appuis sur la touche p ou le bouton de Adem la fonction partieEnCours est égale à false
     // Comme ca y'a pas l'erreur d'apuiiyer plusieurs fois sur pause.
 
-    public Court(RacketController playerA, RacketController playerB,RacketController playerC, RacketController playerD, RacketController playerE,
+    public Court(RacketController playerA, RacketController playerB,RacketController playerC, RacketController playerD,
             double width, double height) {
         this.playerA = playerA;
         this.playerB = playerB;
         this.playerC = playerC;
         this.playerD = playerD;
-        this.playerE = playerE;
         this.width = width;
         this.height = height;
         
         reset();
     }
+
 
     public void setIsBot(boolean b){
         isBot = b;
@@ -323,30 +322,21 @@ public class Court {
 
         if (ballX < (racketC*2) ){
             botDirection = RacketController.State.GOING_LEFT;
-            racketC = ballX;
-            racketE = ballX;
-            racketD = ballX;
-        }
+        }   
         else {
-            if (ballX > (racketC)*2 +racketSize) {
+            if (ballX > (racketC)*2 +racketSize/2) {
 
                 botDirection = RacketController.State.GOING_RIGHT;
-                racketC = ballX;
-            racketE = ballX;
-            racketD = ballX;
         }
         else {
             botDirection = RacketController.State.IDLE;
         }
 
-        }/*
+        }
         switch (botDirection) { // déplacement du bot
             case GOING_LEFT:
                 racketC -= racketSpeed * deltaT  ;
                 if (racketC < 0.0) racketC = 0.0;
-
-                racketE -= racketSpeed * deltaT  ;
-                if (racketE < 0.0) racketE = 0.0;
 
                 racketD -= racketSpeed * deltaT  ;
                 if (racketD < 0.0) racketD = 0.0;
@@ -357,13 +347,10 @@ public class Court {
                 racketC += racketSpeed * deltaT ;
                 if (racketC + racketSize > width) racketC = width - racketSize;
 
-                racketE += racketSpeed * deltaT ;
-                if (racketE + racketSize > width) racketE = width - racketSize;
-
                 racketD += racketSpeed * deltaT ;
                 if (racketD + racketSize > width) racketD = width - racketSize;
                 break;
-        }*/
+        }
     
 }
        
@@ -379,7 +366,7 @@ public class Court {
         // les lignes suivantes sont le cas où la balle rencontre un obstacle
 
         if ((nextBallY < 50 && nextBallX > (racketC*2)-racketSize&& nextBallX < (racketC*2)+racketSize  )|| 
-            (nextBallY > height - 50 && nextBallX > (racketD*2) && nextBallX < (racketD *2) + racketSize )) {
+            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize && nextBallX < (racketD *2) + racketSize )) {
             ballSpeedY = -ballSpeedY;
             nextBallY = ballY + deltaT * ballSpeedY;}
             else {
@@ -490,7 +477,6 @@ public class Court {
         this.racketA = height / 2;
         this.racketB = height / 2;
         this.racketC = height / 2.5;
-        this.racketE = height / 2.5;
         this.racketD = height / 2.5; 
         
         double nb;
