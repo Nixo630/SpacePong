@@ -399,7 +399,6 @@ public class GameView {
     	PartiEnCours=false;
 		court.setPartiEnCours(false);
     	enPause = false;
-		reset();
     	endGame=true;
     	stopAnimation();
     	racketA.setVisible(false);
