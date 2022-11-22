@@ -7,10 +7,11 @@ import javax.sound.sampled.Clip;
 import gui.App;
 import gui.GameView;
 import javafx.scene.Scene;
+import java.util.Random;
 
 public class Court {
     // instance parameters
-    private final RacketController playerA, playerB, playerC, playerD;
+    private final RacketController playerA, playerB, playerC, playerD,playerE;
     private final double width, height; // m
     private final double racketSpeed = 350.0; // m/s
     private final double ballRadius = 15.0; // m
@@ -18,11 +19,13 @@ public class Court {
     private double racketA; // m
     private double racketB; // m
     private double racketC; // m
+    private double racketE;
     private double racketD; // m
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m 
     private int scoreA = 0;
     private int scoreB = 0;
+    private int scoreFinal = 5;
     private double racketSize; // m
     private RacketController.State botDirection;//direction du bot
     private double directionPoint;//coordonee en y ou la balle se dirige
@@ -51,17 +54,16 @@ public class Court {
         this.playerB = playerB;
         this.playerC = playerC;
         this.playerD = playerD;
+        this.playerE = null;
         this.width = width;
         this.height = height;
         
         reset();
     }
-
+    
     public void setScoreFinal(int scoreFinal) {
         this.scoreFinal = scoreFinal;
     }
-
-
 
     public void setIsBot(boolean b){
         isBot = b;
@@ -138,7 +140,6 @@ public class Court {
     public int getScoreB() {
         return scoreB;
     }
-
     private void direction() { // pour le mode 1v1
         if ((racketB + racketSize/2) > directionPoint) {
             botDirection = RacketController.State.GOING_UP;
@@ -153,11 +154,11 @@ public class Court {
 
     private void direction2() { // pour le mode 2v2
 
-         if (directionPoint < racketC*2 + racketSize/2){
+         if (directionPoint < racketC*2 + racketSize/4){
             botDirection = RacketController.State.GOING_LEFT;
         }   
         else {
-            if (directionPoint > racketC*2 + racketSize/2) {
+            if (directionPoint > racketC*2 + racketSize*3/4) {
 
                 botDirection = RacketController.State.GOING_RIGHT;
         }
@@ -291,10 +292,10 @@ public class Court {
             }
             else {
                 if (nextBallX < 0) {
-                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*4));
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7));
                 }
                 else {
-                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB)))*4);
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB)))*7);
                 }
             }
             ballTouched = true;
@@ -362,13 +363,16 @@ public class Court {
         double nextBallY = ballY + deltaT * ballSpeedY;
 
         // les lignes suivantes sont le cas où la balle rencontre un obstacle
+        int x = new Random().nextInt(1,3);
+        if (x == 2) x = -1;
 
-        if ((nextBallY < 50 && nextBallX > racketC*2 -racketSize && nextBallX < racketC*2+racketSize )|| // si la balle touche la racket du haute 
-            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize/2&& nextBallX < (racketD *2) + racketSize )) { // si la balle touche la racket du bas
-            // la balle rembondit 
-            ballSpeedY = -ballSpeedY;
-            nextBallY = ballY + deltaT * ballSpeedY;
-            }
+        if ((nextBallY < 50 && nextBallX > racketC*2 -racketSize && nextBallX < racketC*2+racketSize ) ||
+            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize/2&& nextBallX < (racketD *2) + racketSize )){
+
+           ballSpeedY = -ballSpeedY ;
+            nextBallY = ballY + deltaT * ballSpeedY *1.5 ;
+            ballSpeedX = - (ballSpeedX-25) * x;
+        }
 
             else { // sinon on relance la partie et on augmente le score des joueur
 
@@ -387,18 +391,30 @@ public class Court {
         
             if ((nextBallX < 10 && nextBallY > racketA && nextBallY < racketA + racketSize) // si la balle touche le joueur A
                 || (nextBallX > width +10 && nextBallY > racketB && nextBallY < racketB + racketSize)) { // si la balle touche le joueur B
-
-                if (ballSpeedX > 0){ // MAJ vitesse de la balle après avoir touché un joueur
-                    ballSpeedX = - ballSpeedX - 25;
-                    } 
-
-                else {  // MAJ gauche> droite quand la vitesse est dans le négatif
-                    ballSpeedX = - ballSpeedX + 25 ;
-                    } 
-
-                if (ballSpeedY > 0) {ballSpeedY += 25;} // augmentation de la vitesse de la balle si elle monte
-
-                else {ballSpeedY -= 25;}// augmentation de la vitesse de la balle si elle descend
+                if (ballSpeedX > 0) {
+                ballSpeedX = -(ballSpeedX + 25);
+            } // MAJ vitesse de la balle après avoir touché la raquette
+            else {
+                ballSpeedX = -(ballSpeedX - 25);
+            } // MAJ gauche> droite quand la vitesse est dans le négatif
+                System.out.println("racket touched");
+                if (ballSpeedY > 0) {
+                    // ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
+                if (nextBallX < 10) {
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7);
+                }
+                else {
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB))*7);
+                }
+            }
+            else {
+                if (nextBallX < 10) {
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7));
+                }
+                else {
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB)))*7);
+                }
+            }
 
             nextBallX = ballX + deltaT * ballSpeedX;
             }
@@ -514,3 +530,4 @@ public class Court {
     }
 
 }
+
