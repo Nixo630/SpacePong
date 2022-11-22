@@ -48,6 +48,9 @@ public class GameView {
     private Button quit ;
     private Button resume;
     
+    //Boolean pour savoir si on est en 2vs2 ou 1vs1
+    private boolean multi ;
+    
     //Boutton pour les options lors de la fin du jeu
     private boolean endGame=false;
     private Button title_end;
@@ -56,8 +59,6 @@ public class GameView {
     //taille de l'écran
 	private double height;
 	private double width ;
-        //Boolean pour savoir si on est en 2vs2 ou 1vs1
-    private boolean multi ;
     
     //Boolean pour vérifier qu'une partie est en cours
     
@@ -193,12 +194,14 @@ public class GameView {
     	aTimer = new AnimationTimer() {
     		long last = 0;
 			@Override
-			public void handle(long now) {			
+			public void handle(long now) {
+				// TODO Auto-generated method stub
+				
 				if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
                 }
-                                       
+                                             
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);
@@ -207,7 +210,7 @@ public class GameView {
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
                  
-                if(court.getBallTouched() && changement_taille_racket) { //la balle touche la raquette
+                if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
                 	
                 	Random rd = new Random();
                 	
@@ -249,8 +252,9 @@ public class GameView {
 				if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
-                }                             
-                court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
+                }
+                System.out.println (court.getRacketC());                                
+                court.update2((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);
                 racketB.setY(court.getRacketB() * scale);
@@ -314,7 +318,6 @@ public class GameView {
     public void startAnimation() {
     	PartiEnCours = true;
     	multi = false;
-
     	animate();
     }
 
@@ -404,7 +407,6 @@ public class GameView {
     	PartiEnCours=false;
 		court.setPartiEnCours(false);
     	enPause = false;
-		reset();
     	endGame=true;
     	stopAnimation();
     	racketA.setVisible(false);
@@ -469,6 +471,7 @@ public class GameView {
     	if(endGame) {
     		endGame=false;
     		reset();
+    		stopAnimation();
     		stopAnimation();
 			court.setPartiEnCours(true);
 			menu.setVisible(false);

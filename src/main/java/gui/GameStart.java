@@ -621,12 +621,12 @@ public class GameStart {
 		title.setVisible(true);
 	}
 	
-	
 	public void print_setting_racket_difficulty() {
 		visible_change(getButtonParametre(),false);
 		visible_change(getButtonBackground(),false);
 		visible_change(getButtonSkinBall(),false);
 		visible_change(getMBButtonYesNo(),false);
+		choiceBox.setVisible(false);
 		title_s.setVisible(false);
 		
 		title_racket_difficulty = new Button();

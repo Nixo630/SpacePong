@@ -59,11 +59,11 @@ public class Court {
         
         reset();
     }
-
+    
     public void setScoreFinal(int scoreFinal) {
         this.scoreFinal = scoreFinal;
     }
-    
+
     public void setIsBot(boolean b){
         isBot = b;
     }
@@ -183,14 +183,14 @@ public class Court {
         }
         //La suite est pour le fonctionnement du bot
         if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY < racketB + racketSize/2) {//si la balle est dans la premiere moitie du terrain et que les coordonées de la balle sont en dessous du milieu de la raquette alors on monte pour suivre la balle
-        	//mais il faut aussi que la balle aille dans la direction du bot
-           
-        	racketB -= racketSpeed * deltaT;
+            //mais il faut aussi que la balle aille dans la direction du bot
+//            System.out.println((width/4)*difficulty);
+            racketB -= racketSpeed * deltaT;
             if (racketB < 0.0) racketB = 0.0;
         }
         else if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
-        	
-        	racketB += racketSpeed * deltaT;
+//          System.out.println((width/4)*difficulty);
+            racketB += racketSpeed * deltaT;
             if (racketB + racketSize > height) racketB = height - racketSize;
         }
         else {//et si la balle est dans la deuxieme moitie du terrain on predict la trajectoire
@@ -429,14 +429,14 @@ public class Court {
     
     
     public void playerLost() {
-    	scored = true;
-    	if (scoreA==scoreFinal || scoreB== scoreFinal) {
-    	// On joue le son
-    		partiEnCours = false;
-    		sound("lost.wav");
-    		
-    		lost = true;
-    	}
+        scored = true;
+        if (scoreA==scoreFinal || scoreB== scoreFinal) {
+        // On joue le son
+            partiEnCours = false;
+            sound("lost.wav");
+            
+            lost = true;
+        }
     }
     
     public boolean getLost() {
