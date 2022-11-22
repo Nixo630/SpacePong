@@ -29,6 +29,12 @@ JOSSE;Gaël; ABI
 
 * 22/11/2022
 ** TODO
-*** Solve the issue with GUI overlays in case after "replay"
-*** Add shortcuts for every label in every GUI
-*** Add spport for Locale
+*** DONE Solve the issue with GUI overlays in case after "replay"
+*** NOT REALLY DONE Add shortcuts for every label in every GUI
+*** Add support for Locale
+
+
+* 6/12/2022
+** TODO
+*** NOT REALLY DONE Add shortcuts for every label in every GUI
+*** Add support for network play
