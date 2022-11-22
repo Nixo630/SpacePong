@@ -57,6 +57,11 @@ public class Court {
         reset();
     }
 
+    public void setScoreFinal(int scoreFinal) {
+        this.scoreFinal = scoreFinal;
+    }
+
+
 
     public void setIsBot(boolean b){
         isBot = b;
