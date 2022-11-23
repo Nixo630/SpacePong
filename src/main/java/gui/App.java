@@ -72,6 +72,9 @@ public class App extends Application {
                     break;
                 case ENTER:
                 	break;
+                case ESCAPE:primaryStage.setFullScreen(true);System.exit(0);
+                	break;
+                case S:gameStart.start();break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
