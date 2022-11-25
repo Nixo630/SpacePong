@@ -183,6 +183,10 @@ public class GameView {
     public void Visible_middle_bar(boolean b) {
     	murE.setVisible(b);
     }
+
+	public Court getCourt() {
+		return court;
+	}
     
 	public void animate() {
 		racketD.setVisible(false);
@@ -375,9 +379,6 @@ public class GameView {
     	}
     } 
 
-    public void setmulti(boolean x) { 
-        multi = true;
-    }
     
     //Cette fonction permet de remettre en route le jeu après que l'utilisateur a fait pause
     public void resume() {
@@ -529,7 +530,7 @@ public class GameView {
 	    	racketD.setVisible(true);
 	    	ball.setVisible(true);
 			startAnimation();
-	    });
+	    };
 		
 		gameRoot.getChildren().addAll(replay,title_end,quit);
     }
