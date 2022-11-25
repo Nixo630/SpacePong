@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 public class Court {
     // instance parameters
     private final RacketController playerA, playerB, playerC, playerD,playerE;
+    private final RacketController playerA, playerB, playerC, playerD,playerE;
     private final double width, height; // m
     private final double racketSpeed = 350.0; // m/s
     private final double ballRadius = 15.0; // m
@@ -19,11 +20,13 @@ public class Court {
     private double racketB; // m
     private double racketC; // m
     private double racketE;
+    private double racketE;
     private double racketD; // m
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m 
     private int scoreA = 0;
     private int scoreB = 0;
+    private int scoreFinal = 5;
     private int scoreFinal = 5;
     private double racketSize; // m
     private RacketController.State botDirection;//direction du bot
@@ -54,11 +57,17 @@ public class Court {
         this.playerC = playerC;
         this.playerD = playerD;
         this.playerE = null;
+        this.playerE = null;
         this.width = width;
         this.height = height;
         
         reset();
     }
+    
+    public void setScoreFinal(int scoreFinal) {
+        this.scoreFinal = scoreFinal;
+    }
+
     
     public void setScoreFinal(int scoreFinal) {
         this.scoreFinal = scoreFinal;
@@ -188,8 +197,11 @@ public class Court {
             racketB -= racketSpeed * deltaT;
             if (racketB < 0.0) racketB = 0.0;
         }
-        else if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
-//          System.out.println((width/4)*difficulty);
+
+        else if 
+        ((ballX < (width/4)*(4-difficulty) || 
+        (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) 
+        && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
             racketB += racketSpeed * deltaT;
             if (racketB + racketSize > height) racketB = height - racketSize;
         }

@@ -65,6 +65,16 @@ public class App extends Application {
         var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
+
+
+        startScene.setOnKeyPressed(ev ->{
+            switch(ev.getCode()){
+            case SPACE:
+                break;
+            default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
+                break; 
+            }
+        });
         
  
         
@@ -181,6 +191,8 @@ public class App extends Application {
                 case Q:
                 	gameView.quitter();
                 	break;
+                case ESCAPE:
+                	System.exit(0);
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
@@ -202,7 +214,7 @@ public class App extends Application {
                     if (!court.getIsBot()){
                         if (playerB.state == RacketController.State.GOING_DOWN) playerB.state = RacketController.State.IDLE;
                     }
-                    break;    
+                    break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
