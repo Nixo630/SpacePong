@@ -7,12 +7,13 @@ import java.awt.Toolkit;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
 import model.RacketController;
- 
+
 public class App extends Application {
 	
 	private static Stage guiStage;
@@ -23,8 +24,9 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         Dimension tailleMoniteur = Toolkit.getDefaultToolkit().getScreenSize();
-        int longueur = tailleMoniteur.width-100;
-        int hauteur = tailleMoniteur.height;
+        double longueur = tailleMoniteur.width;
+        double hauteur = tailleMoniteur.height;
+
 
     	guiStage = primaryStage;
         guiStage.setHeight(hauteur);
@@ -56,8 +58,11 @@ public class App extends Application {
         var playerB = new Player();
         var playerC = new Player();
         var playerD = new Player();
+        
+        longueur = longueur*(94.2709/100);
+        hauteur = hauteur*(99.0741/100);
         		
-        var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
+        var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
