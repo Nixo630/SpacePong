@@ -27,6 +27,8 @@ public class GameStart {
 	//Boolean pour savoir si la barre de chargement à deja été charge
 	private boolean charge= false;
 	
+	private boolean start = false;
+	
 	private final Button quit,play,setting_button,multiplay,title;
 	private int height;
 	private int width;
@@ -76,6 +78,9 @@ public class GameStart {
     private Button title_racket_difficult;
     private Button title_choix_bg;
     private Button points_bg;
+    
+    private Button start_button;
+    private ProgressBar progressBar;
     
     //Boutton pour la barre du milieu
     
@@ -216,7 +221,7 @@ public class GameStart {
 		
 		//Mise en place de la barre de progression
 		
-		ProgressBar progressBar = new ProgressBar(0);
+		progressBar = new ProgressBar(0);
 		
 		progressBar.setPrefSize(width/2.5,75);
 		
@@ -226,7 +231,7 @@ public class GameStart {
 		
 		//Mise en place du boutton start
 		
-		Button start_button = new Button();
+		start_button = new Button();
 		start_button.setCursor(Cursor.HAND);
 		start_button.setId("start_button");
 		start_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -285,6 +290,49 @@ public class GameStart {
 		
 		
 	}
+	
+	public void start() {
+		if (!start) {
+			start = true;
+			court.sound("starting.wav");
+			startRoot.getChildren().removeAll(start_button);
+			startRoot.getChildren().addAll(progressBar);
+			
+			
+			if (charge == false) {
+				charge = true;
+				Timer chrono = new Timer();
+				chrono.schedule(new TimerTask() {
+	
+					int time = 25;
+					@Override
+					public void run() {
+						
+						avancer(progressBar);
+						
+						
+						if (time ==0) {
+							charge=true;
+							progressBar.setVisible(false);
+							curseur_droit.setVisible(true);
+							curseur_gauche.setVisible(true);
+							visible_change(getMenuButton(),true);
+							initCurrentButton();
+				        	chrono.cancel();
+				        	
+				        	
+						}
+						time--;
+					}
+					
+				}, 100,15);
+			}
+			else {
+				visible_change(getMenuButton(),true);
+			}
+		}
+	}
+	
 	
 	public void initCurrentButton() {
 		this.current_button = getMenuButton();
