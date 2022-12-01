@@ -64,7 +64,6 @@ public class Court {
         this.scoreFinal = scoreFinal;
     }
 
-
     public void setIsBot(boolean b){
         isBot = b;
     }
@@ -189,11 +188,8 @@ public class Court {
             racketB -= racketSpeed * deltaT;
             if (racketB < 0.0) racketB = 0.0;
         }
-
-        else if 
-        ((ballX < (width/4)*(4-difficulty) || 
-        (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) 
-        && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
+        else if ((ballX < (width/4)*(4-difficulty) || (ballX > (width/4)*(4-difficulty) && ballSpeedX < 0)) && ballY >= racketB + racketSize/2) {//donc si les coordonnées sont au dessus alors on descend pour suivre la balle
+//          System.out.println((width/4)*difficulty);
             racketB += racketSpeed * deltaT;
             if (racketB + racketSize > height) racketB = height - racketSize;
         }

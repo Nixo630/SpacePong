@@ -66,12 +66,6 @@
     -fx-background-size: cover;
 }
 
-#resolution_background{
-    -fx-background-image: url("resolution.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-}
-
 #points_background{
     -fx-background-image: url("points.png");
     -fx-background-color: TRANSPARENT;
@@ -84,37 +78,12 @@
     -fx-background-size: cover;
 }
 
+
 #pointsFinaux{
     -fx-background-image: url("ok.png");
     -fx-background-color: TRANSPARENT;
     -fx-background-size: cover;
 }
-
-#RD_yes{
-    -fx-background-image: url("yes_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-}
-
-#RD_no{
-    -fx-background-image: url("no_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-}
-
-
-#RD_yes{
-    -fx-background-image: url("yes_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-}
-
-#RD_no{
-    -fx-background-image: url("no_button.png");
-    -fx-background-color: TRANSPARENT;
-    -fx-background-size: cover;
-}
-
 
 #RD_yes{
     -fx-background-image: url("yes_button.png");

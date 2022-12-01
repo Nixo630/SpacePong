@@ -1,11 +1,10 @@
-    package gui;
+package gui;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import java.awt.Toolkit;
 
 import java.awt.Dimension;
 import java.util.Random;
@@ -47,7 +46,6 @@ public class GameView {
     private boolean enPause = false;
     private Button quit ;
     private Button resume;
-
     
     //Boolean pour savoir si on est en 2vs2 ou 1vs1
     private boolean multi ;
@@ -56,10 +54,6 @@ public class GameView {
     private boolean endGame=false;
     private Button title_end;
     private Button menu,replay;
-    
-    //taille de l'écran
-	private double height;
-	private double width ;
     
     //Boolean pour vérifier qu'une partie est en cours
     
@@ -75,9 +69,6 @@ public class GameView {
         this.gameRoot = root;
         this.scale = scale;
         start = startScene;
-		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		this.height = dimension.getHeight();
-		this.width  = dimension.getWidth();
         
         changement_taille_racket = false;
         quit = new Button();
@@ -108,9 +99,11 @@ public class GameView {
         racketC.setFill(Color.DARKGREY);
 
         racketC.setX(court.getRacketC() * scale);
-        racketC.setY(xMargin + racketThickness);
+        racketC.setY(xMargin - racketThickness);
 
         racketC.setVisible(false);
+
+        
 
         racketD = new Rectangle();
         racketD.setWidth(court.getRacketSize() * scale);
@@ -118,10 +111,9 @@ public class GameView {
         racketD.setFill(Color.DARKGREY);
 
         racketD.setX(court.getRacketD() * scale);
-        racketD.setY(court.getHeight() * scale - xMargin);
+        racketD.setY(court.getHeight() * scale - xMargin + racketThickness);
 
         racketD.setVisible(false);
-
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());
@@ -228,7 +220,7 @@ public class GameView {
                     affScoreB.setText(""+court.getScoreB());
                     
                 	
-                	court.setRacketSize(100);
+                	court.setRacketSize(150);
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	court.resetScored();
@@ -249,12 +241,14 @@ public class GameView {
     		long last = 0;
 			@Override
 			public void handle(long now) {
+				// TODO Auto-generated method stub
+				
 				if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
                     return;
                 }
                 System.out.println (court.getRacketC());                                
-                court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
+                court.update2((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);
                 racketB.setY(court.getRacketB() * scale);
@@ -284,7 +278,7 @@ public class GameView {
                     affScoreB.setText(""+court.getScoreB());
                     
                 	
-                	court.setRacketSize(100);
+                	court.setRacketSize(150);
                 	racketA.setHeight(court.getRacketSize() * scale);
                 	racketB.setHeight(court.getRacketSize() * scale);
                 	racketC.setHeight(racketThickness);
@@ -298,12 +292,13 @@ public class GameView {
     		
     	};
     	aTimer.start();
+
     }
 
         
     public void reset() {
-    	affScoreA.setLayoutY(height*(2.32/100));
-		affScoreB.setLayoutY(height*(2.32/100));
+    	affScoreA.setLayoutY(25);
+		affScoreB.setLayoutY(25);
     	affScoreA.setText("0");
     	affScoreB.setText("0");
     	court.reset();
@@ -347,18 +342,18 @@ public class GameView {
 			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
 			
-			quit.setPrefSize(width*(16.094/100),height*(10.65/100));
+			quit.setPrefSize(1424/3,216/3);
 			quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
-			quit.setLayoutY(width*(33.855/100));
+			quit.setLayoutY(650);
 			
 			
 			resume.setId("resume_button");
 			resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
 			
-			resume.setPrefSize(width*(17.3/100),height*(3.2/100));
-			resume.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
-			resume.setLayoutY(height*(41.7/100));
+			resume.setPrefSize(1329/4,138/4);
+			resume.setLayoutX(court.getWidth()/2 - resume.getPrefWidth()/2);
+			resume.setLayoutY(450);
 			
 			resume.setCursor(Cursor.HAND);
 			resume.setOnAction(value ->  {
@@ -367,58 +362,38 @@ public class GameView {
 			
 			quit.setCursor(Cursor.HAND);
 			quit.setOnAction(value ->  {
-				enPause = false;
-				reset();
-				gameRoot.getChildren().removeAll(quit,resume);	
-				court.setPartiEnCours(false);
-				lost_game();
-				
+				quitter();
 		    });
 			
 			gameRoot.getChildren().addAll(quit,resume);
     	}
     } 
-
     
-    //Cette fonction permet de remettre en route le jeu après que l'utilisateur a fait pause
     public void resume() {
     	if(enPause) {
     		enPause = false;
-            court.setPartiEnCours(true);
-        	if(multi){
+        	court.setPartiEnCours(true);
+        	if(multi) {
         		startAnimation2();
-        	}else{
-            	startAnimation();
+        	}
+        	else{
+        		startAnimation();
         	}
     		gameRoot.getChildren().removeAll(quit,resume);	
     	}
     }
-
-
-    //Cette fonction permet de quitter correctement la parti, si le joueur a mis en pause le jeu et veut arrêter de jouer
-    //Elle supprime de l'écran les boutons resume et exit, reset les paramètres de la balle
-    public void fin_de_parti(){
-        enPause = false;
-        reset();
-        gameRoot.getChildren().removeAll(quit,resume);  
-        court.setPartiEnCours(false);
-        lost_game();
-    }
     
-    public void quitter(){
+    public void quitter() {
     	if(enPause) {
     		PartiEnCours=false;
     		court.setPartiEnCours(false);
 	    	enPause = false;
 	    	endGame=true;
 			reset();
-	    	gameRoot.getChildren().removeAll(quit,resume);	
-	    	gameRoot.getChildren().removeAll(quit,resume);	
-	    	gameRoot.getChildren().removeAll(quit,resume);	
+			gameRoot.getChildren().removeAll(quit,resume);	
 			lost_game();
     	}
     }
-
     
     public void lost_game() {
     	PartiEnCours=false;
@@ -432,6 +407,10 @@ public class GameView {
     	racketD.setVisible(false);
     	ball.setVisible(false);
     	
+    	Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int height = (int)dimension.getHeight();
+		int width  = (int)dimension.getWidth();
+		
 		//Mise en place de l'affichage de la fin de partie
 	
 		//Ici c'est le bouton qui affiche que la partie est termine
@@ -440,14 +419,14 @@ public class GameView {
 		title_end.setId("title_end");
 		title_end.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		title_end.setPrefSize(width*(36.62/100),height*(14.73/100));
+		title_end.setPrefSize(2111/3,477/3);
 		title_end.setLayoutX(width/2 - title_end.getPrefWidth()/2);
-		title_end.setLayoutY(height*(4.63/100));
+		title_end.setLayoutY(50);
 		
 		//Affichage des score
 		
-		affScoreA.setLayoutY(height*(18.52/100));
-		affScoreB.setLayoutY(height*(18.52/100));
+		affScoreA.setLayoutY(200);
+		affScoreB.setLayoutY(200);
 		
 		//Bouton pour rejouer
 		replay = new Button();
@@ -456,10 +435,10 @@ public class GameView {
 		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		replay.setPrefSize(width*(24.5/100),height*(5.1/100));
+		replay.setPrefSize(1424/3,216/3);
 		
 		replay.setLayoutX(width/2 - width/2/2 - replay.getPrefWidth()/2);
-		replay.setLayoutY(width*(31.8/100));
+		replay.setLayoutY(610);
 		
 		
 		
@@ -468,9 +447,9 @@ public class GameView {
 		menu.setId("menu_button");
 		menu.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		menu.setPrefSize(width*(17.4/100),height*(5.1/100));
+		menu.setPrefSize(1424/3,216/3);
 		menu.setLayoutX(width/2 + width/2/2 - menu.getPrefWidth()/2);
-		menu.setLayoutY(width*(31.771/100));
+		menu.setLayoutY(610);
 		
 		menu.setCursor(Cursor.HAND);
 		menu.setOnAction(value ->  {
@@ -489,7 +468,6 @@ public class GameView {
     		endGame=false;
     		reset();
     		stopAnimation();
-    		stopAnimation();
 			court.setPartiEnCours(true);
 			menu.setVisible(false);
 			replay.setVisible(false);
@@ -497,8 +475,8 @@ public class GameView {
 			court.setLost(false);
 			racketA.setVisible(true);
 	    	racketB.setVisible(true);
-	    	racketC.setVisible(false);
-	    	racketD.setVisible(false);
+	    	racketC.setVisible(true);
+	    	racketD.setVisible(true);
 	    	ball.setVisible(true);
 	    	
 			if (multi){
@@ -526,13 +504,12 @@ public class GameView {
 			court.setLost(false);
 			racketA.setVisible(true);
 	    	racketB.setVisible(true);
-	    	racketC.setVisible(true);
-	    	racketD.setVisible(true);
+	    	racketC.setVisible(false);
+	    	racketD.setVisible(false);
 	    	ball.setVisible(true);
-			startAnimation();
-	    };
-		
-		gameRoot.getChildren().addAll(replay,title_end,quit);
+			App.getStage().setScene(start);
+			App.getStage().setFullScreen(true);
+    	}
     }
     
     public void setChangeRacketSize(boolean b) {

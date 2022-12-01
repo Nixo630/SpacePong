@@ -6,10 +6,7 @@ import java.util.TimerTask;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -41,9 +38,9 @@ public class GameStart {
 
 	//Boutton pour les parties en solo
 	private Button easy,medium,hard,insane;
+	
+	
 
-
-    
     //Input du nombre de points souhaités par l'utilisateur
 	private Button points;
 	private TextField intInput;
@@ -93,9 +90,6 @@ public class GameStart {
     //Boutton pour changer le background de la game
     private Button choix_galaxie,choix_trou_noir,choix_earth,choix_earth2;
     
-    //ChoseBox pour permettre à l'utilisateur de choisir en combien de points il veut finir la partie
-    private ChoiceBox<Integer> choiceBox;
-    
     //Boutton pour l'option du changement aléatoire de la taille de la raquette
     
     private Button title_racket_difficulty;
@@ -104,8 +98,6 @@ public class GameStart {
     private Button button_no;
 
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
-		App.getStage().setResizable(false);
-		App.getStage().setFullScreenExitHint("appuyer sur 'd' et 'c' pour se deplacer\n appuyer sur 'm' pour accepter");
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
@@ -127,21 +119,21 @@ public class GameStart {
 		title.setId("title");
 		title.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		title.setPrefSize(width*50/100,height*25/100);
+		title.setPrefSize(1082/2,332/2);
 		title.setLayoutX(width/2 - title.getPrefWidth()/2);
-		title.setLayoutY(0);
+		title.setLayoutY(50);
 		
 		
 		
 		//Mise en place du boutton Play pour jouer au jeu en solo
 		play = new Button();
-		play.setCursor(Cursor.HAND);		
+		
 		play.setId("solo_play_button");
 		play.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		play.setPrefSize(width*35/100,height*15/100);
+		play.setPrefSize(1920/4.5,463/4.5);
 		play.setLayoutX(width/2 - play.getPrefWidth()/2);
-		play.setLayoutY(height*30/100);
+		play.setLayoutY(280);
 		
 		//Mise en place du curseur droit
 		
@@ -173,9 +165,9 @@ public class GameStart {
 		multiplay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		multiplay.setPrefSize(width*70/100,height*15/100);
+		multiplay.setPrefSize(3376/3.5,574/3.5);
 		multiplay.setLayoutX(width/2 - multiplay.getPrefWidth()/2);
-		multiplay.setLayoutY(height*45/100);
+		multiplay.setLayoutY(400);
 		
 		//Boutton pour quitter le jeu
 		quit = new Button();
@@ -184,9 +176,9 @@ public class GameStart {
 		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		quit.setPrefSize(width*30/100,height*15/100);
+		quit.setPrefSize(1424/3,216/3);
 		quit.setLayoutX(width/2 - quit.getPrefWidth()/2);
-		quit.setLayoutY(height*65/100);
+		quit.setLayoutY(650);
 		
 		retour = new Button();
 		retour.setId("return");
@@ -209,7 +201,7 @@ public class GameStart {
 		setting_button.setId("settings_button");
 		setting_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		setting_button.setPrefSize(height*20/100, height*20/100);
+		setting_button.setPrefSize(360/2,360/2);
 		
 		setting_button.setLayoutX(width-setting_button.getPrefWidth());
 		setting_button.setLayoutY(0);
@@ -238,7 +230,7 @@ public class GameStart {
 		start_button.setDefaultButton(true);
 		
 		
-		start_button.setPrefSize(width*75/100,height*20/100);
+		start_button.setPrefSize(2965/4.5,491/4.5);
 		
 		start_button.setLayoutX(width/2 - start_button.getPrefWidth()/2);
 		start_button.setLayoutY(height/2 - start_button.getPrefHeight()/2);
@@ -357,27 +349,6 @@ public class GameStart {
 	public void setBackground(String s) {
 		gameRoot.setId(s);
 	}
-
-	public boolean isInt(TextField input, String message){
-		try{
-			int age = Integer.parseInt(input.getText());
-			if(!message.equals("")){
-				if(age>0){
-					error.setVisible(false);
-				}else{
-					error.setVisible(true);
-				}
-			}
-			return true;
-		}catch(NumberFormatException e){
-			if(message.equals("")){
-				error.setVisible(false);
-				return false;
-			}
-			error.setVisible(true);
-			return false;
-		}
-	}
 	
 	public void parametre() {
 		visible_change(getMenuButton(),false);
@@ -392,7 +363,7 @@ public class GameStart {
 		
 		title_s.setPrefSize(width*21/100, height*6/100);
 		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_s.setLayoutY(height*5/100);
+		title_s.setLayoutY(50);
 		
 		
 		//Mise en place du choix de l'arriere plan
@@ -452,6 +423,7 @@ public class GameStart {
 		finish_button.setId("finish_button");
 		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
 		
+
 		finish_button.setPrefSize(width*(11.8/100),height*(3.8/100));
 		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
 		finish_button.setLayoutY(height-height*(9.3/100));
@@ -480,7 +452,6 @@ public class GameStart {
 		middle_bar_yes.setLayoutY(width*(20.84/100));
 		
 		
-		
 		middle_bar_no = new Button();
 		middle_bar_no.setId("middle_bar_no");
 		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
@@ -488,6 +459,7 @@ public class GameStart {
 		middle_bar_no.setPrefSize(width*(6.5/100),height*(10.8/100));
 		middle_bar_no.setLayoutX(width*(28.86/100));
 		middle_bar_no.setLayoutY(width*(20.84/100));
+		
 		
 		//Mise en place du choix du skin de la balle pour le joueur
 		
@@ -503,11 +475,11 @@ public class GameStart {
 		choix_ball_sun = new Button();
 		choix_ball_sun.setId("choix_ball_sun");
 		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_sun.setCursor(Cursor.HAND);
 		
 		choix_ball_sun.setPrefSize(width*(2.64/100),width*(2.64/100));
 		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+height*(3.86/100)/2);
 		choix_ball_sun.setLayoutY(height*(50.926/100));
+		
 		choix_ball_sun.setOnAction(value ->  {
 			gw.setBallSkin("sun_ball.png");
 	    });
@@ -515,17 +487,16 @@ public class GameStart {
 		choix_ball_green = new Button();
 		choix_ball_green.setId("choix_ball_green");
 		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_green.setCursor(Cursor.HAND);
 		
 		choix_ball_green.setPrefSize(width*(2.553/100),height*(5.02/100));
 		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+height*(4.63/100)/2);
 		choix_ball_green.setLayoutY(height*(50.926/100));
 		
 		
+		
 		choix_ball_moon = new Button();
 		choix_ball_moon.setId("choix_ball_moon");
 		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_moon.setCursor(Cursor.HAND);
 		
 		choix_ball_moon.setPrefSize(width*(2.71/100),height*(5.5/100));
 		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+height*(4.63/100)/2);
@@ -535,7 +506,6 @@ public class GameStart {
 		choix_ball_jupiter = new Button();
 		choix_ball_jupiter.setId("choix_ball_jupiter");
 		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_jupiter.setCursor(Cursor.HAND);
 		
 		choix_ball_jupiter.setPrefSize(width*(2.06/100),height*(5.4/100));
 		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+height*(4.63/100)/2);
@@ -563,9 +533,9 @@ public class GameStart {
 		choix_ball_earth.setId("choix_ball_earth");
 		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
 		
-		choix_ball_earth.setPrefSize(width*(2.188),height*(5.417/100));
+		choix_ball_earth.setPrefSize(width*(2.5912/100),height*(5.9/100));
 		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+height*(4.63/100)/2);
-		choix_ball_earth.setLayoutY(height*(50.926/100));
+		choix_ball_earth.setLayoutY(choix_ball_lila.getLayoutY());
 		
 		startRoot.getChildren().addAll(title_ball_skin,choix_ball_sun,choix_ball_green
 				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
@@ -584,6 +554,7 @@ public class GameStart {
 		
 
 		//Ajout du nombre de points pour finir une partie
+		
 		intInput = new TextField();
 		points = new Button();
 		points.setOnAction(e -> isInt(intInput, intInput.getText()));
@@ -611,9 +582,7 @@ public class GameStart {
 
 
 		startRoot.getChildren().addAll(intInput, points, error);
-
-
-
+		
 		points_bg = new Button();
 		points_bg.setId("points_background");
 		points_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
@@ -638,6 +607,28 @@ public class GameStart {
 		
 	}
 	
+	public boolean isInt(TextField input, String message){
+		try{
+			int age = Integer.parseInt(input.getText());
+			if(!message.equals("")){
+				if(age>0){
+					error.setVisible(false);
+				}else{
+					error.setVisible(true);
+				}
+			}
+			return true;
+		}catch(NumberFormatException e){
+			if(message.equals("")){
+				error.setVisible(false);
+				return false;
+			}
+			error.setVisible(true);
+			return false;
+		}
+	}
+	
+
 	public void finish() {
 		intInput.setVisible(false);
 		points.setVisible(false);
@@ -660,7 +651,7 @@ public class GameStart {
 			points.setVisible(false);
 			visible_change(getButtonSkinBall(),false);
 			visible_change(getButtonBackground(),false);
-			visible_change(getMBButtonYesNo(), false);
+			visible_change(getMBButtonYesNo(),false);
 			title_s.setVisible(false);
 			
 		}
@@ -674,8 +665,9 @@ public class GameStart {
 		visible_change(getButtonBackground(),false);
 		visible_change(getButtonSkinBall(),false);
 		visible_change(getMBButtonYesNo(),false);
-		choiceBox.setVisible(false);
 		title_s.setVisible(false);
+		intInput.setVisible(false);
+		points.setVisible(false);
 		
 		title_racket_difficulty = new Button();
 		title_racket_difficulty.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
@@ -719,8 +711,9 @@ public class GameStart {
 		gw.setChangeRacketSize(b);
 		explication.setVisible(false);
 		title_racket_difficulty.setVisible(false);
-		choiceBox.setVisible(true);
 		title_s.setVisible(true);
+		intInput.setVisible(true);
+		points.setVisible(true);
 		
 		visible_change(getRDButtonYesNo(),false);
 		visible_change(getButtonParametre(),true);
@@ -740,9 +733,8 @@ public class GameStart {
 		easy.setId("button_easy");
 		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		easy.setPrefSize(width*45/100,height*10/100);
+		easy.setPrefSize(1424/3,216/3);
 		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
-		easy.setLayoutY(height*30/100);
 		
 		
 		
@@ -750,26 +742,27 @@ public class GameStart {
 		medium.setId("button_medium");
 		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		medium.setPrefSize(width*45/100,height*10/100);
+		medium.setPrefSize(1424/3,216/3);
 		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
-		medium.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*45/100);
+		medium.setLayoutY(height/2 - medium.getHeight()- 50);
 		
+		easy.setLayoutY(medium.getLayoutY()-medium.getHeight() - 100);
 		
 		hard = new Button();
 		hard.setId("button_hard");
 		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		hard.setPrefSize(width*45/100,height*10/100);
+		hard.setPrefSize(1424/3,216/3);
 		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
-		hard.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*85/100);
+		hard.setLayoutY(height/2 + hard.getHeight()+ 50);
 		
 		insane = new Button();
 		insane.setId("button_insane");
 		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		insane.setPrefSize(width*45/100,height*10/100);
+		insane.setPrefSize(1424/3,216/3);
 		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
-		insane.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*125/100);
+		insane.setLayoutY(hard.getLayoutY()+hard.getHeight()+100);
 		
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
@@ -796,9 +789,8 @@ public class GameStart {
 		button_1vs1.setId("button_1vs1");
 		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		button_1vs1.setPrefSize(width*45/100,height*10/100);
+		button_1vs1.setPrefSize(1424/3,216/3);
 		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
-		button_1vs1.setLayoutY(height*30/100);
 		
 		
 		
@@ -806,18 +798,19 @@ public class GameStart {
 		button_2vs2.setId("button_2vs2");
 		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		button_2vs2.setPrefSize(width*45/100,height*10/100);
+		button_2vs2.setPrefSize(1424/3,216/3);
 		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
-		button_2vs2.setLayoutY(button_1vs1.getLayoutY() + button_1vs1.getLayoutY()*45/100);
+		button_2vs2.setLayoutY(height/2 - button_2vs2.getPrefHeight()/2);
 		
+		button_1vs1.setLayoutY(button_2vs2.getLayoutY()-50-button_1vs1.getPrefHeight());
 		
 		online = new Button();
 		online.setId("button_online");
 		online.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		online.setPrefSize(width*45/100,height*10/100);
+		online.setPrefSize(1424/3,216/3);
 		online.setLayoutX(width/2 - online.getPrefWidth()/2);
-		online.setLayoutY(button_1vs1.getLayoutY() + button_1vs1.getLayoutY()*85/100);
+		online.setLayoutY(button_2vs2.getLayoutY()+50+button_2vs2.getPrefHeight());
 		
 		
 		
@@ -872,8 +865,7 @@ public class GameStart {
 	
 	public Button[] getButtonSkinBall() {
 		Button[] tab_skin= {choix_ball_sun,choix_ball_green,
-				choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
-				choix_ball_earth};
+				choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,	choix_ball_earth};
 		
 		return tab_skin;
 	}
