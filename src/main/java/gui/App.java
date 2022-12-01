@@ -1,13 +1,14 @@
 package gui;
 
 
+import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
@@ -61,8 +62,8 @@ public class App extends Application {
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
- 
-        
+        TouchView touchView = new TouchView(start,root,gameStart.getCurseurDroit(),gameStart.getCurseurGauche());
+        touchView.init();
         
         startScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
@@ -75,6 +76,7 @@ public class App extends Application {
                 case ESCAPE:primaryStage.setFullScreen(true);System.exit(0);
                 	break;
                 case S:gameStart.start();break;
+                case I : touchView.affiche(gameStart.getCurrentButton());break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
@@ -82,6 +84,7 @@ public class App extends Application {
         
         startScene.setOnKeyReleased(ev ->{
         	switch (ev.getCode()) {
+        	case I :gameStart.setCurrentButton(touchView.close());break;
             case DOWN:
                 gameStart.IncrementeIndice(gameStart.getCurrentButton());
                 gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
@@ -91,7 +94,7 @@ public class App extends Application {
                 gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
                 break;
             case ENTER:
-            	if(gameStart.getCurrentButton().length!=0) {
+            	if(gameStart.getCurrentButton().length!=0 && !touchView.estAffiche()) {
                 	switch (gameStart.getCurrentButton()[gameStart.getCurseurIndice()].getId()) {
                 	
                 	case "solo_play_button": gameStart.chose_difficulty();gameStart.setCurrentButton(gameStart.getButtonDifficulty());break; 
@@ -142,8 +145,8 @@ public class App extends Application {
                 	}
             	}
             	break;
-            	default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
-            	break;
+            default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
+            break;
         	}
         });
         

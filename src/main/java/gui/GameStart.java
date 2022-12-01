@@ -227,7 +227,7 @@ public class GameStart {
 		start_button.setCursor(Cursor.HAND);
 		start_button.setId("start_button");
 		start_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		start_button.setDefaultButton(true);
+		
 		
 		
 		start_button.setPrefSize(2965/4.5,491/4.5);
@@ -959,6 +959,14 @@ public class GameStart {
 			}
 		}
 		return true;
+	}
+	
+	public Circle getCurseurGauche() {
+		return curseur_gauche;
+	}
+	
+	public Circle getCurseurDroit() {
+		return curseur_droit;
 	}
 }
 
