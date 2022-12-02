@@ -62,7 +62,7 @@ public class App extends Application {
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
-        TouchView touchView = new TouchView(start,root,gameStart.getCurseurDroit(),gameStart.getCurseurGauche());
+        TouchView touchView = new TouchView(start,gameStart.getCurseurDroit(),gameStart.getCurseurGauche());
         touchView.init();
         
         startScene.setOnKeyPressed(ev -> {
@@ -73,9 +73,9 @@ public class App extends Application {
                     break;
                 case ENTER:
                 	break;
-                case ESCAPE:primaryStage.setFullScreen(true);System.exit(0);
-                	break;
+                case ESCAPE:primaryStage.setFullScreen(true);break;
                 case S:gameStart.start();break;
+                case Q : System.exit(0);break;
                 case I : touchView.affiche(gameStart.getCurrentButton());break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
@@ -150,6 +150,9 @@ public class App extends Application {
         	}
         });
         
+        TouchView touchView1 = new TouchView(root,gameStart.getCurseurDroit(),gameStart.getCurseurGauche());
+        touchView1.init();
+        
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case Z:
@@ -168,6 +171,7 @@ public class App extends Application {
                         playerB.state = RacketController.State.GOING_DOWN;
                     }
                     break;
+                case I:gameView.pause();touchView1.affiche(gameView.getCurrentButton());break;
                 case P:
                 	gameView.pause();
                 	gameView.menu();
@@ -185,6 +189,7 @@ public class App extends Application {
         });
         gameScene.setOnKeyReleased(ev -> {
             switch (ev.getCode()) {
+            	case I:touchView1.close();gameView.resume();break;
                 case Z:
                     if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
                     break;
