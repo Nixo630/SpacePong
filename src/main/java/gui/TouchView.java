@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -34,8 +36,21 @@ public class TouchView {
     //Mise en place des labels pour les informations
     
     
-    Button joueur1;
-    Button joueur2;
+    ImageView joueur1;
+    ImageView joueur2;
+    ImageView quitter;
+    ImageView reprendre;
+    ImageView replay;
+    ImageView menu;
+    ImageView pause;
+    
+    
+    ImageView touche_r;
+    ImageView touche_r1;
+    ImageView touche_p;
+    ImageView touche_p1;
+    ImageView touche_q;
+    
     
     
 	public TouchView(Pane startRoot,Pane root,Circle g,Circle d) {
@@ -44,7 +59,7 @@ public class TouchView {
 		this.startRoot = startRoot;
 		this.root = root;
 		canvas = new Pane();
-	    canvas.setStyle("-fx-background-color: blue;");
+	    canvas.setStyle("-fx-background-color: pink;");
 	    canvas.setPrefSize(longueur*3/4,hauteur*3/4);
 	    
 	    canvas.setLayoutX(longueur/2-canvas.getPrefWidth()/2);
@@ -70,29 +85,130 @@ public class TouchView {
 	}
 	
 	public void init(){
-		joueur1 = new Button();
-		joueur1.setId("joueur1");
-		joueur1.getStylesheets().addAll(this.getClass().getResource("style_info.css").toExternalForm());
-		joueur1.setPrefSize(1424/3,216/3);
 		
-		joueur1.setLayoutX(milieu.getX() - joueur1.getPrefWidth()-100);
-		joueur1.setLayoutY(50);
+		reprendre = new ImageView();
+		reprendre.setFitWidth(1424/5);
+		reprendre.setFitHeight(216/5);
+		Image imageReprendre = new Image(getClass().getResourceAsStream("reprendre.png"));
+		reprendre.setImage(imageReprendre);
+		reprendre.setLayoutX(10);
+		reprendre.setLayoutY(150);
+		canvas.getChildren().addAll(reprendre);
+		
+		touche_r = new ImageView();
+		Image imageR = new Image(getClass().getResourceAsStream("Image_Info/touche-r.png"));
+        touche_r.setImage(imageR);
+		touche_r.setFitHeight(512/9);
+		touche_r.setFitWidth(512/9);
+		touche_r.setLayoutX(milieu.getX()/2 + touche_r.getFitWidth());
+		touche_r.setLayoutY(reprendre.getLayoutY() + reprendre.getFitHeight()/2 - touche_r.getFitHeight()/2);
+		canvas.getChildren().addAll(touche_r);
+		
+		
+		quitter = new ImageView();
+		quitter.setFitWidth(1424/5);
+		quitter.setFitHeight(216/5);
+		Image imageQuitter = new Image(getClass().getResourceAsStream("quitter.png"));
+		quitter.setImage(imageQuitter);
+		quitter.setLayoutX(10);
+		quitter.setLayoutY(250);
+		canvas.getChildren().addAll(quitter);
+		
+		
+		touche_q = new ImageView();
+		Image imageQ = new Image(getClass().getResourceAsStream("Image_Info/touche-q.png"));
+        touche_q.setImage(imageQ);
+		touche_q.setFitHeight(512/9);
+		touche_q.setFitWidth(512/9);
+		touche_q.setLayoutX(milieu.getX()/2 + touche_q.getFitWidth());
+		touche_q.setLayoutY(quitter.getLayoutY() + quitter.getFitHeight()/2 - touche_q.getFitHeight()/2);
+		canvas.getChildren().addAll(touche_q);
+		
+		
+		replay = new ImageView();
+		replay.setFitWidth(1424/5);
+		replay.setFitHeight(216/5);
+		Image imageRejouer = new Image(getClass().getResourceAsStream("rejouer.png"));
+		replay.setImage(imageRejouer);
+		replay.setLayoutX(10);
+		replay.setLayoutY(350);
+		canvas.getChildren().addAll(replay);
+		
+		touche_r1 = new ImageView();
+        touche_r1.setImage(imageR);
+		touche_r1.setFitHeight(512/9);
+		touche_r1.setFitWidth(512/9);
+		touche_r1.setLayoutX(milieu.getX()/2 + touche_q.getFitWidth());
+		touche_r1.setLayoutY(replay.getLayoutY() + replay.getFitHeight()/2 - touche_r.getFitHeight()/2);
+		canvas.getChildren().addAll(touche_r1);
+		
+		
+		
+		menu = new ImageView();
+		menu.setFitWidth(1424/5);
+		menu.setFitHeight(216/5);
+		Image imageMenu = new Image(getClass().getResourceAsStream("menu.png"));
+		menu.setImage(imageMenu);
+		menu.setLayoutX(10);
+		menu.setLayoutY(450);
+		canvas.getChildren().addAll(menu);
+		
+		touche_p = new ImageView();
+		Image imageP = new Image(getClass().getResourceAsStream("Image_Info/touche-p.png"));
+        touche_p.setImage(imageP);
+		touche_p.setFitHeight(512/9);
+		touche_p.setFitWidth(512/9);
+		touche_p.setLayoutX(milieu.getX()/2 + touche_p.getFitWidth());
+		touche_p.setLayoutY(menu.getLayoutY() + menu.getFitHeight()/2 - touche_p.getFitHeight()/2);
+		canvas.getChildren().addAll(touche_p);
+		
+		pause = new ImageView();
+		pause.setFitWidth(1424/5);
+		pause.setFitHeight(216/5);
+		Image imagePause = new Image(getClass().getResourceAsStream("affichage_pause.png"));
+		pause.setImage(imagePause);
+		pause.setLayoutX(10);
+		pause.setLayoutY(550);
+		canvas.getChildren().addAll(pause);
+		
+		touche_p1 = new ImageView();
+		touche_p1.setImage(imageP);
+		touche_p1.setFitHeight(512/9);
+		touche_p1.setFitWidth(512/9);
+		touche_p1.setLayoutX(milieu.getX()/2 + touche_r.getFitWidth());
+		touche_p1.setLayoutY(pause.getLayoutY() + pause.getFitHeight()/2 - touche_p1.getFitHeight()/2);
+		canvas.getChildren().addAll(touche_p1);
+		
+		initJoueurTouche();
+		
+		startRoot.getChildren().addAll(canvas);
+		canvas.setVisible(false);
+	}
+	
+	
+	public void initJoueurTouche() {
+		joueur1 = new ImageView();
+		joueur1.setFitHeight(216/3);
+		joueur1.setFitWidth(1424/3);
+		Image imJoueur1 = new Image(getClass().getResourceAsStream("Image_Info/joueur_1.png"));
+		joueur1.setImage(imJoueur1);
+		joueur1.setLayoutX(milieu.getX() + milieu.getX()/2-joueur1.getFitWidth()/2);
+		joueur1.setLayoutY(25);
 		
 		canvas.getChildren().addAll(joueur1);
 		
 		
-		joueur2 = new Button();
-		joueur2.setId("joueur2");
-		joueur2.getStylesheets().addAll(this.getClass().getResource("style_info.css").toExternalForm());
-		joueur2.setPrefSize(1424/3,216/3);
-		
-		joueur2.setLayoutX(milieu.getX()+100);
-		joueur2.setLayoutY(50);
+		joueur2 = new ImageView();
+		joueur2.setFitHeight(216/3);
+		joueur2.setFitWidth(1424/3);
+		Image imJoueur2 = new Image(getClass().getResourceAsStream("Image_Info/joueur_2.png"));
+		joueur2.setImage(imJoueur2);
+		joueur2.setLayoutX(milieu.getX() + milieu.getX()/2-joueur2.getFitWidth()/2);
+		joueur2.setLayoutY(milieu.getHeight()/2 + 25);
 		
 		canvas.getChildren().addAll(joueur2);
 		
-		startRoot.getChildren().addAll(canvas);
-		canvas.setVisible(false);
+		
 	}
 	
 	
