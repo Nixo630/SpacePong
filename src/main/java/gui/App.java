@@ -36,7 +36,11 @@ public class App extends Application {
         
         var gameScene = new Scene(root);
         gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-                
+             
+        var online = new Pane();
+        var onlineScene = new Scene(online);
+        onlineScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
+        
         class Player implements RacketController {
             State state = State.IDLE;
 
@@ -55,7 +59,7 @@ public class App extends Application {
         		
         var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
-        var gameStart = new GameStart(start,root,gameScene,gameView,court, new Player());
+        var gameStart = new GameStart(start,root,online,gameScene,gameView,court, onlineScene, new Player());
         
         startScene.setOnKeyPressed(ev ->{
             switch(ev.getCode()){

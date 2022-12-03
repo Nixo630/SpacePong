@@ -36,6 +36,8 @@ public class OnlineGameView {
     //taille de l'écran
 	private double height;
 	private double width;
+	
+	private Scene startScene;
     
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
@@ -127,6 +129,7 @@ public class OnlineGameView {
         affScoreB.setTranslateX((court.getBallX() + xMargin)*1.25);
         
         gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
+        this.startScene = startScene;
     }
     
     public void Visible_middle_bar(boolean b) {

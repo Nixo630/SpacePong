@@ -50,7 +50,8 @@ public class OnlineCourt {
         this.width = width;
         this.height = height;
         
-        this.scale = (width * height) / (1360 * 768);
+        this.scale = 1;
+        //this.scale = (width * height) / (1360 * 768);
         this.scaleX = width / 1360;
         this.scaleY = height / 768;
         

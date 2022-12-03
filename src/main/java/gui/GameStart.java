@@ -37,6 +37,7 @@ public class GameStart {
 	private int width;
 	private Pane startRoot;
 	private Pane gameRoot;
+	private Pane onlineRoot;
 	
 	private GameView gw;
 	private OnlineGameView ogv;
@@ -113,15 +114,17 @@ public class GameStart {
     private Button button_yes;
     private Button button_no;
 
-	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court, RacketController onlinePlayer) {
+	public GameStart (Pane startRoot,Pane root, Pane onlineRoot, Scene courtScene, GameView gw,Court court, Scene onlineScene, RacketController onlinePlayer) {
 		App.getStage().setResizable(false);
 		App.getStage().setFullScreenExitHint("Appuyez sur les touches D et C pour vous deplacer\n Appuyez sur la touche M pour valider");
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
+		this.onlineRoot = onlineRoot;
 		this.gw = gw;
 		this.court = court;
 		this.courtScene = courtScene;
+		this.onlineCourtScene = onlineScene;
 				
 		gameRoot.setId("choix_galaxie");
 		
@@ -809,12 +812,9 @@ public class GameStart {
 			r = new Requests(n, null, "localhost");
 			
 			oc = new OnlineCourt(onlinePlayer, width, height, r);
-			r.setOnlineCourt(oc);
+			r.setOnlineCourt(oc);			
 			
-			
-			
-			onlineCourtScene = new Scene(startRoot);
-			ogv = new OnlineGameView(oc, gameRoot, onlineCourtScene);
+			ogv = new OnlineGameView(oc, onlineRoot, onlineCourtScene);
 			
 			App.getStage().setFullScreen(true);
 			App.getStage().setScene(onlineCourtScene);
