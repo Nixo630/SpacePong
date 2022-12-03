@@ -180,7 +180,7 @@ public class App extends Application {
                         playerB.state = RacketController.State.GOING_DOWN;
                     }
                     break;
-                case I:gameView.pause();touchView1.affiche(curseur.getCurrentButton());break;
+                case I:gameView.pause();gameView.setVisiblePause(false);touchView1.affiche(curseur.getCurrentButton());break;
                 case P:if(!touchView1.estAffiche()) {
 		                	gameView.pause();
 		                	gameView.menu();
@@ -204,7 +204,7 @@ public class App extends Application {
         });
         gameScene.setOnKeyReleased(ev -> {
             switch (ev.getCode()) {
-            	case I:touchView1.close();gameView.resume();break;
+            	case I:touchView1.close();gameView.setVisiblePause(true);break;
                 case Z:
                     if (playerA.state == RacketController.State.GOING_UP) playerA.state = RacketController.State.IDLE;
                     break;

@@ -237,6 +237,7 @@ public class GameView {
 	}
     
 	public void animate() {
+		currentButton = getButtonPause();
 		racketD.setVisible(false);
     	racketC.setVisible(false);
     	aTimer = new AnimationTimer() {
@@ -291,6 +292,7 @@ public class GameView {
     }
 
     public void animate2() {
+    	currentButton = getButtonPause();
      	racketD.setVisible(true);
     	racketC.setVisible(true);
     	aTimer = new AnimationTimer() {
@@ -547,5 +549,10 @@ public class GameView {
     
     public Button[] getCurrentButton() {
     	return currentButton;
+    }
+    
+    public void setVisiblePause(boolean b) {
+    	resume.setVisible(b);
+    	quit.setVisible(b);
     }
 }
