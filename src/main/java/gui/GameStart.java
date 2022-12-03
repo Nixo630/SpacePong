@@ -1,14 +1,13 @@
 package gui;
 
 import java.awt.Dimension;
+import java.net.SocketException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -20,6 +19,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import model.Court;
+import model.OnlineCourt;
+import model.RacketController;
+import network.Network;
+import network.Requests;
 
 
 public class GameStart {
@@ -36,13 +39,21 @@ public class GameStart {
 	private Pane gameRoot;
 	
 	private GameView gw;
+	private OnlineGameView ogv;
+	
 	private Court court;
+	private OnlineCourt oc;
+	
+	private RacketController onlinePlayer;
+	
+	private Network n;
+	private Requests r;
+	
 	private Scene courtScene;
+	private Scene onlineCourtScene;
 
 	//Boutton pour les parties en solo
 	private Button easy,medium,hard,insane;
-
-
     
     //Input du nombre de points souhaités par l'utilisateur
 	private Button points;
@@ -50,7 +61,6 @@ public class GameStart {
 
 	//Message d'erreur si l'utilisateur n'entre pas une valeur entière
 	private Label error;
-
 	
 	//Boutton pour les parties en multijoueur
 	private Button button_1vs1;
@@ -103,24 +113,21 @@ public class GameStart {
     private Button button_yes;
     private Button button_no;
 
-	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
+	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court, RacketController onlinePlayer) {
 		App.getStage().setResizable(false);
-		App.getStage().setFullScreenExitHint("appuyer sur 'd' et 'c' pour se deplacer\n appuyer sur 'm' pour accepter");
+		App.getStage().setFullScreenExitHint("Appuyez sur les touches D et C pour vous deplacer\n Appuyez sur la touche M pour valider");
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
 		this.gw = gw;
 		this.court = court;
 		this.courtScene = courtScene;
-		
-		
+				
 		gameRoot.setId("choix_galaxie");
 		
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		height = (int)dimension.getHeight();
 		width  = (int)dimension.getWidth();
-		
-		
 		
 		//Le titre est un bouton sans commande dessus
 		title = new Button();
@@ -130,8 +137,6 @@ public class GameStart {
 		title.setPrefSize(width*50/100,height*25/100);
 		title.setLayoutX(width/2 - title.getPrefWidth()/2);
 		title.setLayoutY(0);
-		
-		
 		
 		//Mise en place du boutton Play pour jouer au jeu en solo
 		play = new Button();
@@ -227,8 +232,7 @@ public class GameStart {
 		
 		progressBar.setLayoutX(width/2 - progressBar.getPrefWidth()/2);
 		progressBar.setLayoutY(350);
-		
-		
+				
 		//Mise en place du boutton start
 		
 		start_button = new Button();
@@ -236,22 +240,19 @@ public class GameStart {
 		start_button.setId("start_button");
 		start_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		start_button.setDefaultButton(true);
-		
-		
+				
 		start_button.setPrefSize(width*75/100,height*20/100);
 		
 		start_button.setLayoutX(width/2 - start_button.getPrefWidth()/2);
 		start_button.setLayoutY(height/2 - start_button.getPrefHeight()/2);
-		
-		
+				
 		//Lorsqu'on clique sur le bouton, on active une fonction qui fait augmenter la jauge de chargement
 		
 		start_button.setOnAction(value ->  {
 			court.sound("starting.wav");
 			startRoot.getChildren().removeAll(start_button);
 			startRoot.getChildren().addAll(progressBar);
-			
-			
+						
 			if (charge == false) {
 				charge = true;
 				Timer chrono = new Timer();
@@ -262,8 +263,7 @@ public class GameStart {
 					public void run() {
 						
 						avancer(progressBar);
-						
-						
+												
 						if (time ==0) {
 							charge=true;
 							progressBar.setVisible(false);
@@ -271,9 +271,7 @@ public class GameStart {
 							curseur_gauche.setVisible(true);
 							visible_change(getMenuButton(),true);
 							initCurrentButton();
-				        	chrono.cancel();
-				        	
-				        	
+				        	chrono.cancel();				        					        	
 						}
 						time--;
 					}
@@ -286,9 +284,7 @@ public class GameStart {
 				
 		  });
 		
-		startRoot.getChildren().addAll(title,start_button);
-		
-		
+		startRoot.getChildren().addAll(title,start_button);		
 	}
 	
 	public void start() {
@@ -296,8 +292,7 @@ public class GameStart {
 			start = true;
 			court.sound("starting.wav");
 			startRoot.getChildren().removeAll(start_button);
-			startRoot.getChildren().addAll(progressBar);
-			
+			startRoot.getChildren().addAll(progressBar);			
 			
 			if (charge == false) {
 				charge = true;
@@ -309,8 +304,7 @@ public class GameStart {
 					public void run() {
 						
 						avancer(progressBar);
-						
-						
+												
 						if (time ==0) {
 							charge=true;
 							progressBar.setVisible(false);
@@ -318,9 +312,7 @@ public class GameStart {
 							curseur_gauche.setVisible(true);
 							visible_change(getMenuButton(),true);
 							initCurrentButton();
-				        	chrono.cancel();
-				        	
-				        	
+				        	chrono.cancel();				        					        	
 						}
 						time--;
 					}
@@ -331,8 +323,7 @@ public class GameStart {
 				visible_change(getMenuButton(),true);
 			}
 		}
-	}
-	
+	}	
 	
 	public void initCurrentButton() {
 		this.current_button = getMenuButton();
@@ -348,10 +339,10 @@ public class GameStart {
 	void setCharge(boolean t) {
 		charge = t;
 	}
+	
 	//Cette fonction fait avancer la barre de chargmement
 	public static void avancer(ProgressBar pb) {
-		pb.setProgress(0.1+pb.getProgress());
-		
+		pb.setProgress(0.1+pb.getProgress());		
 	}
 	
 	public void setBackground(String s) {
@@ -381,8 +372,7 @@ public class GameStart {
 	
 	public void parametre() {
 		visible_change(getMenuButton(),false);
-		title.setVisible(false);
-		
+		title.setVisible(false);		
 		
 		//Mise en place des settings
 		
@@ -392,8 +382,7 @@ public class GameStart {
 		
 		title_s.setPrefSize(width*21/100, height*6/100);
 		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_s.setLayoutY(height*5/100);
-		
+		title_s.setLayoutY(height*5/100);		
 		
 		//Mise en place du choix de l'arriere plan
 		title_choix_bg = new Button();
@@ -402,8 +391,7 @@ public class GameStart {
 		
 		title_choix_bg.setPrefSize(width*22/100,height*4/100);
 		title_choix_bg.setLayoutX(width*1/100);
-		title_choix_bg.setLayoutY(height*19/100);
-		
+		title_choix_bg.setLayoutY(height*19/100);		
 		
 		choix_galaxie = new Button();
 		choix_galaxie.setId("choix_galaxie");
@@ -411,8 +399,7 @@ public class GameStart {
 		
 		choix_galaxie.setPrefSize(width*(10.5/100),height*(11.2/100));
 		choix_galaxie.setLayoutX(width*(24.4/100));
-		choix_galaxie.setLayoutY(height*(18.6/100));
-		
+		choix_galaxie.setLayoutY(height*(18.6/100));		
 		
 		choix_trou_noir = new Button();
 		choix_trou_noir.setId("choix_trou_noir");
@@ -420,8 +407,7 @@ public class GameStart {
 		
 		choix_trou_noir.setPrefSize(width*(10.5/100),height*(11.2/100));
 		choix_trou_noir.setLayoutX(width*(36.9/100));
-		choix_trou_noir.setLayoutY(height*(18.6/100));
-		
+		choix_trou_noir.setLayoutY(height*(18.6/100));		
 		
 		choix_earth = new Button();
 		choix_earth.setId("choix_earth");
@@ -454,13 +440,10 @@ public class GameStart {
 		
 		finish_button.setPrefSize(width*(11.8/100),height*(3.8/100));
 		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
-		finish_button.setLayoutY(height-height*(9.3/100));
-		
+		finish_button.setLayoutY(height-height*(9.3/100));		
 		
 		startRoot.getChildren().addAll(title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button);
-		
-		
-		
+				
 		// User can choose between with middle bar or without middle bar 
 		
 		title_middle_bar = new Button();
@@ -478,9 +461,7 @@ public class GameStart {
 		middle_bar_yes.setPrefSize(width*(6.5/100),height*(10.8/100));
 		middle_bar_yes.setLayoutX(width*(21.06/100));
 		middle_bar_yes.setLayoutY(width*(20.84/100));
-		
-		
-		
+				
 		middle_bar_no = new Button();
 		middle_bar_no.setId("middle_bar_no");
 		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
@@ -570,8 +551,7 @@ public class GameStart {
 		startRoot.getChildren().addAll(title_ball_skin,choix_ball_sun,choix_ball_green
 				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
 				choix_ball_earth);
-		
-		
+				
 		title_racket_difficult = new Button ();
 		title_racket_difficult.setId("racket_difficulty");
 		title_racket_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
@@ -608,11 +588,7 @@ public class GameStart {
 		error.setMinWidth(height*(46.3/100));
 		error.setVisible(false);
 
-
-
 		startRoot.getChildren().addAll(intInput, points, error);
-
-
 
 		points_bg = new Button();
 		points_bg.setId("points_background");
@@ -623,7 +599,6 @@ public class GameStart {
 
 		startRoot.getChildren().add(points_bg);
 
-
 		//Ajout de la flèche retour en arrière
 		
 		retour = new Button();
@@ -632,10 +607,8 @@ public class GameStart {
 		retour.setLayoutX(height*(3.704/100));
 		retour.setLayoutY(height*(3.704/100));
 		retour.setPrefSize(height*(9.26/100), height*(9.26/100));
-		
 
-		startRoot.getChildren().add(retour);
-		
+		startRoot.getChildren().add(retour);		
 	}
 	
 	public void finish() {
@@ -661,8 +634,7 @@ public class GameStart {
 			visible_change(getButtonSkinBall(),false);
 			visible_change(getButtonBackground(),false);
 			visible_change(getMBButtonYesNo(), false);
-			title_s.setVisible(false);
-			
+			title_s.setVisible(false);			
 		}
 		visible_change(getCurrentButton(),false);
 		visible_change(getMenuButton(),true);
@@ -826,6 +798,47 @@ public class GameStart {
 	
 	public void jouer_online() {
 		
+		try {
+			/* à chaque fois que le joueur veut jouer en ligne,
+			 * on crée une nouvelle connexion,
+			 * un nouvel objet Requests,
+			 * un nouveau terrain (visuel et modélisé).
+			 * Cela facilite les opérations et la gestion des bugs.
+			*/
+			n = new Network();
+			r = new Requests(n, null, "localhost");
+			
+			oc = new OnlineCourt(onlinePlayer, width, height, r);
+			r.setOnlineCourt(oc);
+			
+			
+			
+			onlineCourtScene = new Scene(startRoot);
+			ogv = new OnlineGameView(oc, gameRoot, onlineCourtScene);
+			
+			App.getStage().setFullScreen(true);
+			App.getStage().setScene(onlineCourtScene);
+			App.getStage().setFullScreen(true);
+			
+			/*Thread t = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					
+					while(oc.getFinished() != true) {
+						String[] response = n.listen(2);
+						if (response != null) {
+							r.onMessageReceived(response);
+						}
+					}									
+				}			
+			});
+			t.start();*/
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 	
 	public void VisibleMiseAJourMultiButton() {

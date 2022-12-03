@@ -1,12 +1,10 @@
-    package gui;
+package gui;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import java.awt.Toolkit;
-
 import java.awt.Dimension;
 import java.util.Random;
 
@@ -63,7 +61,7 @@ public class GameView {
     
     //Boolean pour vérifier qu'une partie est en cours
     
-    private boolean PartiEnCours=false;;
+    private boolean PartiEnCours=false;
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
@@ -121,7 +119,6 @@ public class GameView {
         racketD.setY(court.getHeight() * scale - xMargin);
 
         racketD.setVisible(false);
-
 
         ball = new Circle();
         ball.setRadius(court.getBallRadius());

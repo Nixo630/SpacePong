@@ -1,14 +1,9 @@
 package gui;
 
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
-
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
@@ -27,7 +22,6 @@ public class App extends Application {
         double longueur = tailleMoniteur.width;
         double hauteur = tailleMoniteur.height;
 
-
     	guiStage = primaryStage;
         guiStage.setHeight(hauteur);
         guiStage.setWidth(longueur);
@@ -37,15 +31,12 @@ public class App extends Application {
     	
     	var startScene = new Scene(start);
     	startScene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-    	
-        
+    	        
         var root = new Pane();
         
         var gameScene = new Scene(root);
         gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-        
-        
-        
+                
         class Player implements RacketController {
             State state = State.IDLE;
 
@@ -64,9 +55,8 @@ public class App extends Application {
         		
         var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
-        var gameStart = new GameStart(start,root,gameScene,gameView,court);
-
-
+        var gameStart = new GameStart(start,root,gameScene,gameView,court, new Player());
+        
         startScene.setOnKeyPressed(ev ->{
             switch(ev.getCode()){
             case SPACE:
@@ -75,10 +65,7 @@ public class App extends Application {
                 break; 
             }
         });
-        
- 
-        
-        
+                
         startScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case UP:
@@ -87,9 +74,12 @@ public class App extends Application {
                     break;
                 case ENTER:
                 	break;
-                case ESCAPE:primaryStage.setFullScreen(true);System.exit(0);
+                case ESCAPE:
+                	primaryStage.setFullScreen(true);
+                	System.exit(0);
                 	break;
-                case S:gameStart.start();break;
+                case S:
+                	gameStart.start();break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
@@ -153,7 +143,7 @@ public class App extends Application {
                 
                 	case "finish_button":gameStart.finish();gameStart.setCurrentButton(gameStart.getMenuButton());break;
 
-                	default: break;
+                	default:break;
                 	}
             	}
             	break;

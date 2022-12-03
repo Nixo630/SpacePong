@@ -4,8 +4,6 @@ import java.io.File;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import gui.App;
-import gui.GameView;
 import javafx.scene.Scene;
 
 public class Court {
