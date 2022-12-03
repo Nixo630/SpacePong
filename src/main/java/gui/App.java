@@ -1,14 +1,13 @@
 package gui;
 
 
-import java.awt.AWTException;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Court;
@@ -58,88 +57,82 @@ public class App extends Application {
         var playerC = new Player();
         var playerD = new Player();
         		
+        
         var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
-        TouchView touchView = new TouchView(start,gameStart.getCurseurDroit(),gameStart.getCurseurGauche());
+        Curseur curseur = new Curseur(start,gameStart.getStartButton());
+        SettingView settingView = new SettingView(start,gameView);
+        settingView.init();
+        
+        TouchView touchView = new TouchView(start,curseur);
         touchView.init();
-        
-        startScene.setOnKeyPressed(ev -> {
-            switch (ev.getCode()) {
-                case UP:
-                    break;
-                case DOWN:
-                    break;
-                case ENTER:
-                	break;
-                case ESCAPE:primaryStage.setFullScreen(true);break;
-                case S:gameStart.start();break;
-                case Q : System.exit(0);break;
-                case I : touchView.affiche(gameStart.getCurrentButton());break;
-                default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
-                	break;
-            }
-        });
-        
-        startScene.setOnKeyReleased(ev ->{
+             
+        startScene.setOnKeyPressed(ev ->{
         	switch (ev.getCode()) {
-        	case I :gameStart.setCurrentButton(touchView.close());break;
+        	case ESCAPE:primaryStage.setFullScreen(true);break;
+        	case Q : System.exit(0);break;
+        	case I : touchView.affiche(curseur.getCurrentButton());break;
             case DOWN:
-                gameStart.IncrementeIndice(gameStart.getCurrentButton());
-                gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
+                curseur.IncrementeIndice(curseur.getCurrentButton());
+                curseur.bouger_curseur(curseur.getCurrentButton()[curseur.getCurseurIndice()],start);
                 break;
             case UP:
-            	gameStart.DecrementeIndice(gameStart.getCurrentButton());
-                gameStart.bouger_curseur(gameStart.getCurrentButton()[gameStart.getCurseurIndice()],start);
+            	curseur.DecrementeIndice(curseur.getCurrentButton());
+            	curseur.bouger_curseur(curseur.getCurrentButton()[curseur.getCurseurIndice()],start);
                 break;
             case ENTER:
-            	if(gameStart.getCurrentButton().length!=0 && !touchView.estAffiche()) {
-                	switch (gameStart.getCurrentButton()[gameStart.getCurseurIndice()].getId()) {
+            	if(curseur.getCurrentButton().length!=0 && !touchView.estAffiche()) {
+                	switch (curseur.getCurrentButton()[curseur.getCurseurIndice()].getId()) {
                 	
-                	case "solo_play_button": gameStart.chose_difficulty();gameStart.setCurrentButton(gameStart.getButtonDifficulty());break; 
-                	case "multiplay_play_button": gameStart.choose_multiplay();gameStart.setCurrentButton(gameStart.getButtonMulti());break;
-                	case "settings_button": gameStart.parametre();gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "start_button" : gameStart.start(curseur);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "solo_play_button": gameStart.chose_difficulty();curseur.setCurrentButton(gameStart.getButtonDifficulty());break; 
+                	case "multiplay_play_button": gameStart.choose_multiplay();curseur.setCurrentButton(gameStart.getButtonMulti());break;
+                	case "settings_button": settingView.affiche(curseur.getCurrentButton());curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	case "quit_button": System.exit(0);break;
                 	
-                	case "button_easy": gameStart.jouer_solo(1);gameStart.setCurrentButton(gameStart.getMenuButton());break;
-                	case "button_medium": gameStart.jouer_solo(2);gameStart.setCurrentButton(gameStart.getMenuButton());break;
-                	case "button_hard": gameStart.jouer_solo(3);gameStart.setCurrentButton(gameStart.getMenuButton());break;
-                	case "button_insane": gameStart.jouer_solo(4);gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_easy": gameStart.jouer_solo(1);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_medium": gameStart.jouer_solo(2);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_hard": gameStart.jouer_solo(3);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_insane": gameStart.jouer_solo(4);curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	
-                	case "button_1vs1": gameStart.jouer_multi(false);gameStart.setCurrentButton(gameStart.getMenuButton());break;
-                	case "button_2vs2": gameStart.jouer_multi(true);gameStart.setCurrentButton(gameStart.getMenuButton());break;
-                	case "button_online":gameStart.jouer_online();gameStart.setCurrentButton(gameStart.getButtonMulti());break;
+                	case "button_1vs1": gameStart.jouer_multi(false);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_2vs2": gameStart.jouer_multi(true);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_online":gameStart.jouer_online();curseur.setCurrentButton(gameStart.getButtonMulti());break;
                 	
-                	case "return":gameStart.retour(gameStart.getCurrentButton());gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "return":gameStart.retour(curseur.getCurrentButton());curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	
-                	case "title_ball_skin":gameStart.setCurrentButton(gameStart.getButtonSkinBall());break;
-                	case "title_middle_bar":gameStart.setCurrentButton(gameStart.getMBButtonYesNo());break;
-                	case "title_choix_bg":gameStart.setCurrentButton(gameStart.getButtonBackground());break;
+                	case "title_ball_skin":curseur.setCurrentButton(settingView.getButtonSkinBall());break;
+                	case "title_middle_bar":curseur.setCurrentButton(settingView.getMBButtonYesNo());break;
+                	case "title_choix_bg":curseur.setCurrentButton(settingView.getButtonBackground());break;
                 	
-                	case "middle_bar_no":gameStart.VisibleMiddleBar(false);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "middle_bar_yes":gameStart.VisibleMiddleBar(true);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "middle_bar_no":gameStart.VisibleMiddleBar(false);curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "middle_bar_yes":gameStart.VisibleMiddleBar(true);curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	
-                	case "choix_ball_sun":gameView.setBallSkin("sun_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_ball_green":gameView.setBallSkin("green_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_ball_moon":gameView.setBallSkin("moon_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_ball_jupiter":gameView.setBallSkin("jupiter_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_ball_saturne":gameView.setBallSkin("saturne_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_ball_lila":gameView.setBallSkin("lila_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_ball_earth":gameView.setBallSkin("earth_ball.png");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_ball_sun":gameView.setBallSkin("sun_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_green":gameView.setBallSkin("green_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_moon":gameView.setBallSkin("moon_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_jupiter":gameView.setBallSkin("jupiter_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_saturne":gameView.setBallSkin("saturne_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_lila":gameView.setBallSkin("lila_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_earth":gameView.setBallSkin("earth_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	
-                	case "choix_galaxie":gameStart.setBackground("choix_galaxie");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_earth":gameStart.setBackground("choix_earth");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_trou_noir":gameStart.setBackground("choix_trou_noir");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "choix_earth2":gameStart.setBackground("choix_earth2");gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "choix_galaxie":gameStart.setBackground("choix_galaxie");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_earth":gameStart.setBackground("choix_earth");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_trou_noir":gameStart.setBackground("choix_trou_noir");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_earth2":gameStart.setBackground("choix_earth2");curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	
                 	
-                	case "racket_difficulty":gameStart.print_setting_racket_difficulty();gameStart.setCurrentButton(gameStart.getRDButtonYesNo());break;
+                	case "racket_difficulty":settingView.print_setting_racket_difficulty();curseur.setCurrentButton(settingView.getRDButtonYesNo());break;
                 	
-                	case "RD_yes" : gameStart.reponseRacketDifficuly(true);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
-                	case "RD_no" : gameStart.reponseRacketDifficuly(false);gameStart.setCurrentButton(gameStart.getButtonParametre());break;
+                	case "RD_yes" : settingView.reponseRacketDifficuly(true);curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "RD_no" : settingView.reponseRacketDifficuly(false);curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	
+                	case "points_background" : settingView.afficherInput();curseur.setCurrentButton(settingView.getButtonInput());break;
+                	case "pointsFinaux" : settingView.choisirPoint();curseur.setCurrentButton(settingView.getButtonParametre());break;
                 
-                	case "finish_button":gameStart.finish();gameStart.setCurrentButton(gameStart.getMenuButton());break;
+                	case "finish_button":curseur.setCurrentButton(settingView.close());break;
 
                 	default: break;
                 	}
@@ -150,7 +143,15 @@ public class App extends Application {
         	}
         });
         
-        TouchView touchView1 = new TouchView(root,gameStart.getCurseurDroit(),gameStart.getCurseurGauche());
+        startScene.setOnKeyReleased(ev -> {
+            switch (ev.getCode()) {  
+                case I : curseur.setCurrentButton(touchView.close());break;
+                default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
+                	break;
+            }
+        });
+        
+        TouchView touchView1 = new TouchView(root,curseur);
         touchView1.init();
         
         gameScene.setOnKeyPressed(ev -> {
@@ -171,7 +172,7 @@ public class App extends Application {
                         playerB.state = RacketController.State.GOING_DOWN;
                     }
                     break;
-                case I:gameView.pause();touchView1.affiche(gameView.getCurrentButton());break;
+                case I:gameView.pause();touchView1.affiche(curseur.getCurrentButton());break;
                 case P:
                 	gameView.pause();
                 	gameView.menu();

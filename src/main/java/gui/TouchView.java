@@ -4,12 +4,10 @@ package gui;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 
@@ -23,10 +21,9 @@ public class TouchView {
     int hauteur = tailleMoniteur.height;
     
     Pane startRoot;
-    Button[] currentButton;
-    Circle gauche;
-    Circle droit;
+    ImageView[] currentButton;
     Pane canvas;
+    Curseur curseur;
     
     
     //Middle bar pour aider à placer les objets dans le pane
@@ -66,9 +63,8 @@ public class TouchView {
     
     
     
-	public TouchView(Pane startRoot,Circle g,Circle d) {
-		gauche = g;
-		droit = d;
+	public TouchView(Pane startRoot,Curseur c) {
+		curseur = c;
 		this.startRoot = startRoot;
 		canvas = new Pane();
 	    canvas.setStyle("-fx-background-color: pink;");
@@ -88,8 +84,8 @@ public class TouchView {
 	    canvas.getChildren().addAll(milieu);
 	}
 	
-	public void copie(Button[] t) {
-		currentButton = new Button[t.length];
+	public void copie(ImageView[] t) {
+		currentButton = new ImageView[t.length];
 		for (int i = 0;i<t.length;i++) {
 			currentButton[i] = t[i];
 		}
@@ -340,19 +336,17 @@ public class TouchView {
 	}
 	
 	
-	public void affiche(Button[] btn) {
+	public void affiche(ImageView[] btn) {
 		estAffiche = true;
-		droit.setVisible(false);
-		gauche.setVisible(false);
+		curseur.setVisible(false);
 		copie(btn);
 		GameStart.visible_change(currentButton, false);
 		canvas.setVisible(true);	
 	}
 	
-	public Button[] close() {
+	public ImageView[] close() {
 		estAffiche = false;
-		droit.setVisible(true);
-		gauche.setVisible(true);
+		curseur.setVisible(true);
 		GameStart.visible_change(currentButton, true);
 		canvas.setVisible(false);	
 		
