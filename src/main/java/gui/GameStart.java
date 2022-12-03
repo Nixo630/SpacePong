@@ -7,8 +7,12 @@ import java.util.TimerTask;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Court;
@@ -33,6 +37,22 @@ public class GameStart {
 
 	//Boutton pour les parties en solo
 	private ImageView easy,medium,hard,insane;
+	
+	//Boutton pour les parties en ligne
+	
+	private ImageView titleOnline;
+	
+	private ImageView imageIp;
+	private TextField ipInput;
+	private Label ip;
+	private ImageView valideIp;
+	
+	private ImageView imagePseudo;
+	private TextField pseudoInput;
+	private Label pseudo;
+	private ImageView validePseudo;
+	
+	private ImageView valider;
 	
 	//Boutton pour les parties en multijoueur
 	private ImageView button_1vs1;
@@ -75,6 +95,21 @@ public class GameStart {
 		online = new ImageView();
 		
 		initChooseMultiplay();
+		
+		titleOnline = new ImageView();
+		imageIp = new ImageView();
+		ipInput = new TextField();
+		imagePseudo = new ImageView();
+		pseudoInput = new TextField();
+		valider = new ImageView();
+		ip = new Label("Spacepong.fr");
+		pseudo = new Label("Votre pseudo ?");
+		validePseudo = new ImageView();
+		valideIp = new ImageView();
+		
+		
+		
+		
 		
 		//Le titre est un bouton sans commande dessus
 		title = new ImageView();
@@ -175,6 +210,10 @@ public class GameStart {
 		start_button.setLayoutY(height/2 - start_button.getFitHeight()/2);
 		
 		startRoot.getChildren().addAll(title,start_button);
+		
+		initButtonOnline();
+		visible_change(getButtonOnline(),false);
+		titleOnline.setVisible(false);
 			
 	}
 	
@@ -234,7 +273,9 @@ public class GameStart {
 	void setCharge(boolean t) {
 		charge = t;
 	}
+	
 	//Cette fonction fait avancer la barre de chargmement
+	
 	public static void avancer(ProgressBar pb) {
 		pb.setProgress(0.1+pb.getProgress());
 		
@@ -253,7 +294,11 @@ public class GameStart {
 	public void retour(ImageView[] imageViews) {
 		visible_change(getButtonMulti(),false);
 		visible_change(getButtonDifficulty(),false);
+		visible_change(getButtonOnline(),false);
 		visible_change(getMenuButton(),true);
+		ip.setVisible(false);
+		pseudo.setVisible(false);
+		titleOnline.setVisible(false);
 		title.setVisible(true);
 	}
 	
@@ -358,8 +403,149 @@ public class GameStart {
 		visible_change(getButtonMulti(),true);
 	}
 	
-	public void jouer_online() {
+	public void initButtonOnline() {
+		Image imageTitleOnline = new Image(getClass().getResourceAsStream("online.png"));
+		titleOnline.setImage(imageTitleOnline);
+		titleOnline.setFitWidth(imageTitleOnline.getWidth()/2);
+		titleOnline.setFitHeight(imageTitleOnline.getHeight()/2);
+		titleOnline.setLayoutX(width/2 - titleOnline.getFitWidth()/2);
+		titleOnline.setLayoutY(50);	
+		startRoot.getChildren().addAll(titleOnline);
 		
+		
+		imageIp.setId("ip");
+		Image imageTextIp = new Image(getClass().getResourceAsStream("ip.png"));
+		imageIp.setImage(imageTextIp);
+		imageIp.setFitWidth(imageTextIp.getWidth()/2);
+		imageIp.setFitHeight(imageTextIp.getHeight()/2);
+		imageIp.setLayoutX(width*1/4);
+		imageIp.setLayoutY(height*1/4);	
+		startRoot.getChildren().addAll(imageIp);
+		
+		
+		ipInput.setPrefSize(width/5,imageIp.getFitHeight());
+		ipInput.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth() + 50);
+		ipInput.setLayoutY(imageIp.getLayoutY());
+		ipInput.setVisible(false);
+		startRoot.getChildren().addAll(ipInput);
+		
+		
+		ip.setMinHeight(height*(46.3/100));
+		ip.setMinWidth(height*(46.3/100));
+		ip.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth()+100);
+		ip.setLayoutY(imageIp.getLayoutY() + imageIp.getFitHeight()/2 - ip.getMinHeight()/2);
+		ip.setFont(new Font("Serif", imageIp.getFitHeight()/2));
+		ip.setTextFill(Color.web("#FF0000"));
+		ip.setVisible(false);
+		startRoot.getChildren().add(ip);
+		
+		
+		valideIp.setId("Valideip");
+		Image imageOk = new Image(getClass().getResourceAsStream("ok.png"));
+		valideIp.setImage(imageOk);
+		valideIp.setFitWidth(imageOk.getWidth()/2);
+		valideIp.setFitHeight(imageIp.getFitHeight());
+		valideIp.setLayoutX(ip.getLayoutX()+ip.getMinWidth()+100);
+		valideIp.setLayoutY(imageIp.getLayoutY());	
+		startRoot.getChildren().addAll(valideIp);
+		valideIp.setVisible(false);
+		
+		
+		imagePseudo.setId("pseudo");
+		Image imageTextPseudo = new Image(getClass().getResourceAsStream("pseudo.png"));
+		imagePseudo.setImage(imageTextPseudo);
+		imagePseudo.setFitWidth(imageTextPseudo.getWidth()/2);
+		imagePseudo.setFitHeight(imageTextPseudo.getHeight()/2);
+		imagePseudo.setLayoutX(width*1/4-imagePseudo.getFitWidth()/2);
+		imagePseudo.setLayoutY(height*2/4);	
+		startRoot.getChildren().addAll(imagePseudo);
+		
+		
+		pseudoInput.setPrefSize(width/5,imagePseudo.getFitHeight());
+		pseudoInput.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth() + 50);
+		pseudoInput.setLayoutY(imagePseudo.getLayoutY());
+		pseudoInput.setVisible(false);
+		startRoot.getChildren().addAll(pseudoInput);
+		
+		
+		pseudo.setMinHeight(height*(46.3/100));
+		pseudo.setMinWidth(height*(46.3/100));
+		pseudo.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth()+100);
+		pseudo.setLayoutY(imagePseudo.getLayoutY() + imagePseudo.getFitHeight()/2 - pseudo.getMinHeight()/2);
+		pseudo.setFont(new Font("Serif", imagePseudo.getFitHeight()/2));
+		pseudo.setTextFill(Color.web("#FF0000"));
+		pseudo.setVisible(false);
+		startRoot.getChildren().add(pseudo);
+		
+		
+		validePseudo.setId("Validepseudo");
+		validePseudo.setImage(imageOk);
+		validePseudo.setFitWidth(imageOk.getWidth()/2);
+		validePseudo.setFitHeight(imagePseudo.getFitHeight());
+		validePseudo.setLayoutX(pseudo.getLayoutX()+pseudo.getMinWidth()+100);
+		validePseudo.setLayoutY(imagePseudo.getLayoutY());	
+		startRoot.getChildren().addAll(validePseudo);
+		validePseudo.setVisible(false);
+		
+		valider.setId("Validepseudo");
+		Image imageTextValider = new Image(getClass().getResourceAsStream("valider.png"));
+		valider.setImage(imageTextValider);
+		valider.setFitWidth(imageTextValider.getWidth()/2);
+		valider.setFitHeight(imageTextValider.getHeight()/2);
+		valider.setLayoutX(width/2 -valider.getFitWidth()/2);
+		valider.setLayoutY(height*3/4);	
+		startRoot.getChildren().addAll(valider);
+		validePseudo.setVisible(false);
+		
+		
+	}
+	
+	public void choisirIp() {
+		valideIp.setVisible(true);
+		ipInput.setVisible(true);
+		ip.setVisible(false);
+	}
+	
+	public void valideIp() {
+		String s = ipInput.getText();
+		if(s.equals("")) {
+			ip.setText("Spacepong.fr");
+		}
+		else {
+			ip.setText(s);
+		}
+		valideIp.setVisible(false);
+		ipInput.setVisible(false);
+		ip.setVisible(true);
+	}
+	
+	public void choisirPseudo() {
+		validePseudo.setVisible(true);
+		pseudoInput.setVisible(true);
+		pseudo.setVisible(false);
+	}
+	
+	public void validePseudo() {
+		String s = pseudoInput.getText();
+		if(s.equals("")) {
+			pseudo.setText("Votre pseudo ?");
+		}
+		else {
+			pseudo.setText(s);
+		}
+		validePseudo.setVisible(false);
+		pseudoInput.setVisible(false);
+		pseudo.setVisible(true);
+	}
+	
+	
+	public void jouer_online() {
+		title.setVisible(false);
+		titleOnline.setVisible(true);
+		visible_change(getButtonMulti(),false);
+		visible_change(getButtonOnline(),true);
+		ip.setVisible(true);
+		pseudo.setVisible(true);
 	}
 	
 	public void VisibleMiseAJourMultiButton() {
@@ -404,7 +590,20 @@ public class GameStart {
 		return tab;
 	}
 	
+	public ImageView[] getButtonOnline(){
+		ImageView[] tab = {retour,imageIp,imagePseudo,valider};
+		return tab;
+	}
 	
+	public ImageView[] getButtonIp(){
+		ImageView[] tab = {valideIp};
+		return tab;
+	}
+	
+	public ImageView[] getButtonPseudo(){
+		ImageView[] tab = {validePseudo};
+		return tab;
+	}
 	
 	//Mise en place de la fonction pour placer les curseur en fonction d'un bouton
 	

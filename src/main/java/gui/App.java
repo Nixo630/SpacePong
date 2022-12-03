@@ -99,7 +99,15 @@ public class App extends Application {
                 	
                 	case "button_1vs1": gameStart.jouer_multi(false);curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_2vs2": gameStart.jouer_multi(true);curseur.setCurrentButton(gameStart.getMenuButton());break;
-                	case "button_online":gameStart.jouer_online();curseur.setCurrentButton(gameStart.getButtonMulti());break;
+                	case "button_online":gameStart.jouer_online();curseur.setCurrentButton(gameStart.getButtonOnline());break;
+                	
+                	
+                	case "ip":gameStart.choisirIp();curseur.setCurrentButton(gameStart.getButtonIp());break;
+                	case "Valideip" :gameStart.valideIp();curseur.setCurrentButton(gameStart.getButtonOnline());break;
+                	
+                	case "pseudo":gameStart.choisirPseudo();curseur.setCurrentButton(gameStart.getButtonPseudo());break;
+                	case "Validepseudo" :gameStart.validePseudo();curseur.setCurrentButton(gameStart.getButtonOnline());break;
+                	
                 	
                 	case "return":gameStart.retour(curseur.getCurrentButton());curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	
@@ -173,17 +181,23 @@ public class App extends Application {
                     }
                     break;
                 case I:gameView.pause();touchView1.affiche(curseur.getCurrentButton());break;
-                case P:
-                	gameView.pause();
-                	gameView.menu();
-                	break;
+                case P:if(!touchView1.estAffiche()) {
+		                	gameView.pause();
+		                	gameView.menu();
+		                	break;
+                }
                 case R:
-                	gameView.resume();
-                	gameView.replay();
-                	break;
+                	if(!touchView1.estAffiche()) {
+	                	gameView.resume();
+	                	gameView.replay();
+	                	break;
+                	}
                 case Q:
-                	gameView.quitter();
-                	break;
+                	if(!touchView1.estAffiche()){
+                		gameView.quitter();
+                    	break;
+                	}
+                	
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }

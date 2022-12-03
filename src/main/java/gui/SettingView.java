@@ -107,7 +107,7 @@ public class SettingView {
 		initBackgroundChoice();
 		initSkinBall();
 		initMiddleBar();
-		 initPointChoice();
+		initPointChoice();
 		initPageRacketDifficulty();
 		
 		title_racket_difficult = new ImageView();
