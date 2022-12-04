@@ -68,6 +68,9 @@ public class App extends Application {
         
         TouchView touchView = new TouchView(start,curseur);
         touchView.init();
+        
+        LoadView load = new LoadView(start);
+        load.init();
              
         startScene.setOnKeyPressed(ev ->{
         	switch (ev.getCode()) {
@@ -107,9 +110,10 @@ public class App extends Application {
                 	
                 	case "pseudo":gameStart.choisirPseudo();curseur.setCurrentButton(gameStart.getButtonPseudo());break;
                 	case "Validepseudo" :gameStart.validePseudo();curseur.setCurrentButton(gameStart.getButtonOnline());break;
+                	case "ValiderOnline":load.affiche(curseur.getCurrentButton());curseur.setCurrentButton(load.getCurrentButton());break;
                 	
                 	
-                	case "return":gameStart.retour(curseur.getCurrentButton());curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "return":load.close();gameStart.retour(curseur.getCurrentButton());curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	
                 	case "title_ball_skin":curseur.setCurrentButton(settingView.getButtonSkinBall());break;
                 	case "title_middle_bar":curseur.setCurrentButton(settingView.getMBButtonYesNo());break;

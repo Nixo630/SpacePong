@@ -448,6 +448,7 @@ public class GameStart {
 	}
 	
 	public void jouer_solo(int i) {
+		title.setVisible(true);
 		court.setDifficulty(i);
 		visible_change(getButtonDifficulty(),false);
 		
@@ -582,7 +583,7 @@ public class GameStart {
 		startRoot.getChildren().addAll(validePseudo);
 		validePseudo.setVisible(false);
 		
-		valider.setId("Validepseudo");
+		valider.setId("ValiderOnline");
 		Image imageTextValider = new Image(getClass().getResourceAsStream("valider.png"));
 		valider.setImage(imageTextValider);
 		valider.setFitWidth(imageTextValider.getWidth()/2);
@@ -649,7 +650,7 @@ public class GameStart {
 	}
 	
 	public void jouer_multi(boolean choix2v2) {
-		
+		title.setVisible(true);
 		VisibleMiseAJourMultiButton();
 		court.setIsBot(false);
 		court.setPartiEnCours(true);

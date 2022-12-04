@@ -12,7 +12,7 @@ public class Court {
     // instance parameters
     private final RacketController playerA, playerB, playerC, playerD,playerE;
     private final double width, height; // m
-    private final double racketSpeed = 350.0; // m/s
+    private final double racketSpeed = 500.0; // m/s //350.0
     private final double ballRadius = 15.0; // m
     // instance state
     private double racketA; // m
@@ -250,11 +250,11 @@ public class Court {
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSize)) {
             if (ballSpeedX > 0) {
                 botDirection = RacketController.State.IDLE;
-                ballSpeedX = -(ballSpeedX + 25);
+                ballSpeedX = -(ballSpeedX + 70); //25
                 sound("RacketSound.wav");
             } // MAJ vitesse de la balle après avoir touché la raquette
             else {
-                ballSpeedX = -(ballSpeedX - 25);
+                ballSpeedX = -(ballSpeedX - 70); //25
                 sound("RacketSound.wav");
             } // MAJ gauche> droite quand la vitesse est dans le négatif
             if (ballSpeedY > 0) {
