@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 
 import java.awt.Dimension;
+import java.util.HexFormat;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
@@ -56,6 +57,12 @@ public class GameView {
     private Button menu,replay;
     
     //Boolean pour vérifier qu'une partie est en cours
+
+
+	//Valeur de la taille de l'écran
+	Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+	double height = dimension.getHeight();
+	double width  = dimension.getWidth();
     
     private boolean PartiEnCours=false;;
     /**
@@ -166,22 +173,18 @@ public class GameView {
         
         
         affScoreA = new Label(""+court.getScoreA());
-        affScoreA.setFont(Font.font("Cambria",250));
+        affScoreA.setFont(Font.font("Cambria", height*(23.1482/100)));
         affScoreA.setTextFill(Color.DARKGREY);
         affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/2);
         
         affScoreB = new Label(""+court.getScoreB());
-        affScoreB.setFont(Font.font("Cambria",250));
+        affScoreB.setFont(Font.font("Cambria",height*(23.1482/100)));
         affScoreB.setTextFill(Color.DARKGREY);
         affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
         
         gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
         
         //Mise en place de l'affichage de la fin de partie
-        
-        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int height = (int)dimension.getHeight();
-		int width  = (int)dimension.getWidth();
     	
 		//Ici c'est le bouton qui affiche que la partie est termine
 		
@@ -189,9 +192,9 @@ public class GameView {
 		title_end.setId("title_end");
 		title_end.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		title_end.setPrefSize(2111/3,477/3);
+		title_end.setPrefSize(width*(36.65/100),height*(14.7223/100));
 		title_end.setLayoutX(width/2 - title_end.getPrefWidth()/2);
-		title_end.setLayoutY(50);
+		title_end.setLayoutY(height*(4.63/100));
 		
 		
 		
@@ -202,18 +205,18 @@ public class GameView {
 		replay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
 		
-		replay.setPrefSize(1424/3,216/3);
+		replay.setPrefSize(width*(24.7222/100),height*(6.6667/100));
 		
 		replay.setLayoutX(width/2 - width/2/2 - replay.getPrefWidth()/2);
-		replay.setLayoutY(610);
+		replay.setLayoutY(height*(56.4815/100));
 		
 		
 		menu.setId("menu_button");
 		menu.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		
-		menu.setPrefSize(1424/3,216/3);
+		menu.setPrefSize(width*(24.7222/100),height*(6.6667/100));
 		menu.setLayoutX(width/2 + width/2/2 - menu.getPrefWidth()/2);
-		menu.setLayoutY(610);
+		menu.setLayoutY(height*(56.4815/100));
 		
 		menu.setCursor(Cursor.HAND);
 		menu.setOnAction(value ->  {
@@ -355,8 +358,8 @@ public class GameView {
 
         
     public void reset() {
-    	affScoreA.setLayoutY(25);
-		affScoreB.setLayoutY(25);
+    	affScoreA.setLayoutY(height*(2.315/100));
+		affScoreB.setLayoutY(height*(2.315/100));
     	affScoreA.setText("0");
     	affScoreB.setText("0");
     	court.reset();
@@ -401,18 +404,18 @@ public class GameView {
 			quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
 			
-			quit.setPrefSize(1424/3,216/3);
+			quit.setPrefSize(width*(24.7222/100), height*(6.6667/100));
 			quit.setLayoutX(court.getWidth()/2 - quit.getPrefWidth()/2);
-			quit.setLayoutY(650);
+			quit.setLayoutY(height*(60.1852/100));
 			
 			
 			resume.setId("resume_button");
 			resume.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 			
 			
-			resume.setPrefSize(1329/4,138/4);
+			resume.setPrefSize(width*(17.3/100),height*(3.4/100));
 			resume.setLayoutX(court.getWidth()/2 - resume.getPrefWidth()/2);
-			resume.setLayoutY(450);
+			resume.setLayoutY(height*(41.6667/100));
 			
 			resume.setCursor(Cursor.HAND);
 			resume.setOnAction(value ->  {
@@ -469,8 +472,8 @@ public class GameView {
     	
     	//Affichage des score
 		
-    	affScoreA.setLayoutY(200);
-   		affScoreB.setLayoutY(200);
+    	affScoreA.setLayoutY(height*(18.5186/100));
+   		affScoreB.setLayoutY(height*(18.5186/100));
    		
 		GameStart.visible_change(getButtonEnd(), true);
     }

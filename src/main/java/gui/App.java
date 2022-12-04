@@ -29,6 +29,8 @@ public class App extends Application {
     	guiStage = primaryStage;
         guiStage.setHeight(hauteur);
         guiStage.setWidth(longueur);
+
+        guiStage.setFullScreenExitHint("");
     	
     	var start = new Pane();
     	start.setId("pane");
@@ -58,7 +60,7 @@ public class App extends Application {
         var playerD = new Player();
         		
         
-        var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
+        var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,gameScene,gameView,court);
         
@@ -181,6 +183,7 @@ public class App extends Application {
                     }
                     break;
                 case I:gameView.pause();gameView.setVisiblePause(false);touchView1.affiche(curseur.getCurrentButton());break;
+                case ESCAPE:primaryStage.setFullScreen(true);break;
                 case P:if(!touchView1.estAffiche()) {
 		                	gameView.pause();
 		                	gameView.menu();

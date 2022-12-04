@@ -91,17 +91,17 @@ public class SettingView {
 		title_s.setFitWidth(width*21/100); 
 		title_s.setFitHeight(height*6/100);
 		title_s.setLayoutX(width/2 - title_s.getFitWidth()/2);
-		title_s.setLayoutY(50);
+		title_s.setLayoutY(height*(4.63/100));
 		canvas.getChildren().add(title_s);
 		
 		retour = new ImageView();
 		retour.setId("finish_button");
 		Image imageRetour = new Image(getClass().getResourceAsStream("retour.png"));
         retour.setImage(imageRetour);
-		retour.setLayoutX(40);
-		retour.setLayoutY(40);
-		retour.setFitHeight(100);
-		retour.setFitWidth(100);
+		retour.setLayoutX(height*(3.7038/100));
+		retour.setLayoutY(height*(3.7038/100));
+		retour.setFitHeight(height*(4.63/100)*2);
+		retour.setFitWidth(height*(4.63/100)*2);
 		canvas.getChildren().add(retour);
 		
 		initBackgroundChoice();
@@ -363,38 +363,38 @@ public class SettingView {
 		title_racket_difficulty.setId("racket_difficulty");
 		Image imageTitleRacket = new Image(getClass().getResourceAsStream("raquet_difficulty.png"));
 		title_racket_difficulty.setImage(imageTitleRacket);
-		title_racket_difficulty.setFitWidth(3222/7);
-		title_racket_difficulty.setFitHeight(492/7);
+		title_racket_difficulty.setFitWidth(width*(23.9584/100));
+		title_racket_difficulty.setFitHeight(height*(6.49/100));
 		title_racket_difficulty.setLayoutX(width/2 - title_s.getFitWidth()/2);
-		title_racket_difficulty.setLayoutY(50);
+		title_racket_difficulty.setLayoutY(height*(4.63/100));
 		canvasRacketDifficulty.getChildren().add(title_racket_difficulty);
 		
 		explication = new Label("Ici vous pouvez choisir si voulez un changent aleatoire de la taille des rackets a chaque rebond");
-		explication.setFont(Font.font("Cambria",25));
+		explication.setFont(Font.font("Cambria",(height*(4.63/100))/2));
 		explication.setTextFill(Color.DARKGREY);
-		explication.setPrefWidth(1025);
+		explication.setPrefWidth(width*(53.3855/100));
 		explication.setLayoutX(width/2 - explication.getPrefWidth()/2);
-		explication.setLayoutY(150);
+		explication.setLayoutY(height*(4.63/100)*3);
 		canvasRacketDifficulty.getChildren().add(explication);
 		
 		button_yes = new ImageView();
 		button_yes.setId("RD_yes");
 		Image imageYes = new Image(getClass().getResourceAsStream("yes_button.png"));
 		button_yes.setImage(imageYes);
-		button_yes.setFitWidth(497/4);
-		button_yes.setFitHeight(464/4);
-		button_yes.setLayoutX(width/2 - button_yes.getFitWidth()-25);
-		button_yes.setLayoutY(250);
+		button_yes.setFitWidth(width*(6.4714/100));
+		button_yes.setFitHeight(width*(6.0417/100));
+		button_yes.setLayoutX(width/2 - button_yes.getFitWidth()-(height*(4.63/100))/2);
+		button_yes.setLayoutY(height*(4.63/100)*5);
 		canvasRacketDifficulty.getChildren().add(button_yes);
 		
 		button_no = new ImageView();
 		button_no.setId("RD_no");
 		Image imageNo = new Image(getClass().getResourceAsStream("No_button.png"));
 		button_no.setImage(imageNo);
-		button_no.setFitWidth(497/4);
-		button_no.setFitHeight(464/4);
-		button_no.setLayoutX(width/2 + button_no.getFitWidth()+25);
-		button_no.setLayoutY(250);
+		button_no.setFitWidth(width*(6.4714/100));
+		button_no.setFitHeight(width*(6.0417/100));
+		button_no.setLayoutX(width/2 + button_no.getFitWidth()+height*(4.63/100)/2);
+		button_no.setLayoutY(height*(4.63/100)*5);
 		canvasRacketDifficulty.getChildren().add(button_no);
 		
 		root.getChildren().add(canvasRacketDifficulty);

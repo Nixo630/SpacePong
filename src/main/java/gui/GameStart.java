@@ -130,10 +130,10 @@ public class GameStart {
 		title.setId("title");
 		Image imageTitle = new Image(getClass().getResourceAsStream("title.png"));
         title.setImage(imageTitle);
-		title.setFitWidth(1082/2);
-		title.setFitHeight(332/2);
+		title.setFitWidth(width*(28.1771/100));
+		title.setFitHeight(height*(15.3704/100));
 		title.setLayoutX(width/2 - title.getFitWidth()/2);
-		title.setLayoutY(50);
+		title.setLayoutY(height*(4.63/100));
 		
 		
 		
@@ -142,8 +142,8 @@ public class GameStart {
 		play.setId("solo_play_button");
 		Image imageSolo = new Image(getClass().getResourceAsStream("solo.png"));
 		play.setImage(imageSolo);
-		play.setFitWidth(1920/4.5);
-		play.setFitHeight(463/4.5);
+		play.setFitWidth(width*(22.27431/100));
+		play.setFitHeight(height*(9.5/100));
 		play.setLayoutX(width/2 - play.getFitWidth()/2);
 		play.setLayoutY(height*1/4);
 		
@@ -153,8 +153,8 @@ public class GameStart {
 		Image imageMulti = new Image(getClass().getResourceAsStream("multiplayer.png"));
         multiplay.setImage(imageMulti);
 		multiplay.setId("multiplay_play_button");
-		multiplay.setFitWidth(3376/3.5);
-		multiplay.setFitHeight(574/3.5);
+		multiplay.setFitWidth(width*(50.238/100));
+		multiplay.setFitHeight(height*(15.1852/100));
 		multiplay.setLayoutX(width/2 - multiplay.getFitWidth()/2);
 		multiplay.setLayoutY(height*2/4);
 		
@@ -163,8 +163,8 @@ public class GameStart {
 		quit.setId("quit_button");
 		Image imageQuitter = new Image(getClass().getResourceAsStream("quitter.png"));
         quit.setImage(imageQuitter);
-		quit.setFitWidth(1424/3);
-		quit.setFitHeight(216/3);
+		quit.setFitWidth(width*(24.7743/100));
+		quit.setFitHeight(height*(6.667/100));
 		quit.setLayoutX(width/2 - quit.getFitWidth()/2);
 		quit.setLayoutY(height*3/4);
 		
@@ -172,10 +172,10 @@ public class GameStart {
 		retour.setId("return");
 		Image imageRetour = new Image(getClass().getResourceAsStream("retour.png"));
         retour.setImage(imageRetour);
-		retour.setLayoutX(40);
-		retour.setLayoutY(40);
-		retour.setFitHeight(100);
-		retour.setFitWidth(100);
+		retour.setLayoutX(height*(3.7038/100));
+		retour.setLayoutY(height*(3.7038/100));
+		retour.setFitHeight(height*(9.25/100));
+		retour.setFitWidth(height*(9.25/100));
 		
 		
 		startRoot.getChildren().addAll(play, quit,multiplay,retour);
@@ -192,8 +192,8 @@ public class GameStart {
 		
 		setting_button = new ImageView();
 		setting_button.setId("settings_button");
-		setting_button.setFitWidth(360/2);
-		setting_button.setFitHeight(360/2);
+		setting_button.setFitWidth(height*(16.6667/100));
+		setting_button.setFitHeight(height*(16.6667/100));
 		Image imageSetting = new Image(getClass().getResourceAsStream("setting_button.png"));
 		setting_button.setImage(imageSetting);
 		setting_button.setLayoutX(width-setting_button.getFitWidth());
@@ -207,17 +207,17 @@ public class GameStart {
 		//Mise en place de la barre de progression
 		
 		progressBar = new ProgressBar(0);
-		progressBar.setPrefSize(width/2.5,75);
+		progressBar.setPrefSize(width/2.5,height*(6.95/100));
 		progressBar.setLayoutX(width/2 - progressBar.getPrefWidth()/2);
-		progressBar.setLayoutY(350);
+		progressBar.setLayoutY(height*(32.4075/100));
 		
 		
 		//Mise en place du boutton start
 		
 		start_button = new ImageView();
 		start_button.setId("start_button");
-		start_button.setFitWidth(2965/4.5);
-		start_button.setFitHeight(491/4.5);
+		start_button.setFitWidth(width*(34.31699/100));
+		start_button.setFitHeight(height*(10.1028/100));
 		Image imageStart = new Image(getClass().getResourceAsStream("start_button.png"));
 		start_button.setImage(imageStart);
 		start_button.setLayoutX(width/2 - start_button.getFitWidth()/2);
@@ -291,7 +291,7 @@ public class GameStart {
 		monter.setImage(imageMonter);
 		monter.setFitWidth(imageMonter.getWidth()/4);
 		monter.setFitHeight(imageMonter.getHeight()/4);
-		monter.setLayoutX(5);
+		monter.setLayoutX(height*(0.463/100));
 		monter.setLayoutY(0);
 		afficheNavigation.getChildren().add(monter);
 		
@@ -300,7 +300,7 @@ public class GameStart {
 		descendre.setImage(imageDescendre);
 		descendre.setFitWidth(imageDescendre.getWidth()/4);
 		descendre.setFitHeight(imageDescendre.getHeight()/4);
-		descendre.setLayoutX(5);
+		descendre.setLayoutX(height*(0.463/100));
 		descendre.setLayoutY(afficheNavigation.getPrefHeight()*1/4);
 		afficheNavigation.getChildren().add(descendre);
 		
@@ -310,7 +310,7 @@ public class GameStart {
 		valider.setImage(imageValider);
 		valider.setFitWidth(imageValider.getWidth()/4);
 		valider.setFitHeight(imageValider.getHeight()/4);
-		valider.setLayoutX(5);
+		valider.setLayoutX(height*(0.463/100));
 		valider.setLayoutY(afficheNavigation.getPrefHeight()*2/4);
 		afficheNavigation.getChildren().add(valider);
 		
@@ -319,7 +319,7 @@ public class GameStart {
 		info.setImage(imageInfo);
 		info.setFitWidth(imageInfo.getWidth()/4);
 		info.setFitHeight(imageInfo.getHeight()/4);
-		info.setLayoutX(5);
+		info.setLayoutX(height*(0.463/100));
 		info.setLayoutY(afficheNavigation.getPrefHeight()*3/4);
 		afficheNavigation.getChildren().add(info);
 		
@@ -397,7 +397,7 @@ public class GameStart {
 	}
 	
 	public void chose_difficulty() {
-		title.setVisible(false);
+		title.setVisible(true);
 		visible_change(getMenuButton(),false);
 		visible_change(getButtonDifficulty(),true);
 		retour.setVisible(true);	
@@ -408,9 +408,10 @@ public class GameStart {
 		easy.setId("button_easy");
 		Image imageEasy = new Image(getClass().getResourceAsStream("easy_button.png"));
         easy.setImage(imageEasy);
-		easy.setFitWidth(1424/3);
-		easy.setFitHeight(216/3);
+		easy.setFitWidth(width*(24.7222/100));
+		easy.setFitHeight(height*(6.6667/100));
 		easy.setLayoutX(width/2 - easy.getFitWidth()/2);
+		easy.setLayoutY(height*2/6);
 		
 		
 		
@@ -419,30 +420,28 @@ public class GameStart {
 		Image imageMedium = new Image(getClass().getResourceAsStream("medium_button.png"));
         medium.setImage(imageMedium);
 		
-		medium.setFitWidth(1424/3);
-		medium.setFitHeight(216/3);
+		medium.setFitWidth(width*(24.7222/100));
+		medium.setFitHeight(height*(6.6667/100));
 		medium.setLayoutX(width/2 - medium.getFitWidth()/2);
-		medium.setLayoutY(height*2/5);
-		
-		easy.setLayoutY(height*1/5);
+		medium.setLayoutY(height*3/6);
 		
 		
 		hard.setId("button_hard");
 		Image imageHard = new Image(getClass().getResourceAsStream("hard_button.png"));
         hard.setImage(imageHard);
-		hard.setFitWidth(1424/3);
-		hard.setFitHeight(216/3);
+		hard.setFitWidth(width*(24.7222/100));
+		hard.setFitHeight(height*(6.6667/100));
 		hard.setLayoutX(width/2 - hard.getFitWidth()/2);
-		hard.setLayoutY(height*3/5);
+		hard.setLayoutY(height*4/6);
 		
 		
 		insane.setId("button_insane");
 		Image imageInsane = new Image(getClass().getResourceAsStream("insane_button.png"));
 		insane.setImage(imageInsane);
-		insane.setFitWidth(1424/3);
-		insane.setFitHeight(216/3);
+		insane.setFitWidth(width*(24.7222/100));
+		insane.setFitHeight(height*(6.6667/100));
 		insane.setLayoutX(width/2 - insane.getFitWidth()/2);
-		insane.setLayoutY(height*4/5);
+		insane.setLayoutY(height*5/6);
 		
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
@@ -465,28 +464,28 @@ public class GameStart {
 		button_1vs1.setId("button_1vs1");
 		Image image1vs1 = new Image(getClass().getResourceAsStream("button_1vs1.png"));
 		button_1vs1.setImage(image1vs1);
-		button_1vs1.setFitWidth(1424/3);
-		button_1vs1.setFitHeight(216/3);
+		button_1vs1.setFitWidth(width*(24.7222/100));
+		button_1vs1.setFitHeight(height*(6.6667/100));
 		button_1vs1.setLayoutX(width/2 - button_1vs1.getFitWidth()/2);
 		
 		button_2vs2.setId("button_2vs2");
 		Image image2vs2 = new Image(getClass().getResourceAsStream("button_2vs2.png"));
 		button_2vs2.setImage(image2vs2);
-		button_2vs2.setFitWidth(1424/3);
-		button_2vs2.setFitHeight(216/3);
+		button_2vs2.setFitWidth(width*(24.7222/100));
+		button_2vs2.setFitHeight(height*(6.6667/100));
 		button_2vs2.setLayoutX(width/2 - button_2vs2.getFitWidth()/2);
 		button_2vs2.setLayoutY(height/2 - button_2vs2.getFitHeight()/2);
 		
-		button_1vs1.setLayoutY(button_2vs2.getLayoutY()-50-button_1vs1.getFitHeight());
+		button_1vs1.setLayoutY(button_2vs2.getLayoutY()-height*(4.63/100)-button_1vs1.getFitHeight());
 		
 		
 		online.setId("button_online");
 		Image imageOnline = new Image(getClass().getResourceAsStream("online.png"));
 		online.setImage(imageOnline);
-		online.setFitWidth(1424/3);
-		online.setFitHeight(216/3);
+		online.setFitWidth(width*(24.7222/100));
+		online.setFitHeight(height*(6.6667/100));
 		online.setLayoutX(width/2 - online.getFitWidth()/2);
-		online.setLayoutY(button_2vs2.getLayoutY()+50+button_2vs2.getFitHeight());
+		online.setLayoutY(button_2vs2.getLayoutY()+height*(4.63/100)+button_2vs2.getFitHeight());
 	
 		
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2,online);
@@ -504,7 +503,7 @@ public class GameStart {
 		titleOnline.setFitWidth(imageTitleOnline.getWidth()/2);
 		titleOnline.setFitHeight(imageTitleOnline.getHeight()/2);
 		titleOnline.setLayoutX(width/2 - titleOnline.getFitWidth()/2);
-		titleOnline.setLayoutY(50);	
+		titleOnline.setLayoutY(height*(4.63/100));	
 		startRoot.getChildren().addAll(titleOnline);
 		
 		
@@ -519,7 +518,7 @@ public class GameStart {
 		
 		
 		ipInput.setPrefSize(width/5,imageIp.getFitHeight());
-		ipInput.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth() + 50);
+		ipInput.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth() + height*(4.63/100));
 		ipInput.setLayoutY(imageIp.getLayoutY());
 		ipInput.setVisible(false);
 		startRoot.getChildren().addAll(ipInput);
@@ -527,7 +526,7 @@ public class GameStart {
 		
 		ip.setMinHeight(height*(46.3/100));
 		ip.setMinWidth(height*(46.3/100));
-		ip.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth()+100);
+		ip.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth()+(height*(4.63/100)*2));
 		ip.setLayoutY(imageIp.getLayoutY() + imageIp.getFitHeight()/2 - ip.getMinHeight()/2);
 		ip.setFont(new Font("Serif", imageIp.getFitHeight()/2));
 		ip.setTextFill(Color.web("#FF0000"));
@@ -557,7 +556,7 @@ public class GameStart {
 		
 		
 		pseudoInput.setPrefSize(width/5,imagePseudo.getFitHeight());
-		pseudoInput.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth() + 50);
+		pseudoInput.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth() + height*(4.63/100));
 		pseudoInput.setLayoutY(imagePseudo.getLayoutY());
 		pseudoInput.setVisible(false);
 		startRoot.getChildren().addAll(pseudoInput);
@@ -565,7 +564,7 @@ public class GameStart {
 		
 		pseudo.setMinHeight(height*(46.3/100));
 		pseudo.setMinWidth(height*(46.3/100));
-		pseudo.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth()+100);
+		pseudo.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth()+(height*(4.63/100)*2));
 		pseudo.setLayoutY(imagePseudo.getLayoutY() + imagePseudo.getFitHeight()/2 - pseudo.getMinHeight()/2);
 		pseudo.setFont(new Font("Serif", imagePseudo.getFitHeight()/2));
 		pseudo.setTextFill(Color.web("#FF0000"));
@@ -577,7 +576,7 @@ public class GameStart {
 		validePseudo.setImage(imageOk);
 		validePseudo.setFitWidth(imageOk.getWidth()/2);
 		validePseudo.setFitHeight(imagePseudo.getFitHeight());
-		validePseudo.setLayoutX(pseudo.getLayoutX()+pseudo.getMinWidth()+100);
+		validePseudo.setLayoutX(pseudo.getLayoutX()+pseudo.getMinWidth()+(height*(4.63/100))*2);
 		validePseudo.setLayoutY(imagePseudo.getLayoutY());	
 		startRoot.getChildren().addAll(validePseudo);
 		validePseudo.setVisible(false);
