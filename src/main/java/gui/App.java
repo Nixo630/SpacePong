@@ -1,7 +1,5 @@
 package gui;
 
-
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
@@ -42,7 +40,9 @@ public class App extends Application {
         var gameScene = new Scene(root);
         gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
         
-        
+        var online = new Pane();
+        var onlineScene = new Scene(online);
+        onlineScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
         
         class Player implements RacketController {
             State state = State.IDLE;
@@ -56,11 +56,13 @@ public class App extends Application {
         var playerB = new Player();
         var playerC = new Player();
         var playerD = new Player();
+        
+        var playerOnline = new Player();
         		
         
         var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
-        var gameStart = new GameStart(start,root,gameScene,gameView,court);
+        var gameStart = new GameStart(start,root,online,gameScene,gameView,court, onlineScene, playerOnline);
         
         Curseur curseur = new Curseur(start,gameStart.getStartButton());
         SettingView settingView = new SettingView(start,gameView);
@@ -68,7 +70,7 @@ public class App extends Application {
         
         TouchView touchView = new TouchView(start,curseur);
         touchView.init();
-             
+                     
         startScene.setOnKeyPressed(ev ->{
         	switch (ev.getCode()) {
         	case ESCAPE:primaryStage.setFullScreen(true);break;
@@ -107,7 +109,7 @@ public class App extends Application {
                 	
                 	case "pseudo":gameStart.choisirPseudo();curseur.setCurrentButton(gameStart.getButtonPseudo());break;
                 	case "Validepseudo" :gameStart.validePseudo();curseur.setCurrentButton(gameStart.getButtonOnline());break;
-                	
+                	case "Valideonline": gameStart.runOnline(); break;
                 	
                 	case "return":gameStart.retour(curseur.getCurrentButton());curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	
@@ -161,6 +163,32 @@ public class App extends Application {
         
         TouchView touchView1 = new TouchView(root,curseur);
         touchView1.init();
+        
+        onlineScene.setOnKeyPressed(ev -> {
+        	switch (ev.getCode()) {
+            case Z:
+                playerOnline.state = RacketController.State.GOING_UP;
+                break;
+            case X:
+            	playerOnline.state = RacketController.State.GOING_DOWN;
+                break;
+			default:
+				break;
+        	}
+        });
+        
+        onlineScene.setOnKeyReleased(ev -> {
+            switch (ev.getCode()) {
+                case Z:
+                    if (playerOnline.state == RacketController.State.GOING_UP) playerOnline.state = RacketController.State.IDLE;
+                    break;
+                case X:
+                    if (playerOnline.state == RacketController.State.GOING_DOWN) playerOnline.state = RacketController.State.IDLE;
+                    break;
+			default:
+				break;
+            }
+        });
         
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {

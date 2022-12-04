@@ -1,9 +1,13 @@
 package gui;
 
 import java.awt.Dimension;
+import java.io.File;
+import java.net.SocketException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +20,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Court;
+import model.OnlineCourt;
+import model.RacketController;
+import network.Network;
+import network.Requests;
 
 
 public class GameStart {
@@ -30,10 +38,21 @@ public class GameStart {
 	private int width;
 	private Pane startRoot;
 	private Pane gameRoot;
+	private Pane onlineRoot;
 	
 	private GameView gw;
+	private OnlineGameView ogv;
+	
 	private Court court;
+	private OnlineCourt oc;
+	
 	private Scene courtScene;
+	private Scene onlineCourtScene;
+	
+	private RacketController onlinePlayer;
+	
+	private Network n;
+	private Requests r;
 
 	//Boutton pour les parties en solo
 	private ImageView easy,medium,hard,insane;
@@ -67,16 +86,19 @@ public class GameStart {
     private ProgressBar progressBar;
     
 
-	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
+	public GameStart (Pane startRoot,Pane root, Pane onlineRoot, Scene courtScene, GameView gw,Court court, Scene onlineScene, RacketController onlinePlayer) {
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
 		this.gw = gw;
 		this.court = court;
 		this.courtScene = courtScene;
-		
+		this.onlineRoot = onlineRoot;
+		this.onlineCourtScene = onlineScene;
+		this.onlinePlayer = onlinePlayer;
 		
 		gameRoot.setId("choix_galaxie");
+		onlineRoot.setId("choix_galaxie");
 		
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		height = (int)dimension.getHeight();
@@ -106,11 +128,7 @@ public class GameStart {
 		pseudo = new Label("Votre pseudo ?");
 		validePseudo = new ImageView();
 		valideIp = new ImageView();
-		
-		
-		
-		
-		
+				
 		//Le titre est un bouton sans commande dessus
 		title = new ImageView();
 		title.setId("title");
@@ -120,9 +138,7 @@ public class GameStart {
 		title.setFitHeight(332/2);
 		title.setLayoutX(width/2 - title.getFitWidth()/2);
 		title.setLayoutY(50);
-		
-		
-		
+				
 		//Mise en place du boutton Play pour jouer au jeu en solo
 		play = new ImageView();
 		play.setId("solo_play_button");
@@ -283,6 +299,7 @@ public class GameStart {
 	
 	public void setBackground(String s) {
 		gameRoot.setId(s);
+		onlineRoot.setId(s);
 	}
 	
 	
@@ -487,7 +504,7 @@ public class GameStart {
 		startRoot.getChildren().addAll(validePseudo);
 		validePseudo.setVisible(false);
 		
-		valider.setId("Validepseudo");
+		valider.setId("Valideonline");
 		Image imageTextValider = new Image(getClass().getResourceAsStream("valider.png"));
 		valider.setImage(imageTextValider);
 		valider.setFitWidth(imageTextValider.getWidth()/2);
@@ -509,7 +526,7 @@ public class GameStart {
 	public void valideIp() {
 		String s = ipInput.getText();
 		if(s.equals("")) {
-			ip.setText("Spacepong.fr");
+			ip.setText("spacepong.fr");
 		}
 		else {
 			ip.setText(s);
@@ -545,7 +562,64 @@ public class GameStart {
 		visible_change(getButtonMulti(),false);
 		visible_change(getButtonOnline(),true);
 		ip.setVisible(true);
-		pseudo.setVisible(true);
+		pseudo.setVisible(true);	
+	}
+	
+	public void runOnline() {
+		String ipServer = ip.getText();
+		String ps = pseudo.getText();
+		try {
+			/* à chaque fois que le joueur veut jouer en ligne,
+			 * on crée une nouvelle connexion,
+			 * un nouvel objet Requests,
+			 * un nouveau terrain (visuel et modélisé).
+			 * Cela facilite les opérations et la gestion des bugs.
+			 */
+			n = new Network();
+			// A MODIFIER EN RECUPERANT IP SERVEUR
+			r = new Requests(n, ipServer);
+
+			oc = new OnlineCourt(onlinePlayer, width, height, r);
+			r.setOnlineCourt(oc);			
+
+			ogv = new OnlineGameView(oc, onlineRoot, onlineCourtScene);
+
+			App.getStage().setFullScreen(true);
+			App.getStage().setScene(onlineCourtScene);
+			App.getStage().setFullScreen(true);
+			
+			ogv.startAnimation();
+
+			Thread t = new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+
+						boolean received = r.sendMessage(oc.getIdPlayer(), "PLAYER_JOINED", 0.0, 0.0, true);
+						if (received == false) {
+							sound("NoConnection.wav");
+							return;
+							// on revient à l'accueil en indiquant un pb connexion
+						}
+						
+						
+						while(true) {
+							String[] response = n.listen(2);
+							if (response != null) {
+								r.onMessageReceived(response);
+							}
+						}					
+					}			
+				});
+				t.start();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			sound("NoConnection.wav");
+			
+			// on revient en arrière car problème connexion
+			e.printStackTrace();
+		}		
 	}
 	
 	public void VisibleMiseAJourMultiButton() {
@@ -622,5 +696,19 @@ public class GameStart {
 		}
 		return true;
 	}
+	
+	public void sound(String s) {
+        // On joue le son
+        try
+        {
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
+            clip.start();
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
+    }
 }
 
