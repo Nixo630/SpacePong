@@ -80,7 +80,7 @@ public class SettingView {
 		canvasRacketDifficulty = new Pane();
 	    this.canvasRacketDifficulty.setId("pane");
 		this.canvasRacketDifficulty.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		canvasRacketDifficulty.setPrefSize(width*3/4,height*3/4);
+		canvasRacketDifficulty.setPrefSize(width,height);
 	}
 	
 	public void init() {

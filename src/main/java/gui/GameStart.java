@@ -25,6 +25,8 @@ public class GameStart {
 	
 	private boolean start = false;
 	
+	private Pane afficheNavigation;
+	
 	private final ImageView quit,play,setting_button,multiplay,title;
 	private int height;
 	private int width;
@@ -82,6 +84,18 @@ public class GameStart {
 		height = (int)dimension.getHeight();
 		width  = (int)dimension.getWidth();
 		
+		
+		afficheNavigation = new Pane();
+		afficheNavigation.setStyle("-fx-background-color: pink;");
+		afficheNavigation.setPrefSize(width*2/4,height*1/4);
+	    
+		afficheNavigation.setLayoutX(width/4);
+		afficheNavigation.setLayoutY(height*3/4);
+		
+		initAfficheNavigation();
+		
+		
+		
 		easy = new ImageView();
 		medium = new ImageView();
 		hard = new ImageView();
@@ -131,7 +145,7 @@ public class GameStart {
 		play.setFitWidth(1920/4.5);
 		play.setFitHeight(463/4.5);
 		play.setLayoutX(width/2 - play.getFitWidth()/2);
-		play.setLayoutY(280);
+		play.setLayoutY(height*1/4);
 		
 		//Mise en place du bouton pour jouer à deux 
 		
@@ -142,7 +156,7 @@ public class GameStart {
 		multiplay.setFitWidth(3376/3.5);
 		multiplay.setFitHeight(574/3.5);
 		multiplay.setLayoutX(width/2 - multiplay.getFitWidth()/2);
-		multiplay.setLayoutY(400);
+		multiplay.setLayoutY(height*2/4);
 		
 		//Boutton pour quitter le jeu
 		quit = new ImageView();
@@ -152,7 +166,7 @@ public class GameStart {
 		quit.setFitWidth(1424/3);
 		quit.setFitHeight(216/3);
 		quit.setLayoutX(width/2 - quit.getFitWidth()/2);
-		quit.setLayoutY(650);
+		quit.setLayoutY(height*3/4);
 		
 		retour = new ImageView();
 		retour.setId("return");
@@ -243,6 +257,7 @@ public class GameStart {
 							progressBar.setVisible(false);
 							visible_change(getMenuButton(),true);
 							c.setVisible(true);
+							afficheNavigation.setVisible(false);
 				        	chrono.cancel();
 						}
 						time--;
@@ -268,6 +283,10 @@ public class GameStart {
 		for (int i = 0;i<t.length;i++) {
 			t[i].setVisible(b);
 		}
+	}
+	
+	public void initAfficheNavigation() {
+		startRoot.getChildren().add(afficheNavigation);
 	}
 	
 	void setCharge(boolean t) {
@@ -303,6 +322,7 @@ public class GameStart {
 	}
 	
 	public void chose_difficulty() {
+		title.setVisible(false);
 		visible_change(getMenuButton(),false);
 		visible_change(getButtonDifficulty(),true);
 		retour.setVisible(true);	
@@ -327,9 +347,9 @@ public class GameStart {
 		medium.setFitWidth(1424/3);
 		medium.setFitHeight(216/3);
 		medium.setLayoutX(width/2 - medium.getFitWidth()/2);
-		medium.setLayoutY(height/2 - medium.getFitHeight()/2-50);
+		medium.setLayoutY(height*2/5);
 		
-		easy.setLayoutY(medium.getLayoutY()-medium.getFitHeight() - 50);
+		easy.setLayoutY(height*1/5);
 		
 		
 		hard.setId("button_hard");
@@ -338,7 +358,7 @@ public class GameStart {
 		hard.setFitWidth(1424/3);
 		hard.setFitHeight(216/3);
 		hard.setLayoutX(width/2 - hard.getFitWidth()/2);
-		hard.setLayoutY(height/2 + hard.getFitHeight()/2+50);
+		hard.setLayoutY(height*3/5);
 		
 		
 		insane.setId("button_insane");
@@ -347,7 +367,7 @@ public class GameStart {
 		insane.setFitWidth(1424/3);
 		insane.setFitHeight(216/3);
 		insane.setLayoutX(width/2 - insane.getFitWidth()/2);
-		insane.setLayoutY(hard.getLayoutY()+hard.getFitHeight()+50);
+		insane.setLayoutY(height*4/5);
 		
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
