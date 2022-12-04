@@ -1,0 +1,32 @@
+SPACE PONG
+
+Résumé : 
+Notre version de pong s'oriente vers un aspect spacial et futuriste. Space Pong emmènera l'utilisateur à redécouvrir pong comme il l'a connnu étant jeune, 
+seulement il sera revisité.
+Notre but est de créer une immersion dans un voyage intersiderale dans lequel le joueur pourra s'évader l'espace de quelques minutes pour faire une partie
+de notre pong futuriste : Space Pong
+
+(dans un aspect futuriste)
+Menu :
+-Jouer solo
+-Jouer multijoueur
+-Réglages
+
+Réglages :
+-Modification du volume
+-Possibilité de changer le 'skin' de la balle
+-Posibilité de modifier le 'skin' du terrain
+-Modification du nombres de points requis pour gagner la partie
+
+Jouer solo (Contre l'ordinateur):
+-Choix du côté
+-Pong classique 1vs1 
+
+Jouer multijoueur (1 contre 1):
+-Pong classique contre un ami
+
+Site internet :
+-Présentera la fiche produit du jeu
+-Vidéo teaser
+-Lien de téléchargement
+-Tutoriel comment utilisé Space Pong
