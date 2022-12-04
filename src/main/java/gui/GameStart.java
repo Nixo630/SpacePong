@@ -286,6 +286,81 @@ public class GameStart {
 	}
 	
 	public void initAfficheNavigation() {
+		ImageView monter = new ImageView();
+		Image imageMonter = new Image(getClass().getResourceAsStream("Image_Info/monter.png"));
+		monter.setImage(imageMonter);
+		monter.setFitWidth(imageMonter.getWidth()/4);
+		monter.setFitHeight(imageMonter.getHeight()/4);
+		monter.setLayoutX(5);
+		monter.setLayoutY(0);
+		afficheNavigation.getChildren().add(monter);
+		
+		ImageView descendre = new ImageView();
+		Image imageDescendre = new Image(getClass().getResourceAsStream("Image_Info/descendre.png"));
+		descendre.setImage(imageDescendre);
+		descendre.setFitWidth(imageDescendre.getWidth()/4);
+		descendre.setFitHeight(imageDescendre.getHeight()/4);
+		descendre.setLayoutX(5);
+		descendre.setLayoutY(afficheNavigation.getPrefHeight()*1/4);
+		afficheNavigation.getChildren().add(descendre);
+		
+		
+		ImageView valider = new ImageView();
+		Image imageValider= new Image(getClass().getResourceAsStream("valider.png"));
+		valider.setImage(imageValider);
+		valider.setFitWidth(imageValider.getWidth()/4);
+		valider.setFitHeight(imageValider.getHeight()/4);
+		valider.setLayoutX(5);
+		valider.setLayoutY(afficheNavigation.getPrefHeight()*2/4);
+		afficheNavigation.getChildren().add(valider);
+		
+		ImageView info = new ImageView();
+		Image imageInfo= new Image(getClass().getResourceAsStream("info.png"));
+		info.setImage(imageInfo);
+		info.setFitWidth(imageInfo.getWidth()/4);
+		info.setFitHeight(imageInfo.getHeight()/4);
+		info.setLayoutX(5);
+		info.setLayoutY(afficheNavigation.getPrefHeight()*3/4);
+		afficheNavigation.getChildren().add(info);
+		
+		
+		ImageView touche_Up = new ImageView();
+		Image imageUp = new Image(getClass().getResourceAsStream("Image_Info/touche-up.png"));
+        touche_Up.setImage(imageUp);
+		touche_Up.setFitHeight(imageUp.getWidth()/11);
+		touche_Up.setFitWidth(imageUp.getHeight()/11);
+		touche_Up.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_Up.setLayoutY(monter.getLayoutY() + monter.getFitHeight()/2 - touche_Up.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_Up);
+		
+		
+		ImageView touche_Down = new ImageView();
+		Image imageDown = new Image(getClass().getResourceAsStream("Image_Info/touche-down.png"));
+        touche_Down.setImage(imageDown);
+		touche_Down.setFitHeight(imageDown.getWidth()/11);
+		touche_Down.setFitWidth(imageDown.getHeight()/11);
+		touche_Down.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_Down.setLayoutY(descendre.getLayoutY() + descendre.getFitHeight()/2 - touche_Down.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_Down);
+		
+		ImageView touche_Entree = new ImageView();
+		Image imageEntree = new Image(getClass().getResourceAsStream("Image_Info/touche-entrer.png"));
+		touche_Entree.setImage(imageEntree);
+		touche_Entree.setFitHeight(imageEntree.getWidth()/11);
+		touche_Entree.setFitWidth(imageEntree.getHeight()/11);
+		touche_Entree.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_Entree.setLayoutY(valider.getLayoutY() + valider.getFitHeight()/2 - touche_Entree.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_Entree);
+		
+		ImageView touche_I = new ImageView();
+		Image imageI = new Image(getClass().getResourceAsStream("Image_Info/touche-i.png"));
+		touche_I.setImage(imageI);
+		touche_I.setFitHeight(imageI.getWidth()/11);
+		touche_I.setFitWidth(imageI.getHeight()/11);
+		touche_I.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_I.setLayoutY(info.getLayoutY() + info.getFitHeight()/2 - touche_I.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_I);
+		
 		startRoot.getChildren().add(afficheNavigation);
 	}
 	
