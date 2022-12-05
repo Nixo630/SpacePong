@@ -144,7 +144,7 @@ public class TouchView {
 		Image imageRejouer = new Image(getClass().getResourceAsStream("rejouer.png"));
 		replay.setImage(imageRejouer);
 		replay.setLayoutX(height*(4.63/100)/5);
-		replay.setLayoutY(350);
+		replay.setLayoutY(height*(4.63/100)*7);
 		canvas.getChildren().addAll(replay);
 		
 		touche_r1 = new ImageView();
