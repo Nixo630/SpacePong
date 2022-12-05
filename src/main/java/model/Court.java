@@ -4,13 +4,9 @@ import java.io.File;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import gui.App;
-import gui.GameView;
-import javafx.scene.Scene;
-
 public class Court {
     // instance parameters
-    private final RacketController playerA, playerB, playerC, playerD,playerE;
+    private final RacketController playerA, playerB; //, playerC, playerD,playerE;
     private final double width, height; // m
     private final double racketSpeed = 350.0; // m/s
     private final double ballRadius = 15.0; // m
@@ -18,7 +14,7 @@ public class Court {
     private double racketA; // m
     private double racketB; // m
     private double racketC; // m
-    private double racketE;
+    //private double racketE;
     private double racketD; // m
     private double ballX, ballY; // m
     private double ballSpeedX, ballSpeedY; // m 
@@ -30,7 +26,7 @@ public class Court {
     private double directionPoint;//coordonee en y ou la balle se dirige
     private boolean isBot;//pour savoir si on est en solo et qu'on a besoin d'un bot
     
-    private Scene lostScene;
+   // private Scene lostScene;
     private boolean ballTouched = false;
     private boolean scored = false;
     
@@ -47,13 +43,13 @@ public class Court {
     // Bien oublie pas quand tu appuis sur la touche p ou le bouton de Adem la fonction partieEnCours est égale à false
     // Comme ca y'a pas l'erreur d'apuiiyer plusieurs fois sur pause.
 
-    public Court(RacketController playerA, RacketController playerB,RacketController playerC, RacketController playerD,
+    public Court(RacketController playerA, RacketController playerB,
             double width, double height) {
         this.playerA = playerA;
         this.playerB = playerB;
-        this.playerC = playerC;
+        /*this.playerC = playerC;
         this.playerD = playerD;
-        this.playerE = null;
+        this.playerE = null;*/
         this.width = width;
         this.height = height;
         
@@ -164,6 +160,8 @@ public class Court {
                 racketA += racketSpeed * deltaT;
                 if (racketA + racketSize > height) racketA = height - racketSize;
                 break;
+		default:
+			break;
         }
         if(!isBot){
             switch (playerB.getState()) {
@@ -177,6 +175,8 @@ public class Court {
                 racketB += racketSpeed * deltaT;
                 if (racketB + racketSize > height) racketB = height - racketSize;
                 break;
+			default:
+				break;
             }
             if (updateBall(deltaT)) reset();
             return;
@@ -228,6 +228,8 @@ public class Court {
                     racketB += racketSpeed * deltaT;
                     if (racketB + racketSize > height) racketB = height - racketSize;
                     break;
+			default:
+				break;
             }
         }
         if (updateBall(deltaT)) reset();
@@ -306,6 +308,8 @@ public class Court {
                 racketA += racketSpeed * deltaT;
                 if (racketA + racketSize > height) racketA = height - racketSize;
                 break;
+		default:
+			break;
         }
         switch (playerB.getState()) {  // on récupère le déplacement du joueur B pour déplacer la hitbox de sa racket
             case GOING_UP:
@@ -318,6 +322,8 @@ public class Court {
                 racketB += racketSpeed * deltaT;
                 if (racketB + racketSize > height) racketB = height - racketSize;
                 break;
+		default:
+			break;
         }
 
         if (updateBall2(deltaT)) reset(); // on actualise l'état de la balle
@@ -355,6 +361,8 @@ public class Court {
                 racketD += racketSpeed * deltaT ;
                 if (racketD + racketSize > width) racketD = width - racketSize;
                 break;
+		default:
+			break;
         }
     
 }
@@ -476,7 +484,7 @@ public class Court {
         this.racketA = height / 2;
         this.racketB = height / 2;
         this.racketC = height / 2.5;
-        this.racketE = height / 2.5;
+        //this.racketE = height / 2.5;
         this.racketD = height / 2.5; 
         
         double nb;

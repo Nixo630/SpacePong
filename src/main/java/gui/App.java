@@ -54,13 +54,13 @@ public class App extends Application {
         }
         var playerA = new Player();
         var playerB = new Player();
-        var playerC = new Player();
-        var playerD = new Player();
+        //var playerC = new Player();
+        //var playerD = new Player();
         
         var playerOnline = new Player();
         		
         
-        var court = new Court(playerA, playerB, playerD, playerD, longueur, hauteur);
+        var court = new Court(playerA, playerB, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
         var gameStart = new GameStart(start,root,online,gameScene,gameView,court, onlineScene, playerOnline);
         

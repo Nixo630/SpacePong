@@ -6,7 +6,6 @@ import java.util.Random;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import javafx.scene.Scene;
 import network.Requests;
 
 public class OnlineCourt {
@@ -41,7 +40,7 @@ public class OnlineCourt {
 
     private double racketSize; // m
 
-    private Scene lostScene;
+    //private Scene lostScene;
     
     private boolean finished = false;
     
@@ -164,20 +163,9 @@ public class OnlineCourt {
         }
     }
     
-    // VERIFIER VARIABLES / MESURES
     public void updateBall(double x, double y) {
-    	/*
-    	if (ballX <= 50 * scaleX && ballY >= racketA && ballY <= racketA + racketSize ||
-    			(ballX >= width - 50 * scaleX && ballY >= racketB && ballY <= racketB + racketSize)) { // la balle touche une raquette
-    		sound("RacketSound.wav");
-    	}
-    	else if ((ballX >= 50 * scaleX && ballX <= width - 50 * scaleX && ballY <= 20 * scaleY) // la balle touche un mur
-						|| (ballX >= 50 * scaleX && ballX <= width - 50 * scaleX && ballY >= height - 20 * scaleY)) {
-    		sound("WallSound.wav");
-    	}*/
-
     	ballX = x * scaleX;
-    	ballY = y * scaleY;    	
+    	ballY = y * scaleY;
     }
 
     public void sound(String s) {

@@ -87,6 +87,14 @@ public class Requests {
 			oc.setRacketB(r);
 			break;
 			
+		case "TOUCHED_WALL":
+			oc.sound("WallSound.wav");
+			break;
+			
+		case "TOUCHED_RACKET":
+			oc.sound("RacketSound.wav");
+			break;
+			
 		default:
 			break;
 		}		
@@ -100,7 +108,7 @@ public class Requests {
 			if (AR == false) n.send(dst, 57086, String.valueOf(id), msg);
 			else {
 				boolean AR_received = n.sendAR(dst, 57086, String.valueOf(id), msg);
-				if (AR_received) System.out.println("[REQUEST] AR reçu");
+				//if (AR_received) System.out.println("[REQUEST] AR reçu");
 				return AR_received;
 			}
 			return true;

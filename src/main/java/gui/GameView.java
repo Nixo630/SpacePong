@@ -180,7 +180,7 @@ public class GameView {
         //Mise en place de l'affichage de la fin de partie
         
         Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int height = (int)dimension.getHeight();
+		//int height = (int)dimension.getHeight();
 		int width  = (int)dimension.getWidth();
     	
 		//Ici c'est le bouton qui affiche que la partie est termine
@@ -303,7 +303,7 @@ public class GameView {
                     last = now;
                     return;
                 }
-                System.out.println (court.getRacketC());                                
+                //System.out.println (court.getRacketC());                                
                 court.update2((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);

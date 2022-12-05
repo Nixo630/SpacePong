@@ -1,12 +1,7 @@
 package gui;
 
-import java.awt.Dimension;
-import java.util.Random;
-
 import javafx.animation.AnimationTimer;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -15,7 +10,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import model.Court;
 import model.OnlineCourt;
 
 public class OnlineGameView {
@@ -32,12 +26,8 @@ public class OnlineGameView {
     
     private Label affScoreA, affScoreB, pseudoLbl, pseudoAdvLbl;   
     private static AnimationTimer aTimer;
-            
-    //taille de l'écran
-	private double height;
-	private double width;
 	
-	private Scene startScene;
+	//private Scene startScene;
     
     /**
      * @param court le "modèle" de cette vue (le terrain de jeu de raquettes et tout ce qu'il y a dessus)
@@ -48,10 +38,7 @@ public class OnlineGameView {
     public OnlineGameView(OnlineCourt court, Pane root, Scene startScene) {
         this.court = court;
         this.gameRoot = root;
-        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		this.height = dimension.getHeight();
-		this.width  = dimension.getWidth();
-		
+        
 		this.xMargin = 50 * court.scaleX;
 		this.racketThickness = 10 * court.scaleX;
 		this.murThickness = 20.0 * court.scale;
@@ -132,16 +119,16 @@ public class OnlineGameView {
         pseudoLbl.setFont(Font.font("Cambria",25));
         pseudoLbl.setTextFill(Color.MAGENTA);
         pseudoLbl.setTranslateX((court.width / 6));
-        pseudoLbl.setTranslateY(height - 100);
+        pseudoLbl.setTranslateY(court.getHeight() - 100);
         
         pseudoAdvLbl = new Label("");
         pseudoAdvLbl.setFont(Font.font("Cambria",25));
         pseudoAdvLbl.setTextFill(Color.MAGENTA);
         pseudoAdvLbl.setTranslateX(court.width - (court.width / 3));
-        pseudoAdvLbl.setTranslateY(height - 100);
+        pseudoAdvLbl.setTranslateY(court.getHeight() - 100);
         
         gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball, pseudoLbl, pseudoAdvLbl);
-        this.startScene = startScene;
+        //this.startScene = startScene;
     }
     
     public void Visible_middle_bar(boolean b) {
