@@ -9,6 +9,7 @@ import gui.GameView;
 import javafx.scene.Scene;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Random;
 
 public class Court {
     public long time;//secondes actuelle du jeu
@@ -16,7 +17,7 @@ public class Court {
     public double nowTimerB = 0;//idem mais pour le joueur B
 
     // instance parameters
-    private final RacketController playerA, playerB, playerC, playerD,playerE;
+    private final RacketController playerA, playerB, playerC, playerD,playerE;// player E deviendra un pbstacle dans une future MAJ
     private final double width, height; // m
     private final double racketSpeed = 500.0; // m/s//350
     private double ballRadius = 15.0; // m et est devenu non final pour pouvoir rendre la balle en invisible
@@ -218,6 +219,25 @@ public class Court {
         }
         else {
             botDirection = RacketController.State.IDLE;
+        }
+    }
+
+        private void direction2() { // pour le mode 2v2
+
+         if (directionPoint < racketC*2 + (racketSize-20)/4){ // on enleve 20 car raquetsize est optimisée en fonction de la hauteur, 
+                                                              //étant donné que la largeur est plus longue,
+            botDirection = RacketController.State.GOING_LEFT; // celà crée un problème et une hitbox plus grande, 
+                                                              //pour celà il faut donc baisser la hitbox d'une valeur brut
+
+        }   
+        else {
+            if (directionPoint > racketC*2 + (racketSize-20)*3/4) {
+
+                botDirection = RacketController.State.GOING_RIGHT;
+        }
+        else {
+            botDirection = RacketController.State.IDLE;
+            }
         }
     }
 
@@ -484,55 +504,85 @@ public class Court {
      //@return true if a player lost
 
      private boolean updateBall2(double deltaT) {
+
          // prochaine position de la balle 
         double nextBallX = ballX + deltaT * ballSpeedX;
         double nextBallY = ballY + deltaT * ballSpeedY;
 
         // les lignes suivantes sont le cas où la balle rencontre un obstacle
+        int x = new Random().nextInt(1,3);
+        if (x == 2) x = -1;
 
-        if ((nextBallY < 50 && nextBallX > (racketC*2)-racketSize&& nextBallX < (racketC*2)+racketSize  )|| 
-            (nextBallY > height - 50 && nextBallX > (racketD*2)-racketSize && nextBallX < (racketD *2) + racketSize )) {
-            ballSpeedY = -ballSpeedY;
-            nextBallY = ballY + deltaT * ballSpeedY;}
-            else {
+        if ((nextBallY < 50 && nextBallX > racketC*2 -(racketSize-20) && nextBallX < racketC*2+(racketSize-20) ) ||
+            (nextBallY > height - 50 && nextBallX > (racketD*2)-(racketSize-20)/2&& nextBallX < (racketD *2) + (racketSize-20) )){
 
-            if (nextBallY < 50) {
-            setScoreA(scoreA+1);
-            playerLost();
-            return true;
-            
-            } else if (nextBallY > height-50) {
-            setScoreA(scoreA+1);
-            playerLost();
-            return true;
-            }
+           ballSpeedY = -ballSpeedY ;
+            nextBallY = ballY + deltaT * ballSpeedY *1.5 ;
+            ballSpeedX = - (ballSpeedX-25) * x;
+        }
+
+            else { // sinon on relance la partie et on augmente le score des joueur
+
+                if (nextBallY < 50) { 
+                    setScoreA(scoreA+1);
+                    playerLost();
+                    return true;
+                } 
+                else 
+                    if (nextBallY > height-50) {
+                    setScoreA(scoreA+1);
+                    playerLost();
+                    return true;
+                    }
             }
         
-            if ((nextBallX < 10 && nextBallY > racketA && nextBallY < racketA + racketSize)
-                || (nextBallX > width +10 && nextBallY > racketB && nextBallY < racketB + racketSize)) {
-            if (ballSpeedX > 0){ballSpeedX = -(ballSpeedX + 25);} // MAJ vitesse de la balle après avoir touché la raquette
-            else {ballSpeedX = -(ballSpeedX - 25);} // MAJ gauche> droite quand la vitesse est dans le négatif
-            if (ballSpeedY > 0) {ballSpeedY += 25;}
-            else {ballSpeedY -= 25;}
+            if ((nextBallX < 10 && nextBallY > racketA && nextBallY < racketA + racketSize) // si la balle touche le joueur A
+                || (nextBallX > width +10 && nextBallY > racketB && nextBallY < racketB + racketSize)) { // si la balle touche le joueur B
+                if (ballSpeedX > 0) {
+                ballSpeedX = -(ballSpeedX + 25);
+            } // MAJ vitesse de la balle après avoir touché la raquette
+            else {
+                ballSpeedX = -(ballSpeedX - 25);
+            } // MAJ gauche> droite quand la vitesse est dans le négatif
+                System.out.println("racket touched");
+                if (ballSpeedY > 0) {
+                    // ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
+                if (nextBallX < 10) {
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7);
+                }
+                else {
+                    ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB))*7);
+                }
+            }
+            else {
+                if (nextBallX < 10) {
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketA))*7));
+                }
+                else {
+                    ballSpeedY = -(Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB)))*7);
+                }
+            }
+
             nextBallX = ballX + deltaT * ballSpeedX;
-        } else if (nextBallX < 10) {
-            setScoreB(scoreB+1);
-            playerLost();
-            return true;
-            
-        } else if (nextBallX > width+10) {
-            setScoreB(scoreB+1);
-            playerLost();
-            return true; 
-        }
+            }
+
+        else 
+            if (nextBallX < 10) {
+                setScoreB(scoreB+1);
+                playerLost();
+                return true;  
+            } 
+        else
+            if (nextBallX > width+10) {
+                setScoreB(scoreB+1);
+                playerLost();
+                return true; 
+            }
         
         ballX = nextBallX;
         ballY = nextBallY;
         return false;
     }
-
-
-
     public void sound(String s) {
         // On joue le son
         try
