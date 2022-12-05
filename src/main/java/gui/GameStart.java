@@ -4,21 +4,17 @@ import java.awt.Dimension;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javafx.scene.Cursor;
+
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.Court;
 
 
@@ -29,7 +25,9 @@ public class GameStart {
 	
 	private boolean start = false;
 	
-	private final Button quit,play,setting_button,multiplay,title;
+	private Pane afficheNavigation;
+	
+	private final ImageView quit,play,setting_button,multiplay,title;
 	private int height;
 	private int width;
 	private Pane startRoot;
@@ -40,72 +38,38 @@ public class GameStart {
 	private Scene courtScene;
 
 	//Boutton pour les parties en solo
-	private Button easy,medium,hard,insane;
-
-
-    
-    //Input du nombre de points souhaités par l'utilisateur
-	private Button points;
-	private TextField intInput;
-
-	//Message d'erreur si l'utilisateur n'entre pas une valeur entière
-	private Label error;
-
+	private ImageView easy,medium,hard,insane;
+	
+	//Boutton pour les parties en ligne
+	
+	private ImageView titleOnline;
+	
+	private ImageView imageIp;
+	private TextField ipInput;
+	private Label ip;
+	private ImageView valideIp;
+	
+	private ImageView imagePseudo;
+	private TextField pseudoInput;
+	private Label pseudo;
+	private ImageView validePseudo;
+	
+	private ImageView valider;
 	
 	//Boutton pour les parties en multijoueur
-	private Button button_1vs1;
-	private Button button_2vs2;
-	private Button online;
-	
-	//Mise en place d'un curseur
-	private Circle curseur_droit;
-	private Circle curseur_gauche;
+	private ImageView button_1vs1;
+	private ImageView button_2vs2;
+	private ImageView online;
+
 	
 	//Mise en place d'un boutton retour
-	private Button retour;
-	
-	//Cette variable permet de savoir où sont positionné les curseurs;
-	private int indice = 1;
-	
-	//Ce tableau est le tableau des button courant
-    private Button[] current_button= {};
+	private ImageView retour;    
     
-    //Mise en place de tous les boutons pour les paramètres
-    private Button title_s;
-    private Button title_middle_bar;
-    private Button finish_button;
-    private Button title_ball_skin;
-    private Button title_racket_difficult;
-    private Button title_choix_bg;
-    private Button points_bg;
-    
-    private Button start_button;
+    private ImageView start_button;
     private ProgressBar progressBar;
     
-    //Boutton pour la barre du milieu
-    
-    private Button middle_bar_no;
-    private Button middle_bar_yes;
-    
-    //Boutton pour le changement de skin de la ball
-    private Button choix_ball_sun,choix_ball_green,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,choix_ball_earth;
-    
-    //Boutton pour changer le background de la game
-    private Button choix_galaxie,choix_trou_noir,choix_earth,choix_earth2;
-    
-    //ChoseBox pour permettre à l'utilisateur de choisir en combien de points il veut finir la partie
-    private ChoiceBox<Integer> choiceBox;
-    
-    //Boutton pour l'option du changement aléatoire de la taille de la raquette
-    
-    private Button title_racket_difficulty;
-    private Label explication;
-    private Button button_yes;
-    private Button button_no;
 
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
-		App.getStage().setResizable(false);
-		App.getStage().setFullScreenExitHint("appuyer sur 'd' et 'c' pour se deplacer\n appuyer sur 'm' pour accepter");
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
@@ -121,97 +85,118 @@ public class GameStart {
 		width  = (int)dimension.getWidth();
 		
 		
+		afficheNavigation = new Pane();
+		afficheNavigation.setStyle("-fx-background-color: pink;");
+		afficheNavigation.setPrefSize(width*2/4,height*1/4);
+	    
+		afficheNavigation.setLayoutX(width/4);
+		afficheNavigation.setLayoutY(height*3/4);
+		
+		initAfficheNavigation();
+		
+		
+		
+		easy = new ImageView();
+		medium = new ImageView();
+		hard = new ImageView();
+		insane = new ImageView();
+		
+		initButtonDifficulty();
+		
+		
+		button_1vs1 = new ImageView();
+		button_2vs2 = new ImageView();
+		online = new ImageView();
+		
+		initChooseMultiplay();
+		
+		titleOnline = new ImageView();
+		imageIp = new ImageView();
+		ipInput = new TextField();
+		imagePseudo = new ImageView();
+		pseudoInput = new TextField();
+		valider = new ImageView();
+		ip = new Label("Spacepong.fr");
+		pseudo = new Label("Votre pseudo ?");
+		validePseudo = new ImageView();
+		valideIp = new ImageView();
+		
+		
+		
+		
 		
 		//Le titre est un bouton sans commande dessus
-		title = new Button();
+		title = new ImageView();
 		title.setId("title");
-		title.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		title.setPrefSize(width*50/100,height*25/100);
-		title.setLayoutX(width/2 - title.getPrefWidth()/2);
-		title.setLayoutY(0);
+		Image imageTitle = new Image(getClass().getResourceAsStream("title.png"));
+        title.setImage(imageTitle);
+		title.setFitWidth(width*(28.1771/100));
+		title.setFitHeight(height*(15.3704/100));
+		title.setLayoutX(width/2 - title.getFitWidth()/2);
+		title.setLayoutY(height*(4.63/100));
 		
 		
 		
 		//Mise en place du boutton Play pour jouer au jeu en solo
-		play = new Button();
-		play.setCursor(Cursor.HAND);		
+		play = new ImageView();
 		play.setId("solo_play_button");
-		play.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		play.setPrefSize(width*35/100,height*15/100);
-		play.setLayoutX(width/2 - play.getPrefWidth()/2);
-		play.setLayoutY(height*30/100);
-		
-		//Mise en place du curseur droit
-		
-		curseur_droit= new Circle();
-		curseur_droit.setRadius(25);
-	    curseur_droit.setCenterX(play.getLayoutX()+play.getPrefWidth()+25);
-	    curseur_droit.setCenterY(play.getLayoutY()+play.getPrefHeight()/2);
-	    Image j = new Image(getClass().getResourceAsStream("curseur_droit.png"));
-	    curseur_droit.setFill(new ImagePattern(j));
-	    
-	    //Mise en place du curseur gauche;
-	    
-	    curseur_gauche= new Circle();
-		curseur_gauche.setRadius(25);
-	    curseur_gauche.setCenterX(play.getLayoutX()-25);
-	    curseur_gauche.setCenterY(play.getLayoutY()+play.getPrefHeight()/2);
-	    Image i = new Image(getClass().getResourceAsStream("curseur_gauche.png"));
-	    curseur_gauche.setFill(new ImagePattern(i));
-	    
-	    startRoot.getChildren().addAll(curseur_droit,curseur_gauche);
-	    curseur_gauche.setVisible(false);
-	    curseur_droit.setVisible(false);
+		Image imageSolo = new Image(getClass().getResourceAsStream("solo.png"));
+		play.setImage(imageSolo);
+		play.setFitWidth(width*(22.27431/100));
+		play.setFitHeight(height*(9.5/100));
+		play.setLayoutX(width/2 - play.getFitWidth()/2);
+		play.setLayoutY(height*1/4);
 		
 		//Mise en place du bouton pour jouer à deux 
 		
-		multiplay = new Button();
-		
+		multiplay = new ImageView();
+		Image imageMulti = new Image(getClass().getResourceAsStream("multiplayer.png"));
+        multiplay.setImage(imageMulti);
 		multiplay.setId("multiplay_play_button");
-		multiplay.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		
-		multiplay.setPrefSize(width*70/100,height*15/100);
-		multiplay.setLayoutX(width/2 - multiplay.getPrefWidth()/2);
-		multiplay.setLayoutY(height*45/100);
+		multiplay.setFitWidth(width*(50.238/100));
+		multiplay.setFitHeight(height*(15.1852/100));
+		multiplay.setLayoutX(width/2 - multiplay.getFitWidth()/2);
+		multiplay.setLayoutY(height*2/4);
 		
 		//Boutton pour quitter le jeu
-		quit = new Button();
-		quit.setCancelButton(true);
+		quit = new ImageView();
 		quit.setId("quit_button");
-		quit.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		Image imageQuitter = new Image(getClass().getResourceAsStream("quitter.png"));
+        quit.setImage(imageQuitter);
+		quit.setFitWidth(width*(24.7743/100));
+		quit.setFitHeight(height*(6.667/100));
+		quit.setLayoutX(width/2 - quit.getFitWidth()/2);
+		quit.setLayoutY(height*3/4);
 		
-		
-		quit.setPrefSize(width*30/100,height*15/100);
-		quit.setLayoutX(width/2 - quit.getPrefWidth()/2);
-		quit.setLayoutY(height*65/100);
-		
-		retour = new Button();
+		retour = new ImageView();
 		retour.setId("return");
-		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		retour.setLayoutX(40);
-		retour.setLayoutY(40);
-		retour.setPrefSize(100, 100);
+		Image imageRetour = new Image(getClass().getResourceAsStream("retour.png"));
+        retour.setImage(imageRetour);
+		retour.setLayoutX(height*(3.7038/100));
+		retour.setLayoutY(height*(3.7038/100));
+		retour.setFitHeight(height*(9.25/100));
+		retour.setFitWidth(height*(9.25/100));
+		
 		
 		startRoot.getChildren().addAll(play, quit,multiplay,retour);
 		
+		retour.setVisible(false);
 		play.setVisible(false);
 		multiplay.setVisible(false);
 		quit.setVisible(false);
 		retour.setVisible(false);
+		visible_change(getButtonDifficulty(),false);
+		visible_change(getButtonMulti(),false);
 		
 		//Mise en place du boutton setting
 		
-		setting_button = new Button();
-		
+		setting_button = new ImageView();
 		setting_button.setId("settings_button");
-		setting_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		setting_button.setPrefSize(height*20/100, height*20/100);
-		
-		setting_button.setLayoutX(width-setting_button.getPrefWidth());
+		setting_button.setFitWidth(height*(16.6667/100));
+		setting_button.setFitHeight(height*(16.6667/100));
+		Image imageSetting = new Image(getClass().getResourceAsStream("setting_button.png"));
+		setting_button.setImage(imageSetting);
+		setting_button.setLayoutX(width-setting_button.getFitWidth());
 		setting_button.setLayoutY(0);
 		
 		
@@ -222,77 +207,33 @@ public class GameStart {
 		//Mise en place de la barre de progression
 		
 		progressBar = new ProgressBar(0);
-		
-		progressBar.setPrefSize(width/2.5,75);
-		
+		progressBar.setPrefSize(width/2.5,height*(6.95/100));
 		progressBar.setLayoutX(width/2 - progressBar.getPrefWidth()/2);
-		progressBar.setLayoutY(350);
+		progressBar.setLayoutY(height*(32.4075/100));
 		
 		
 		//Mise en place du boutton start
 		
-		start_button = new Button();
-		start_button.setCursor(Cursor.HAND);
+		start_button = new ImageView();
 		start_button.setId("start_button");
-		start_button.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		start_button.setDefaultButton(true);
-		
-		
-		start_button.setPrefSize(width*75/100,height*20/100);
-		
-		start_button.setLayoutX(width/2 - start_button.getPrefWidth()/2);
-		start_button.setLayoutY(height/2 - start_button.getPrefHeight()/2);
-		
-		
-		//Lorsqu'on clique sur le bouton, on active une fonction qui fait augmenter la jauge de chargement
-		
-		start_button.setOnAction(value ->  {
-			court.sound("starting.wav");
-			startRoot.getChildren().removeAll(start_button);
-			startRoot.getChildren().addAll(progressBar);
-			
-			
-			if (charge == false) {
-				charge = true;
-				Timer chrono = new Timer();
-				chrono.schedule(new TimerTask() {
-	
-					int time = 25;
-					@Override
-					public void run() {
-						
-						avancer(progressBar);
-						
-						
-						if (time ==0) {
-							charge=true;
-							progressBar.setVisible(false);
-							curseur_droit.setVisible(true);
-							curseur_gauche.setVisible(true);
-							visible_change(getMenuButton(),true);
-							initCurrentButton();
-				        	chrono.cancel();
-				        	
-				        	
-						}
-						time--;
-					}
-					
-				}, 100,15);
-			}
-			else {
-				visible_change(getMenuButton(),true);
-			}
-				
-		  });
+		start_button.setFitWidth(width*(34.31699/100));
+		start_button.setFitHeight(height*(10.1028/100));
+		Image imageStart = new Image(getClass().getResourceAsStream("start_button.png"));
+		start_button.setImage(imageStart);
+		start_button.setLayoutX(width/2 - start_button.getFitWidth()/2);
+		start_button.setLayoutY(height/2 - start_button.getFitHeight()/2);
 		
 		startRoot.getChildren().addAll(title,start_button);
 		
-		
+		initButtonOnline();
+		visible_change(getButtonOnline(),false);
+		titleOnline.setVisible(false);
+			
 	}
 	
-	public void start() {
+	public void start(Curseur c) {
 		if (!start) {
+			c.setVisible(false);
 			start = true;
 			court.sound("starting.wav");
 			startRoot.getChildren().removeAll(start_button);
@@ -314,13 +255,10 @@ public class GameStart {
 						if (time ==0) {
 							charge=true;
 							progressBar.setVisible(false);
-							curseur_droit.setVisible(true);
-							curseur_gauche.setVisible(true);
 							visible_change(getMenuButton(),true);
-							initCurrentButton();
+							c.setVisible(true);
+							afficheNavigation.setVisible(false);
 				        	chrono.cancel();
-				        	
-				        	
 						}
 						time--;
 					}
@@ -334,21 +272,104 @@ public class GameStart {
 	}
 	
 	
-	public void initCurrentButton() {
-		this.current_button = getMenuButton();
-	}
-	
 	//Cette fonction fait apparaitre les bouton de jeu et pour quitter
-	public static void visible_change(Button [] t,boolean b) {
+	public static void visible_change(ImageView [] t,boolean b) {
 		for (int i = 0;i<t.length;i++) {
 			t[i].setVisible(b);
 		}
 	}
 	
+	public static void visible_change(Button[] t,boolean b) {
+		for (int i = 0;i<t.length;i++) {
+			t[i].setVisible(b);
+		}
+	}
+	
+	public void initAfficheNavigation() {
+		ImageView monter = new ImageView();
+		Image imageMonter = new Image(getClass().getResourceAsStream("Image_Info/monter.png"));
+		monter.setImage(imageMonter);
+		monter.setFitWidth(imageMonter.getWidth()/4);
+		monter.setFitHeight(imageMonter.getHeight()/4);
+		monter.setLayoutX(height*(0.463/100));
+		monter.setLayoutY(0);
+		afficheNavigation.getChildren().add(monter);
+		
+		ImageView descendre = new ImageView();
+		Image imageDescendre = new Image(getClass().getResourceAsStream("Image_Info/descendre.png"));
+		descendre.setImage(imageDescendre);
+		descendre.setFitWidth(imageDescendre.getWidth()/4);
+		descendre.setFitHeight(imageDescendre.getHeight()/4);
+		descendre.setLayoutX(height*(0.463/100));
+		descendre.setLayoutY(afficheNavigation.getPrefHeight()*1/4);
+		afficheNavigation.getChildren().add(descendre);
+		
+		
+		ImageView valider = new ImageView();
+		Image imageValider= new Image(getClass().getResourceAsStream("valider.png"));
+		valider.setImage(imageValider);
+		valider.setFitWidth(imageValider.getWidth()/4);
+		valider.setFitHeight(imageValider.getHeight()/4);
+		valider.setLayoutX(height*(0.463/100));
+		valider.setLayoutY(afficheNavigation.getPrefHeight()*2/4);
+		afficheNavigation.getChildren().add(valider);
+		
+		ImageView info = new ImageView();
+		Image imageInfo= new Image(getClass().getResourceAsStream("info.png"));
+		info.setImage(imageInfo);
+		info.setFitWidth(imageInfo.getWidth()/4);
+		info.setFitHeight(imageInfo.getHeight()/4);
+		info.setLayoutX(height*(0.463/100));
+		info.setLayoutY(afficheNavigation.getPrefHeight()*3/4);
+		afficheNavigation.getChildren().add(info);
+		
+		
+		ImageView touche_Up = new ImageView();
+		Image imageUp = new Image(getClass().getResourceAsStream("Image_Info/touche-up.png"));
+        touche_Up.setImage(imageUp);
+		touche_Up.setFitHeight(imageUp.getWidth()/11);
+		touche_Up.setFitWidth(imageUp.getHeight()/11);
+		touche_Up.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_Up.setLayoutY(monter.getLayoutY() + monter.getFitHeight()/2 - touche_Up.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_Up);
+		
+		
+		ImageView touche_Down = new ImageView();
+		Image imageDown = new Image(getClass().getResourceAsStream("Image_Info/touche-down.png"));
+        touche_Down.setImage(imageDown);
+		touche_Down.setFitHeight(imageDown.getWidth()/11);
+		touche_Down.setFitWidth(imageDown.getHeight()/11);
+		touche_Down.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_Down.setLayoutY(descendre.getLayoutY() + descendre.getFitHeight()/2 - touche_Down.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_Down);
+		
+		ImageView touche_Entree = new ImageView();
+		Image imageEntree = new Image(getClass().getResourceAsStream("Image_Info/touche-entrer.png"));
+		touche_Entree.setImage(imageEntree);
+		touche_Entree.setFitHeight(imageEntree.getWidth()/11);
+		touche_Entree.setFitWidth(imageEntree.getHeight()/11);
+		touche_Entree.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_Entree.setLayoutY(valider.getLayoutY() + valider.getFitHeight()/2 - touche_Entree.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_Entree);
+		
+		ImageView touche_I = new ImageView();
+		Image imageI = new Image(getClass().getResourceAsStream("Image_Info/touche-i.png"));
+		touche_I.setImage(imageI);
+		touche_I.setFitHeight(imageI.getWidth()/11);
+		touche_I.setFitWidth(imageI.getHeight()/11);
+		touche_I.setLayoutX(afficheNavigation.getPrefWidth()*3/4);
+		touche_I.setLayoutY(info.getLayoutY() + info.getFitHeight()/2 - touche_I.getFitHeight()/2);
+		afficheNavigation.getChildren().addAll(touche_I);
+		
+		startRoot.getChildren().add(afficheNavigation);
+	}
+	
 	void setCharge(boolean t) {
 		charge = t;
 	}
+	
 	//Cette fonction fait avancer la barre de chargmement
+	
 	public static void avancer(ProgressBar pb) {
 		pb.setProgress(0.1+pb.getProgress());
 		
@@ -357,419 +378,70 @@ public class GameStart {
 	public void setBackground(String s) {
 		gameRoot.setId(s);
 	}
-
-	public boolean isInt(TextField input, String message){
-		try{
-			int age = Integer.parseInt(input.getText());
-			if(!message.equals("")){
-				if(age>0){
-					error.setVisible(false);
-				}else{
-					error.setVisible(true);
-				}
-			}
-			return true;
-		}catch(NumberFormatException e){
-			if(message.equals("")){
-				error.setVisible(false);
-				return false;
-			}
-			error.setVisible(true);
-			return false;
-		}
-	}
 	
-	public void parametre() {
-		visible_change(getMenuButton(),false);
-		title.setVisible(false);
-		
-		
-		//Mise en place des settings
-		
-		title_s = new Button();
-		title_s.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_s.setId("title");
-		
-		title_s.setPrefSize(width*21/100, height*6/100);
-		title_s.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_s.setLayoutY(height*5/100);
-		
-		
-		//Mise en place du choix de l'arriere plan
-		title_choix_bg = new Button();
-		title_choix_bg.setId("title_choix_bg");
-		title_choix_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		title_choix_bg.setPrefSize(width*22/100,height*4/100);
-		title_choix_bg.setLayoutX(width*1/100);
-		title_choix_bg.setLayoutY(height*19/100);
-		
-		
-		choix_galaxie = new Button();
-		choix_galaxie.setId("choix_galaxie");
-		choix_galaxie.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		choix_galaxie.setPrefSize(width*(10.5/100),height*(11.2/100));
-		choix_galaxie.setLayoutX(width*(24.4/100));
-		choix_galaxie.setLayoutY(height*(18.6/100));
-		
-		
-		choix_trou_noir = new Button();
-		choix_trou_noir.setId("choix_trou_noir");
-		choix_trou_noir.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		choix_trou_noir.setPrefSize(width*(10.5/100),height*(11.2/100));
-		choix_trou_noir.setLayoutX(width*(36.9/100));
-		choix_trou_noir.setLayoutY(height*(18.6/100));
-		
-		
-		choix_earth = new Button();
-		choix_earth.setId("choix_earth");
-		choix_earth.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_earth.setCursor(Cursor.HAND);
-		choix_earth.setPrefSize(width*(10.5/100),height*(11.2/100));
-		choix_earth.setLayoutX(width*(49.8/100));
-		choix_earth.setLayoutY(height*(18.6/100));
-		
-		choix_earth.setOnAction(value ->  {
-			gameRoot.setId("choix_earth");
-	    });
-		
-		
-		choix_earth2 = new Button();
-		choix_earth2.setId("choix_earth2");
-		choix_earth2.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		choix_earth2.setCursor(Cursor.HAND);
-		choix_earth2.setPrefSize(width*(10.5/100),height*(11.2/100));
-		choix_earth2.setLayoutX(width*(62.7/100));
-		choix_earth2.setLayoutY(height*(18.6/100));
-		
-		choix_earth2.setOnAction(value ->  {
-			gameRoot.setId("choix_earth2");
-	    });
-		
-		finish_button = new Button();
-		finish_button.setId("finish_button");
-		finish_button.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		finish_button.setPrefSize(width*(11.8/100),height*(3.8/100));
-		finish_button.setLayoutX(width/2 - finish_button.getPrefWidth()/2);
-		finish_button.setLayoutY(height-height*(9.3/100));
-		
-		
-		startRoot.getChildren().addAll(title_s,title_choix_bg,choix_galaxie,choix_trou_noir,choix_earth,choix_earth2,finish_button);
-		
-		
-		
-		// User can choose between with middle bar or without middle bar 
-		
-		title_middle_bar = new Button();
-		title_middle_bar.setId("title_middle_bar");
-		title_middle_bar.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		title_middle_bar.setPrefSize(width*(18.7/100),height*(3.6/100));
-		title_middle_bar.setLayoutX(width*(1.05/100));
-		title_middle_bar.setLayoutY(height*(41.7/100));
-		
-		middle_bar_yes = new Button();
-		middle_bar_yes.setId("middle_bar_yes");
-		middle_bar_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		middle_bar_yes.setPrefSize(width*(6.5/100),height*(10.8/100));
-		middle_bar_yes.setLayoutX(width*(21.06/100));
-		middle_bar_yes.setLayoutY(width*(20.84/100));
-		
-		
-		
-		middle_bar_no = new Button();
-		middle_bar_no.setId("middle_bar_no");
-		middle_bar_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		middle_bar_no.setPrefSize(width*(6.5/100),height*(10.8/100));
-		middle_bar_no.setLayoutX(width*(28.86/100));
-		middle_bar_no.setLayoutY(width*(20.84/100));
-		
-		//Mise en place du choix du skin de la balle pour le joueur
-		
-		title_ball_skin = new Button();
-		title_ball_skin.setId("title_ball_skin");
-		title_ball_skin.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		
-		title_ball_skin.setPrefSize(width*(18.6/100),height*(3.86/100));
-		title_ball_skin.setLayoutX(height*(3.86/100)/2);
-		title_ball_skin.setLayoutY(height*(50.926/100));
-		
-		
-		choix_ball_sun = new Button();
-		choix_ball_sun.setId("choix_ball_sun");
-		choix_ball_sun.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_sun.setCursor(Cursor.HAND);
-		
-		choix_ball_sun.setPrefSize(width*(2.64/100),width*(2.64/100));
-		choix_ball_sun.setLayoutX(title_ball_skin.getLayoutX()+title_ball_skin.getPrefWidth()+height*(3.86/100)/2);
-		choix_ball_sun.setLayoutY(height*(50.926/100));
-		choix_ball_sun.setOnAction(value ->  {
-			gw.setBallSkin("sun_ball.png");
-	    });
-		
-		choix_ball_green = new Button();
-		choix_ball_green.setId("choix_ball_green");
-		choix_ball_green.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_green.setCursor(Cursor.HAND);
-		
-		choix_ball_green.setPrefSize(width*(2.553/100),height*(5.02/100));
-		choix_ball_green.setLayoutX(choix_ball_sun.getLayoutX()+choix_ball_sun.getPrefWidth()+height*(4.63/100)/2);
-		choix_ball_green.setLayoutY(height*(50.926/100));
-		
-		
-		choix_ball_moon = new Button();
-		choix_ball_moon.setId("choix_ball_moon");
-		choix_ball_moon.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_moon.setCursor(Cursor.HAND);
-		
-		choix_ball_moon.setPrefSize(width*(2.71/100),height*(5.5/100));
-		choix_ball_moon.setLayoutX(choix_ball_green.getLayoutX()+choix_ball_green.getPrefWidth()+height*(4.63/100)/2);
-		choix_ball_moon.setLayoutY(height*(50.926/100));
-		
-		
-		choix_ball_jupiter = new Button();
-		choix_ball_jupiter.setId("choix_ball_jupiter");
-		choix_ball_jupiter.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		choix_ball_jupiter.setCursor(Cursor.HAND);
-		
-		choix_ball_jupiter.setPrefSize(width*(2.06/100),height*(5.4/100));
-		choix_ball_jupiter.setLayoutX(choix_ball_moon.getLayoutX()+choix_ball_moon.getPrefWidth()+height*(4.63/100)/2);
-		choix_ball_jupiter.setLayoutY(height*(50.926/100));
-		
-		
-		choix_ball_saturne = new Button();
-		choix_ball_saturne.setId("choix_ball_saturne");
-		choix_ball_saturne.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		
-		choix_ball_saturne.setPrefSize(width*(3.1/100),height*(4.96/100));
-		choix_ball_saturne.setLayoutX(choix_ball_jupiter.getLayoutX()+choix_ball_jupiter.getPrefWidth()+height*(4.63/100)/2);
-		choix_ball_saturne.setLayoutY(height*(50.926/100));
-		
-		choix_ball_lila = new Button();
-		choix_ball_lila.setId("choix_ball_lila");
-		choix_ball_lila.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		
-		choix_ball_lila.setPrefSize(width*(2.5912/100),height*(4.96/100));
-		choix_ball_lila.setLayoutX(choix_ball_saturne.getLayoutX()+choix_ball_saturne.getPrefWidth()+height*(4.63/100)/2);
-		choix_ball_lila.setLayoutY(height*(50.926/100));
-		
-		
-		choix_ball_earth = new Button();
-		choix_ball_earth.setId("choix_ball_earth");
-		choix_ball_earth.getStylesheets().addAll(this.getClass().getResource("style_ball.css").toExternalForm());
-		
-		choix_ball_earth.setPrefSize(width*(2.188),height*(5.417/100));
-		choix_ball_earth.setLayoutX(choix_ball_lila.getLayoutX()+choix_ball_lila.getPrefWidth()+height*(4.63/100)/2);
-		choix_ball_earth.setLayoutY(height*(50.926/100));
-		
-		startRoot.getChildren().addAll(title_ball_skin,choix_ball_sun,choix_ball_green
-				,choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
-				choix_ball_earth);
-		
-		
-		title_racket_difficult = new Button ();
-		title_racket_difficult.setId("racket_difficulty");
-		title_racket_difficult.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		title_racket_difficult.setPrefSize(width*(18.65/100),height*(5.247/100));
-		title_racket_difficult.setLayoutX(width*(40.52/100));
-		title_racket_difficult.setLayoutY(height*(41.7/100));
-		
-		startRoot.getChildren().addAll(title_middle_bar,middle_bar_yes,middle_bar_no,title_racket_difficult);
-		
-
-		//Ajout du nombre de points pour finir une partie
-		intInput = new TextField();
-		points = new Button();
-		points.setOnAction(e -> isInt(intInput, intInput.getText()));
-		points.setPrefSize(width*(3.5/100),height*(5.4/100));
-		points.setLayoutX(width*(28.13/100));
-		points.setLayoutY(width*(33.9/100));
-		points.setId("pointsFinaux");
-		points.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		points.setCursor(Cursor.HAND);
-
-		intInput.setPrefSize(width*(2.4714/100),height*(5.4/100));
-		intInput.setLayoutX(width*(25.13/100));
-		intInput.setLayoutY(width*(33.9/100));
-
-		//Message d'erreur
-		error = new Label("incorrect, veuillez entrez un nombre superieur a 0");
-		error.setLayoutX(width*(32.292/100));
-		error.setLayoutY(height*(39.815/100));
-		error.setFont(new Font("Serif", height*(1.852/100)));
-		error.setTextFill(Color.web("#FF0000"));
-		error.setMinHeight(height*(46.3/100));
-		error.setMinWidth(height*(46.3/100));
-		error.setVisible(false);
-
-
-
-		startRoot.getChildren().addAll(intInput, points, error);
-
-
-
-		points_bg = new Button();
-		points_bg.setId("points_background");
-		points_bg.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		points_bg.setPrefSize(width*(23.44/100), height*(4.4/100));
-		points_bg.setLayoutX(height*(0.93/100));
-		points_bg.setLayoutY(width*(33.9/100));
-
-		startRoot.getChildren().add(points_bg);
-
-
-		//Ajout de la flèche retour en arrière
-		
-		retour = new Button();
-		retour.setId("return");
-		retour.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		retour.setLayoutX(height*(3.704/100));
-		retour.setLayoutY(height*(3.704/100));
-		retour.setPrefSize(height*(9.26/100), height*(9.26/100));
-		
-
-		startRoot.getChildren().add(retour);
-		
-	}
-	
-	public void finish() {
-		intInput.setVisible(false);
-		points.setVisible(false);
-		points_bg.setVisible(false);
-		if(isInt(intInput, intInput.getText())){
-			gw.getCourt().setScoreFinal(Integer.valueOf(intInput.getText()));
-		}
-		error.setVisible(false);
-		retour(getButtonParametre());
-	}
 	
 	public void VisibleMiddleBar(boolean b) {
 		gw.Visible_middle_bar(b);
 	}
 	
 	//Cette fonction est rataché au boutton retour qu'on retrouve dans les settings, dans le choix de la difficulté et dans le choix du multijoueur
-	public void retour(Button[] btn) {
-		if (egal(btn,getButtonParametre())) {
-			intInput.setVisible(false);
-			points.setVisible(false);
-			visible_change(getButtonSkinBall(),false);
-			visible_change(getButtonBackground(),false);
-			visible_change(getMBButtonYesNo(), false);
-			title_s.setVisible(false);
-			
-		}
-		visible_change(getCurrentButton(),false);
+	public void retour(ImageView[] imageViews) {
+		visible_change(getButtonMulti(),false);
+		visible_change(getButtonDifficulty(),false);
+		visible_change(getButtonOnline(),false);
 		visible_change(getMenuButton(),true);
+		ip.setVisible(false);
+		pseudo.setVisible(false);
+		titleOnline.setVisible(false);
 		title.setVisible(true);
 	}
 	
-	public void print_setting_racket_difficulty() {
-		visible_change(getButtonParametre(),false);
-		visible_change(getButtonBackground(),false);
-		visible_change(getButtonSkinBall(),false);
-		visible_change(getMBButtonYesNo(),false);
-		choiceBox.setVisible(false);
-		title_s.setVisible(false);
-		
-		title_racket_difficulty = new Button();
-		title_racket_difficulty.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		title_racket_difficulty.setId("racket_difficulty");
-		
-		title_racket_difficulty.setPrefSize(3222/7,492/7);
-		title_racket_difficulty.setLayoutX(width/2 - title_s.getPrefWidth()/2);
-		title_racket_difficulty.setLayoutY(50);
-		
-		explication = new Label("Ici vous pouvez choisir si voulez un changent aleatoire de la taille des rackets a chaque rebond");
-		explication.setFont(Font.font("Cambria",25));
-		explication.setTextFill(Color.DARKGREY);
-		explication.setPrefWidth(1025);
-		explication.setLayoutX(width/2 - explication.getPrefWidth()/2);
-		explication.setLayoutY(150);
-		
-		button_yes = new Button();
-		button_yes.setId("RD_yes");
-		button_yes.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		
-		button_yes.setPrefSize(497/4,464/4);
-		button_yes.setLayoutX(width/2 - button_yes.getPrefWidth()-25);
-		button_yes.setLayoutY(250);
-		
-		button_no = new Button();
-		button_no.setId("RD_no");
-		button_no.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
-		
-		
-		button_no.setPrefSize(497/4,464/4);
-		button_no.setLayoutX(width/2 + button_no.getPrefWidth()+25);
-		button_no.setLayoutY(250);
-		
-		startRoot.getChildren().addAll(title_racket_difficulty,explication,button_yes,button_no);
-		
-	}
-	
-	public void reponseRacketDifficuly(boolean b) {
-		title_racket_difficulty.setVisible(false);
-		gw.setChangeRacketSize(b);
-		explication.setVisible(false);
-		title_racket_difficulty.setVisible(false);
-		choiceBox.setVisible(true);
-		title_s.setVisible(true);
-		
-		visible_change(getRDButtonYesNo(),false);
-		visible_change(getButtonParametre(),true);
-		visible_change(getButtonBackground(),true);
-		visible_change(getButtonSkinBall(),true);
-		visible_change(getMBButtonYesNo(),true);
-	}
-	
-	
 	public void chose_difficulty() {
-		
-		Button[] btn_accueil = getMenuButton();
-		visible_change(btn_accueil,false);
-		retour.setVisible(true);
-		
-		easy = new Button();
+		title.setVisible(true);
+		visible_change(getMenuButton(),false);
+		visible_change(getButtonDifficulty(),true);
+		retour.setVisible(true);	
+	}
+	
+	public void initButtonDifficulty() {
+
 		easy.setId("button_easy");
-		easy.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		Image imageEasy = new Image(getClass().getResourceAsStream("easy_button.png"));
+        easy.setImage(imageEasy);
+		easy.setFitWidth(width*(24.7222/100));
+		easy.setFitHeight(height*(6.6667/100));
+		easy.setLayoutX(width/2 - easy.getFitWidth()/2);
+		easy.setLayoutY(height*2/6);
 		
-		easy.setPrefSize(width*45/100,height*10/100);
-		easy.setLayoutX(width/2 - easy.getPrefWidth()/2);
-		easy.setLayoutY(height*30/100);
 		
 		
 		
-		medium = new Button();
 		medium.setId("button_medium");
-		medium.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		Image imageMedium = new Image(getClass().getResourceAsStream("medium_button.png"));
+        medium.setImage(imageMedium);
 		
-		medium.setPrefSize(width*45/100,height*10/100);
-		medium.setLayoutX(width/2 - medium.getPrefWidth()/2);
-		medium.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*45/100);
+		medium.setFitWidth(width*(24.7222/100));
+		medium.setFitHeight(height*(6.6667/100));
+		medium.setLayoutX(width/2 - medium.getFitWidth()/2);
+		medium.setLayoutY(height*3/6);
 		
 		
-		hard = new Button();
 		hard.setId("button_hard");
-		hard.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		Image imageHard = new Image(getClass().getResourceAsStream("hard_button.png"));
+        hard.setImage(imageHard);
+		hard.setFitWidth(width*(24.7222/100));
+		hard.setFitHeight(height*(6.6667/100));
+		hard.setLayoutX(width/2 - hard.getFitWidth()/2);
+		hard.setLayoutY(height*4/6);
 		
-		hard.setPrefSize(width*45/100,height*10/100);
-		hard.setLayoutX(width/2 - hard.getPrefWidth()/2);
-		hard.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*85/100);
 		
-		insane = new Button();
 		insane.setId("button_insane");
-		insane.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		insane.setPrefSize(width*45/100,height*10/100);
-		insane.setLayoutX(width/2 - insane.getPrefWidth()/2);
-		insane.setLayoutY(easy.getLayoutY() + easy.getLayoutY()*125/100);
+		Image imageInsane = new Image(getClass().getResourceAsStream("insane_button.png"));
+		insane.setImage(imageInsane);
+		insane.setFitWidth(width*(24.7222/100));
+		insane.setFitHeight(height*(6.6667/100));
+		insane.setLayoutX(width/2 - insane.getFitWidth()/2);
+		insane.setLayoutY(height*5/6);
 		
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
@@ -788,44 +460,186 @@ public class GameStart {
 	}
 
 		//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
-	public void choose_multiplay() {
-		retour.setVisible(true);
-		visible_change(getMenuButton(),false);
-		
-		button_1vs1 = new Button();
+	public void initChooseMultiplay() {
 		button_1vs1.setId("button_1vs1");
-		button_1vs1.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		Image image1vs1 = new Image(getClass().getResourceAsStream("button_1vs1.png"));
+		button_1vs1.setImage(image1vs1);
+		button_1vs1.setFitWidth(width*(24.7222/100));
+		button_1vs1.setFitHeight(height*(6.6667/100));
+		button_1vs1.setLayoutX(width/2 - button_1vs1.getFitWidth()/2);
 		
-		button_1vs1.setPrefSize(width*45/100,height*10/100);
-		button_1vs1.setLayoutX(width/2 - button_1vs1.getPrefWidth()/2);
-		button_1vs1.setLayoutY(height*30/100);
-		
-		
-		
-		button_2vs2 = new Button();
 		button_2vs2.setId("button_2vs2");
-		button_2vs2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		Image image2vs2 = new Image(getClass().getResourceAsStream("button_2vs2.png"));
+		button_2vs2.setImage(image2vs2);
+		button_2vs2.setFitWidth(width*(24.7222/100));
+		button_2vs2.setFitHeight(height*(6.6667/100));
+		button_2vs2.setLayoutX(width/2 - button_2vs2.getFitWidth()/2);
+		button_2vs2.setLayoutY(height/2 - button_2vs2.getFitHeight()/2);
 		
-		button_2vs2.setPrefSize(width*45/100,height*10/100);
-		button_2vs2.setLayoutX(width/2 - button_2vs2.getPrefWidth()/2);
-		button_2vs2.setLayoutY(button_1vs1.getLayoutY() + button_1vs1.getLayoutY()*45/100);
+		button_1vs1.setLayoutY(button_2vs2.getLayoutY()-height*(4.63/100)-button_1vs1.getFitHeight());
 		
 		
-		online = new Button();
 		online.setId("button_online");
-		online.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		online.setPrefSize(width*45/100,height*10/100);
-		online.setLayoutX(width/2 - online.getPrefWidth()/2);
-		online.setLayoutY(button_1vs1.getLayoutY() + button_1vs1.getLayoutY()*85/100);
-		
-		
+		Image imageOnline = new Image(getClass().getResourceAsStream("online.png"));
+		online.setImage(imageOnline);
+		online.setFitWidth(width*(24.7222/100));
+		online.setFitHeight(height*(6.6667/100));
+		online.setLayoutX(width/2 - online.getFitWidth()/2);
+		online.setLayoutY(button_2vs2.getLayoutY()+height*(4.63/100)+button_2vs2.getFitHeight());
+	
 		
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2,online);
 	}
 	
-	public void jouer_online() {
+	public void choose_multiplay() {
+		retour.setVisible(true);
+		visible_change(getMenuButton(),false);
+		visible_change(getButtonMulti(),true);
+	}
+	
+	public void initButtonOnline() {
+		Image imageTitleOnline = new Image(getClass().getResourceAsStream("online.png"));
+		titleOnline.setImage(imageTitleOnline);
+		titleOnline.setFitWidth(imageTitleOnline.getWidth()/2);
+		titleOnline.setFitHeight(imageTitleOnline.getHeight()/2);
+		titleOnline.setLayoutX(width/2 - titleOnline.getFitWidth()/2);
+		titleOnline.setLayoutY(height*(4.63/100));	
+		startRoot.getChildren().addAll(titleOnline);
 		
+		
+		imageIp.setId("ip");
+		Image imageTextIp = new Image(getClass().getResourceAsStream("ip.png"));
+		imageIp.setImage(imageTextIp);
+		imageIp.setFitWidth(imageTextIp.getWidth()/2);
+		imageIp.setFitHeight(imageTextIp.getHeight()/2);
+		imageIp.setLayoutX(width*1/4);
+		imageIp.setLayoutY(height*1/4);	
+		startRoot.getChildren().addAll(imageIp);
+		
+		
+		ipInput.setPrefSize(width/5,imageIp.getFitHeight());
+		ipInput.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth() + height*(4.63/100));
+		ipInput.setLayoutY(imageIp.getLayoutY());
+		ipInput.setVisible(false);
+		startRoot.getChildren().addAll(ipInput);
+		
+		
+		ip.setMinHeight(height*(46.3/100));
+		ip.setMinWidth(height*(46.3/100));
+		ip.setLayoutX(imageIp.getLayoutX()+imageIp.getFitWidth()+(height*(4.63/100)*2));
+		ip.setLayoutY(imageIp.getLayoutY() + imageIp.getFitHeight()/2 - ip.getMinHeight()/2);
+		ip.setFont(new Font("Serif", imageIp.getFitHeight()/2));
+		ip.setTextFill(Color.web("#FF0000"));
+		ip.setVisible(false);
+		startRoot.getChildren().add(ip);
+		
+		
+		valideIp.setId("Valideip");
+		Image imageOk = new Image(getClass().getResourceAsStream("ok.png"));
+		valideIp.setImage(imageOk);
+		valideIp.setFitWidth(imageOk.getWidth()/2);
+		valideIp.setFitHeight(imageIp.getFitHeight());
+		valideIp.setLayoutX(ip.getLayoutX()+ip.getMinWidth()+100);
+		valideIp.setLayoutY(imageIp.getLayoutY());	
+		startRoot.getChildren().addAll(valideIp);
+		valideIp.setVisible(false);
+		
+		
+		imagePseudo.setId("pseudo");
+		Image imageTextPseudo = new Image(getClass().getResourceAsStream("pseudo.png"));
+		imagePseudo.setImage(imageTextPseudo);
+		imagePseudo.setFitWidth(imageTextPseudo.getWidth()/2);
+		imagePseudo.setFitHeight(imageTextPseudo.getHeight()/2);
+		imagePseudo.setLayoutX(width*1/4-imagePseudo.getFitWidth()/2);
+		imagePseudo.setLayoutY(height*2/4);	
+		startRoot.getChildren().addAll(imagePseudo);
+		
+		
+		pseudoInput.setPrefSize(width/5,imagePseudo.getFitHeight());
+		pseudoInput.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth() + height*(4.63/100));
+		pseudoInput.setLayoutY(imagePseudo.getLayoutY());
+		pseudoInput.setVisible(false);
+		startRoot.getChildren().addAll(pseudoInput);
+		
+		
+		pseudo.setMinHeight(height*(46.3/100));
+		pseudo.setMinWidth(height*(46.3/100));
+		pseudo.setLayoutX(imagePseudo.getLayoutX()+imagePseudo.getFitWidth()+(height*(4.63/100)*2));
+		pseudo.setLayoutY(imagePseudo.getLayoutY() + imagePseudo.getFitHeight()/2 - pseudo.getMinHeight()/2);
+		pseudo.setFont(new Font("Serif", imagePseudo.getFitHeight()/2));
+		pseudo.setTextFill(Color.web("#FF0000"));
+		pseudo.setVisible(false);
+		startRoot.getChildren().add(pseudo);
+		
+		
+		validePseudo.setId("Validepseudo");
+		validePseudo.setImage(imageOk);
+		validePseudo.setFitWidth(imageOk.getWidth()/2);
+		validePseudo.setFitHeight(imagePseudo.getFitHeight());
+		validePseudo.setLayoutX(pseudo.getLayoutX()+pseudo.getMinWidth()+(height*(4.63/100))*2);
+		validePseudo.setLayoutY(imagePseudo.getLayoutY());	
+		startRoot.getChildren().addAll(validePseudo);
+		validePseudo.setVisible(false);
+		
+		valider.setId("Validepseudo");
+		Image imageTextValider = new Image(getClass().getResourceAsStream("valider.png"));
+		valider.setImage(imageTextValider);
+		valider.setFitWidth(imageTextValider.getWidth()/2);
+		valider.setFitHeight(imageTextValider.getHeight()/2);
+		valider.setLayoutX(width/2 -valider.getFitWidth()/2);
+		valider.setLayoutY(height*3/4);	
+		startRoot.getChildren().addAll(valider);
+		validePseudo.setVisible(false);
+		
+		
+	}
+	
+	public void choisirIp() {
+		valideIp.setVisible(true);
+		ipInput.setVisible(true);
+		ip.setVisible(false);
+	}
+	
+	public void valideIp() {
+		String s = ipInput.getText();
+		if(s.equals("")) {
+			ip.setText("Spacepong.fr");
+		}
+		else {
+			ip.setText(s);
+		}
+		valideIp.setVisible(false);
+		ipInput.setVisible(false);
+		ip.setVisible(true);
+	}
+	
+	public void choisirPseudo() {
+		validePseudo.setVisible(true);
+		pseudoInput.setVisible(true);
+		pseudo.setVisible(false);
+	}
+	
+	public void validePseudo() {
+		String s = pseudoInput.getText();
+		if(s.equals("")) {
+			pseudo.setText("Votre pseudo ?");
+		}
+		else {
+			pseudo.setText(s);
+		}
+		validePseudo.setVisible(false);
+		pseudoInput.setVisible(false);
+		pseudo.setVisible(true);
+	}
+	
+	
+	public void jouer_online() {
+		title.setVisible(false);
+		titleOnline.setVisible(true);
+		visible_change(getButtonMulti(),false);
+		visible_change(getButtonOnline(),true);
+		ip.setVisible(true);
+		pseudo.setVisible(true);
 	}
 	
 	public void VisibleMiseAJourMultiButton() {
@@ -850,110 +664,44 @@ public class GameStart {
 		}
 	}
 	
-	public Button[] getMenuButton() {
-		Button[] tab = {setting_button,play,multiplay,quit};
+	public ImageView[] getMenuButton() {
+		ImageView[] tab = {setting_button,play,multiplay,quit};
 		return tab;
 	}
 	
-	public Button[] getButtonDifficulty() {
-		Button[] tab = {retour,easy,medium,hard,insane};
+	public ImageView[] getButtonDifficulty() {
+		ImageView[] tab = {retour,easy,medium,hard,insane};
 		return tab;
 	}
 	
-	public Button[] getButtonMulti() {
-		Button[] tab = {retour,button_1vs1,button_2vs2,online};
+	public ImageView[] getButtonMulti() {
+		ImageView[] tab = {retour,button_1vs1,button_2vs2,online};
 		return tab;
 	}
 	
-	public Button[] getButtonParametre() {
-		Button[] tab = {retour,title_choix_bg,title_middle_bar,title_ball_skin,title_racket_difficult,points_bg,finish_button};
+	public ImageView[] getStartButton() {
+		ImageView[] tab = {start_button};
 		return tab;
 	}
 	
-	public Button[] getButtonSkinBall() {
-		Button[] tab_skin= {choix_ball_sun,choix_ball_green,
-				choix_ball_moon,choix_ball_jupiter,choix_ball_saturne,choix_ball_lila,
-				choix_ball_earth};
-		
-		return tab_skin;
-	}
-	
-	public Button[] getButtonBackground() {
-		Button[] tab_setting = {choix_galaxie,choix_trou_noir,choix_earth,choix_earth2};
-		
-		return tab_setting;
-	}
-	
-	public Button[] getMBButtonYesNo(){
-		Button[] tab = {middle_bar_no,middle_bar_yes};
-		
+	public ImageView[] getButtonOnline(){
+		ImageView[] tab = {retour,imageIp,imagePseudo,valider};
 		return tab;
 	}
 	
-	public Button[] getRDButtonYesNo(){
-		Button[] tab = {button_yes,button_no};
-		
+	public ImageView[] getButtonIp(){
+		ImageView[] tab = {valideIp};
+		return tab;
+	}
+	
+	public ImageView[] getButtonPseudo(){
+		ImageView[] tab = {validePseudo};
 		return tab;
 	}
 	
 	//Mise en place de la fonction pour placer les curseur en fonction d'un bouton
 	
-	public void bouger_curseur(Button btn,Pane p) {
-		//On supprime les curseur
-		
-		p.getChildren().removeAll(curseur_droit,curseur_gauche);
-		
-		//Changement de la position des curseurs en fonction du btn mis en paramètre
-
-	    curseur_droit.setCenterX(btn.getLayoutX()+btn.getPrefWidth()+25);
-	    curseur_droit.setCenterY(btn.getLayoutY()+btn.getPrefHeight()/2);
-	    
-	    //Mise en place du curseur gauche;
-	    
-		curseur_gauche.setCenterX(btn.getLayoutX()-25);
-	    curseur_gauche.setCenterY(btn.getLayoutY()+btn.getPrefHeight()/2);
-	    
-	    //On réaffiche les curseurs
-	    p.getChildren().addAll(curseur_droit,curseur_gauche);
-	}
 	
-	//Fonction pour incrémenter ou décrémenter l'indice des curseurs en fonction de la taille du tableau de bouton
-	
-	public void IncrementeIndice(Button[] btn) {
-		if(indice==btn.length-1) {
-			indice = 0;
-		}
-		else {
-			indice+=1;
-		}
-	}
-	
-	public void DecrementeIndice(Button[] btn) {
-		if(indice==0) {
-			indice = btn.length-1;
-		}
-		else {
-			indice-=1;
-		}
-	}
-	
-	//Fonction pour récuppérer l'indice du curseur
-	
-	public int getCurseurIndice() {
-		return indice;
-	}
-	
-	//Fonction pour recuperer le tableau des boutons courant
-	
-	public Button[] getCurrentButton() {
-		return current_button;
-	}
-	
-	public void setCurrentButton(Button[] btn) {
-		indice=0;
-		current_button = btn;
-		bouger_curseur(current_button[indice],startRoot);
-	}
 	
 	//Fonction auxilliaire permettant de determiner si 2 tableaux ont le même contenu
 	

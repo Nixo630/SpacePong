@@ -1,0 +1,47 @@
+#joueur1{
+    -fx-background-image: url("Image_Info/joueur_1.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+
+#joueur2{
+    -fx-background-image: url("Image_Info/joueur_2.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#touche_z{
+    -fx-background-image: url("Image_Info/touche-z.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#touche_x{
+    -fx-background-image: url("Image_Info/touche-x.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#touche_p{
+    -fx-background-image: url("Image_Info/touche-p.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#touche_q{
+    -fx-background-image: url("Image_Info/touche-q.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+#touche_r{
+    -fx-background-image: url("Image_Info/touche-r.png");
+    -fx-background-color: TRANSPARENT;
+    -fx-background-size: cover;
+}
+
+
+
+
+
