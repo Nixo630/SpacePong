@@ -46,12 +46,26 @@ public class App extends Application {
         
         class Player implements RacketController {
             State state = State.IDLE;
+            Power power = Power.IDLE;
 
             @Override
             public State getState() {
                 return state;
             }
+            @Override
+            public void setState(RacketController.State s) {
+                state = s;
+            }
+            @Override
+            public void setPower(RacketController.Power p) {
+                power = p;
+            }
+            @Override
+            public Power getPower() {
+                return power;
+            }
         }
+        
         var playerA = new Player();
         var playerB = new Player();
         var playerC = new Player();
@@ -100,7 +114,10 @@ public class App extends Application {
                 	case "button_hard": gameStart.jouer_solo(3);curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_insane": gameStart.jouer_solo(4);curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	
-                	case "button_1vs1": gameStart.jouer_multi(false);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "button_1vs1": gameStart.afficheFun();curseur.setCurrentButton(gameStart.getButtonFun());break;
+                	case "fun":gameStart.choisir_fun(true);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	case "normal": gameStart.choisir_fun(false);curseur.setCurrentButton(gameStart.getMenuButton());break;
+                	
                 	case "button_2vs2": gameStart.jouer_multi(true);curseur.setCurrentButton(gameStart.getMenuButton());break;
                 	case "button_online":gameStart.jouer_online();curseur.setCurrentButton(gameStart.getButtonOnline());break;
                 	
@@ -201,7 +218,16 @@ public class App extends Application {
                 		gameView.quitter();
                     	break;
                 	}
-                	
+                case D:
+                    if (court.nowTimerA == 0 && court.getPlayerA().getPower() != RacketController.Power.IDLE) {
+                        court.useCurrentPowerA();//pour ne pas permettre à l'utilisateur de cliquer plusieurs fois pour avoir le meme pouvoir quand
+                        court.powerUsedA = true;
+                    }//il en a qui est actif
+                case K:
+                    if (court.nowTimerB == 0 && court.getPlayerB().getPower() != RacketController.Power.IDLE) {
+                        court.useCurrentPowerB();
+                        court.powerUsedB = true;
+                    }
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
