@@ -30,7 +30,7 @@ public class OnlineGameView {
     private final Rectangle racketA, racketB, murA, murB, murC, murD, murE;
     private final Circle ball;
     
-    private Label affScoreA, affScoreB;   
+    private Label affScoreA, affScoreB, pseudoLbl, pseudoAdvLbl;   
     private static AnimationTimer aTimer;
             
     //taille de l'écran
@@ -52,9 +52,9 @@ public class OnlineGameView {
 		this.height = dimension.getHeight();
 		this.width  = dimension.getWidth();
 		
-		this.xMargin = 50 * court.scale;
-		this.racketThickness = 10 * court.scale;
-		this.murThickness = 10.0 * court.scale;
+		this.xMargin = 50 * court.scaleX;
+		this.racketThickness = 10 * court.scaleX;
+		this.murThickness = 20.0 * court.scale;
 		
         root.setMinWidth(court.getWidth() + 2 * xMargin);
         root.setMinHeight(court.getHeight());
@@ -128,7 +128,19 @@ public class OnlineGameView {
         affScoreB.setTextFill(Color.DARKGREY);
         affScoreB.setTranslateX((court.getBallX() + xMargin)*1.25);
         
-        gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
+        pseudoLbl = new Label(court.getPseudo());
+        pseudoLbl.setFont(Font.font("Cambria",25));
+        pseudoLbl.setTextFill(Color.MAGENTA);
+        pseudoLbl.setTranslateX((court.width / 6));
+        pseudoLbl.setTranslateY(height - 100);
+        
+        pseudoAdvLbl = new Label("");
+        pseudoAdvLbl.setFont(Font.font("Cambria",25));
+        pseudoAdvLbl.setTextFill(Color.MAGENTA);
+        pseudoAdvLbl.setTranslateX(court.width - (court.width / 3));
+        pseudoAdvLbl.setTranslateY(height - 100);
+        
+        gameRoot.getChildren().addAll(racketA, racketB, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball, pseudoLbl, pseudoAdvLbl);
         this.startScene = startScene;
     }
     
@@ -159,6 +171,10 @@ public class OnlineGameView {
 
                 ball.setCenterX(court.getBallX());
                 ball.setCenterY(court.getBallY());
+                
+                if (court.pseudoAdvDef()) {
+                	pseudoAdvLbl.setText(court.getPseudoAdv());
+                }
                                      
                 
                 if(court.getScored()) {             

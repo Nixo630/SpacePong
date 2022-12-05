@@ -576,10 +576,9 @@ public class GameStart {
 			 * Cela facilite les opérations et la gestion des bugs.
 			 */
 			n = new Network();
-			// A MODIFIER EN RECUPERANT IP SERVEUR
 			r = new Requests(n, ipServer);
 
-			oc = new OnlineCourt(onlinePlayer, width, height, r);
+			oc = new OnlineCourt(onlinePlayer, width, height, r, ps);
 			r.setOnlineCourt(oc);			
 
 			ogv = new OnlineGameView(oc, onlineRoot, onlineCourtScene);
@@ -595,8 +594,12 @@ public class GameStart {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-
-						boolean received = r.sendMessage(oc.getIdPlayer(), "PLAYER_JOINED", 0.0, 0.0, true);
+						String pseudo;
+						if (ps == null || ps.equals("")) {
+							pseudo = "Anonyme";
+						}
+						else pseudo = ps.replace(" ", "_");
+						boolean received = r.sendMessage(oc.getIdPlayer(), "PLAYER_JOINED", 0.0, 0.0, pseudo, true);
 						if (received == false) {
 							sound("NoConnection.wav");
 							return;

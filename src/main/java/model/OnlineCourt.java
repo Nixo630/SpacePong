@@ -15,8 +15,12 @@ public class OnlineCourt {
     private final RacketController playerA;
     public final double width, height; // m
     
-    public final double scale;
-    public final double scaleX, scaleY;
+    public final double scale; // scale X*Y rapporté au client
+    public final double serverScale; // scale X*Y rapporté au serveur
+    
+    public final double scaleX, scaleY; // scale X rapporté au client, scale Y rapporté au client
+    public final double serverScaleX, serverScaleY; // scale X rapporté au serveur, scale Y rapporté au serveur
+    
     public final double racketSpeed; // m/s
     public final double ballRadius; // m
     // instance state
@@ -29,6 +33,11 @@ public class OnlineCourt {
     private int scoreB = 0;
     
     private int idPlayer;
+    
+    private String pseudo;
+    private String pseudoAdv;
+    
+    private boolean advDef = false;
 
     private double racketSize; // m
 
@@ -43,26 +52,32 @@ public class OnlineCourt {
     private Requests r;
     
     public OnlineCourt(RacketController playerA,
-    		double width, double height, Requests r) {
+    		double width, double height, Requests r, String pseudo) {
     	
         this.playerA = playerA;
         
         this.width = width;
         this.height = height;
         
-        this.scale = (width * height) / (1360 * 768);
-        this.scaleX = width / 1360;
-        this.scaleY = height / 768;
+        this.scale = (width * height) / (1920 * 1080);
+        this.serverScale = (1920 * 1080) / (width * height);
         
-        this.racketA = (height / 2) * scale;
-        this.racketB = (height / 2) * scale;
+        this.scaleX = width / 1920;
+        this.scaleY = height / 1080;
+        this.serverScaleX = 1920 / width;
+        this.serverScaleY = 1080 / height;
         
-        this.racketSize = 150 * scaleY;
-        this.racketSpeed = 350.0 * scale;
-        this.ballRadius = 15.0 * scale;
+        this.racketA = height / 2;
+        this.racketB = height / 2;
         
-        this.ballX = (width / 2) * scale;
-        this.ballY = (height / 2) * scale;
+        this.racketSize = 200 * scaleY;
+        this.racketSpeed = 350.0 * scaleY;
+        this.ballRadius = 30.0 * scale;
+        
+        this.ballX = width / 2;
+        this.ballY = height / 2;
+        
+        this.pseudo = pseudo;
         
         Random rd = new Random();
         idPlayer = -1 - rd.nextInt(1000);
@@ -133,7 +148,7 @@ public class OnlineCourt {
                 if (racketA < 0.0) racketA = 0.0;
                 
                 // A MODIFIER
-                else r.sendMessage(idPlayer, "RACKET_UPDATE", 0.0, racketA * scale, false);
+                else r.sendMessage(idPlayer, "RACKET_UPDATE", 0.0, racketA * serverScaleY, "null", false);
                 break;
             case IDLE:
                 break;
@@ -142,7 +157,7 @@ public class OnlineCourt {
                 if (racketA + racketSize > height) racketA = height - racketSize;
                 
                 // A MODIFIER
-                else r.sendMessage(idPlayer, "RACKET_UPDATE", 0.0, racketA * scale, false);
+                else r.sendMessage(idPlayer, "RACKET_UPDATE", 0.0, racketA * serverScaleY, "null", false);
                 break;
 		default:
 			break;
@@ -151,18 +166,18 @@ public class OnlineCourt {
     
     // VERIFIER VARIABLES / MESURES
     public void updateBall(double x, double y) {
-    	
-    	if (ballX <= 50 && ballY >= racketA && ballY <= racketA + racketSize ||
-    			(ballX >= width - 50 && ballY >= racketB && ballY <= racketB + racketSize)) { // la balle touche une raquette
+    	/*
+    	if (ballX <= 50 * scaleX && ballY >= racketA && ballY <= racketA + racketSize ||
+    			(ballX >= width - 50 * scaleX && ballY >= racketB && ballY <= racketB + racketSize)) { // la balle touche une raquette
     		sound("RacketSound.wav");
     	}
-    	else if ((ballX >= 50 && ballX <= width - 50 && ballY <= 10) // la balle touche un mur
-						|| (ballX >= 50 && ballX <= width - 50 && ballY >= height - 10)) {
+    	else if ((ballX >= 50 * scaleX && ballX <= width - 50 * scaleX && ballY <= 20 * scaleY) // la balle touche un mur
+						|| (ballX >= 50 * scaleX && ballX <= width - 50 * scaleX && ballY >= height - 20 * scaleY)) {
     		sound("WallSound.wav");
-    	}
+    	}*/
 
-    	ballX = x * scale;
-    	ballY = y * scale;    	
+    	ballX = x * scaleX;
+    	ballY = y * scaleY;    	
     }
 
     public void sound(String s) {
@@ -212,12 +227,12 @@ public class OnlineCourt {
 	}
 
 	public void setRacketA(double y) {
-		racketA = y;
+		racketA = y * scaleY;
 	}
 	
 	public void setRacketB(double y) {
 		// TODO Auto-generated method stub
-		racketB = y;
+		racketB = y * scaleY;
 	}
 
 	public int getIdPlayer() {
@@ -231,5 +246,22 @@ public class OnlineCourt {
 	
 	public void resetScored() {
 		scored = false;
+	}
+	
+	public String getPseudo() {
+		return pseudo;
+	}
+	
+	public String getPseudoAdv() {
+		return pseudoAdv;
+	}
+	
+	public void setPseudoAdv(String pseudoAdv) {
+		this.pseudoAdv = pseudoAdv;
+		if (pseudoAdv != null && !pseudoAdv.equals(""))	advDef = true;
+	}
+	
+	public boolean pseudoAdvDef() {
+		return advDef;
 	}
 }

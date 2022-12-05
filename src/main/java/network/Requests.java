@@ -24,7 +24,7 @@ public class Requests {
 		
 	// Traitement> réception d'un message
 	// Un message est composé de cette façon :
-	// {ID_MESSAGE; IP_EMETTRICE; ID_JOUEUR; MESSAGE; ARGUMENT1; ARGUMENT2; 0 (= pas d'accusé réception) ou 1 (= renvoyer accusé de réception)}
+	// {ID_MESSAGE; IP_EMETTRICE; ID_JOUEUR; MESSAGE; ARGUMENT1; ARGUMENT2; ARGUMENT3; 0 (= pas d'accusé réception) ou 1 (= renvoyer accusé de réception)}
 	public void onMessageReceived(String[] resp) {
 		HashMap<String, Object> rm = new HashMap<>(); // rm pour Response Map
 		rm.put("ip", resp[0]);
@@ -33,10 +33,11 @@ public class Requests {
 		rm.put("msg", resp[3]);
 		rm.put("arg1", Double.valueOf(resp[4]));
 		rm.put("arg2", Double.valueOf(resp[5]));
-		rm.put("AR", Integer.valueOf(resp[6]));
+		rm.put("arg3", resp[6]);
+		rm.put("AR", Integer.valueOf(resp[7]));
 				
 		if ((int) rm.get("AR") == 1) { // on demande d'émettre un AR
-			sendMessage((int) rm.get("idPlayer"), "AR", Double.valueOf((int) rm.get("idMsg")), 0.0, false);
+			sendMessage((int) rm.get("idPlayer"), "AR", Double.valueOf((int) rm.get("idMsg")), 0.0, "null", false);
 		}
 		
 		switch((String) rm.get("msg")) {
@@ -45,6 +46,9 @@ public class Requests {
 			oc.setId((int) Math.round((Double)rm.get("arg1")));
 			break;
 			
+		case "SET_PSEUDO_ADV":
+			oc.setPseudoAdv((String) rm.get("arg3"));
+						
 		case "WAITING":
 			break;
 			// On affiche un écran indiquant que l'on est en attente de joueurs
@@ -89,10 +93,10 @@ public class Requests {
 	}
 	
 	// Envoi d'un message au serveur
-	public boolean sendMessage(int id, String msg, Double arg1, Double arg2, boolean AR) {
+	public boolean sendMessage(int id, String msg, Double arg1, Double arg2, String arg3, boolean AR) {
 		try {
 			InetAddress dst = InetAddress.getByName(serverIP);
-			msg += " " + arg1 + " " + arg2;
+			msg += " " + arg1 + " " + arg2 + " " + arg3;
 			if (AR == false) n.send(dst, 57086, String.valueOf(id), msg);
 			else {
 				boolean AR_received = n.sendAR(dst, 57086, String.valueOf(id), msg);
