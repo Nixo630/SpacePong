@@ -40,6 +40,8 @@ public class GameStart {
 	//Boutton pour les parties en solo
 	private ImageView easy,medium,hard,insane;
 	
+	private ImageView normalMode;
+	private ImageView funMode;
 	//Boutton pour les parties en ligne
 	
 	private ImageView titleOnline;
@@ -122,7 +124,10 @@ public class GameStart {
 		valideIp = new ImageView();
 		
 		
+		normalMode = new ImageView();
+		funMode = new ImageView();
 		
+		initFunMode();
 		
 		
 		//Le titre est un bouton sans commande dessus
@@ -389,6 +394,7 @@ public class GameStart {
 		visible_change(getButtonMulti(),false);
 		visible_change(getButtonDifficulty(),false);
 		visible_change(getButtonOnline(),false);
+		visible_change(getButtonFun(),false);
 		visible_change(getMenuButton(),true);
 		ip.setVisible(false);
 		pseudo.setVisible(false);
@@ -447,6 +453,7 @@ public class GameStart {
 	}
 	
 	public void jouer_solo(int i) {
+		title.setVisible(true);
 		court.setDifficulty(i);
 		visible_change(getButtonDifficulty(),false);
 		
@@ -581,7 +588,7 @@ public class GameStart {
 		startRoot.getChildren().addAll(validePseudo);
 		validePseudo.setVisible(false);
 		
-		valider.setId("Validepseudo");
+		valider.setId("ValiderOnline");
 		Image imageTextValider = new Image(getClass().getResourceAsStream("valider.png"));
 		valider.setImage(imageTextValider);
 		valider.setFitWidth(imageTextValider.getWidth()/2);
@@ -648,7 +655,7 @@ public class GameStart {
 	}
 	
 	public void jouer_multi(boolean choix2v2) {
-		
+		title.setVisible(true);
 		VisibleMiseAJourMultiButton();
 		court.setIsBot(false);
 		court.setPartiEnCours(true);
@@ -662,6 +669,42 @@ public class GameStart {
 		else {
 			gw.startAnimation();
 		}
+	}
+	
+	public void initFunMode() {
+		normalMode.setId("normal");
+		Image imageNormal = new Image(getClass().getResourceAsStream("normal.png"));
+		normalMode.setImage(imageNormal);
+		normalMode.setFitWidth(imageNormal.getWidth()/3);
+		normalMode.setFitHeight(imageNormal.getHeight()/3);
+		normalMode.setLayoutX(width/2 - normalMode.getFitWidth()/2);
+		normalMode.setLayoutY(button_2vs2.getLayoutY()-50-button_1vs1.getFitHeight());
+		normalMode.setVisible(false);
+		
+		funMode.setId("fun");
+		Image imagefun = new Image(getClass().getResourceAsStream("fun.png"));
+		funMode.setImage(imagefun);
+		funMode.setFitWidth(imagefun.getWidth()/3);
+		funMode.setFitHeight(imagefun.getHeight()/3);
+		funMode.setLayoutX(width/2 - funMode.getFitWidth()/2);
+		funMode.setLayoutY(height/2 - funMode.getFitHeight()/2);
+		funMode.setVisible(false);
+		
+		startRoot.getChildren().addAll(normalMode,funMode);	
+	}
+	
+	public void afficheFun() {
+		visible_change(getButtonMulti(),false);
+		visible_change(getButtonFun(),true);
+	}
+	
+	
+	public void choisir_fun(boolean fun) {
+		visible_change(getButtonFun(),false);
+		gw.setIsFun(fun);
+		court.setIsFun(fun);
+		
+		jouer_multi(false);
 	}
 	
 	public ImageView[] getMenuButton() {
@@ -696,6 +739,11 @@ public class GameStart {
 	
 	public ImageView[] getButtonPseudo(){
 		ImageView[] tab = {validePseudo};
+		return tab;
+	}
+	
+	public ImageView[] getButtonFun(){
+		ImageView[] tab = {retour,normalMode,funMode};
 		return tab;
 	}
 	

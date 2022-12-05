@@ -18,6 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import model.Court;
+import model.RacketController;
 
 public class GameView {
     // class parameters
@@ -30,6 +31,7 @@ public class GameView {
     // children of the game main node
     private final Rectangle racketA, racketB, racketC, racketD, murA, murB, murC, murD, murE;
     private final Circle ball;
+    private final Circle ballPower;
     
     private Label affScoreA, affScoreB;   
     private static AnimationTimer aTimer;
@@ -50,6 +52,12 @@ public class GameView {
     
     //Boolean pour savoir si on est en 2vs2 ou 1vs1
     private boolean multi ;
+    
+    //Boolean pour savoir si on est dans le mode fun ou pas
+    private boolean isFun = false;
+    private int lastPowerSpend = 0;//pour savoir quand l'heure à laquelle la dernière ballPower a été faites
+    public boolean powerUsedA = false;//pour savoir quand nous avons cliqué pour utiliser un des deux pouvoirs des deux joueurs
+    public boolean powerUsedB = false;
     
     //Boutton pour les options lors de la fin du jeu
     private boolean endGame=false;
@@ -136,6 +144,11 @@ public class GameView {
         
         setBallSkin("earth_ball.png");
         
+        ballPower = new Circle();
+        ballPower.setRadius(court.getBallPowerRadius());
+        ballPower.setFill(Color.BLACK);
+        ballPower.setVisible(false);
+        
         murA = new Rectangle();//mur du haut
         murA.setWidth(court.getWidth() * scale + 2 * xMargin);
         murA.setHeight(murThickness);
@@ -182,7 +195,7 @@ public class GameView {
         affScoreB.setTextFill(Color.DARKGREY);
         affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
         
-        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball);
+        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball,ballPower);
         
         //Mise en place de l'affichage de la fin de partie
     	
@@ -238,6 +251,39 @@ public class GameView {
 	public Court getCourt() {
 		return court;
 	}
+	
+	public void setIsFun(boolean b) {
+		isFun = b;
+	}
+	
+	
+	public void popBallPower(int time) {
+        if (time == this.lastPowerSpend) {
+            return;
+        }
+        else {
+            this.lastPowerSpend = time;
+        }
+        int randomX = (int) (court.getWidth()/4 + (Math.random() * (court.getWidth()*(4/3) - court.getWidth()/4)));//coordonnee en x entre les 3 quarts 2 quarts du terrain
+        int randomY = (int) (Math.random() * (court.getHeight()));//coordonnee en y entre 0 et la hauteur de l'ecran
+        ballPower.setCenterX(randomX * scale);
+        ballPower.setCenterY(randomY * scale);
+        ballPower.setVisible(true);
+        court.setBallPowerX(randomX * scale);
+        court.setBallPowerY(randomY * scale);
+        int rd = (int) (Math.random() * 8);
+        switch (rd) {
+	        case 0 : court.setCurrentPower(RacketController.Power.STRENGHT);setBallPowerSkin("STRENGHT.png");break;
+	        case 1 : court.setCurrentPower(RacketController.Power.ELECTRICAL);setBallPowerSkin("ELECTRICAL.png");break;
+	        case 2 : court.setCurrentPower(RacketController.Power.WIND);setBallPowerSkin("WIND.png");break;
+	        case 3 : court.setCurrentPower(RacketController.Power.INVISIBLE);setBallPowerSkin("INVISIBLE.png");break;
+	        case 4 : court.setCurrentPower(RacketController.Power.BIGGER);setBallPowerSkin("BIGGER.png");break;
+	        case 5 : court.setCurrentPower(RacketController.Power.SMALLER);setBallPowerSkin("SMALLER.png");break;
+	        case 6 : court.setCurrentPower(RacketController.Power.SLOWER);setBallPowerSkin("SLOWER.png");break;
+	        case 7 : court.setCurrentPower(RacketController.Power.FASTER);setBallPowerSkin("FASTER.png");break;
+	        default : break;
+        }
+    }
     
 	public void animate() {
 		currentButton = getButtonPause();
@@ -253,7 +299,24 @@ public class GameView {
                     last = now;
                     return;
                 }
-                                             
+                 
+				powerUsedA = court.powerUsedA;
+                powerUsedB = court.powerUsedB;
+
+                court.time = now;
+                if (now >= court.nowTimerA && powerUsedA && court.getPlayerA().getPower() != RacketController.Power.STRENGHTACTIVATED) {//pour verifier quand nous avons
+                    court.endPowerA();//dépasser le timer alors on met fin au pouvoir
+                    powerUsedA = false;
+                    court.powerUsedA = false;
+                }
+
+                if (now >= court.nowTimerB && powerUsedB && court.getPlayerB().getPower() != RacketController.Power.STRENGHTACTIVATED) {//exclure STRENGHTACTIVATED du cas car il faut
+                    court.endPowerB();//garder ce pouvoir meme si on ne l'utilise pas tout de suite car il n'a aucun timer
+                    powerUsedB = false;
+                    court.powerUsedB = false;
+                }
+                
+                
                 court.update((now - last) * 1.0e-9); // convert nanoseconds to seconds
                 last = now;
                 racketA.setY(court.getRacketA() * scale);
@@ -261,6 +324,27 @@ public class GameView {
 
                 ball.setCenterX(court.getBallX() * scale + xMargin);
                 ball.setCenterY(court.getBallY() * scale);
+                
+                if (court.getBallRadius() == 0) {
+                    ball.setVisible(false);
+                }
+                else {
+                    ball.setVisible(true);
+                }
+
+                if (isFun && Math.round(last*1.0e-9)%7 == 0) {//toutes les 7 secondes
+                    popBallPower((int)Math.round(last*1.0e-9));
+                }
+
+                racketA.setHeight(court.getRacketSizeA() * scale);//on actualise constamment les tailles des raquettes
+                racketB.setHeight(court.getRacketSizeB() * scale);//au cas ou un pouvoir doit etre applique
+
+                ball.setCenterX(court.getBallX() * scale + xMargin);
+                ball.setCenterY(court.getBallY() * scale);
+                
+                if (isFun && court.getBallPowerX() == -1 && court.getBallPowerY() == -1 && court.getCurrentPower() == null) {
+                    ballPower.setVisible(false);//si la balle vient de toucher la ballPower alors elle disparait
+                }
                  
                 if(court.getBallTouched() && changement_taille_racket) { // la balle touche la raquette
                 	
@@ -525,6 +609,9 @@ public class GameView {
 	    	racketC.setVisible(false);
 	    	racketD.setVisible(false);
 	    	ball.setVisible(true);
+	    	ballPower.setVisible(false);
+	    	isFun = false;
+	    	court.setIsFun(false);
 			App.getStage().setScene(start);
 			App.getStage().setFullScreen(true);
     	}
@@ -538,6 +625,12 @@ public class GameView {
     	String t = "Ball_skin/"+s;
     	Image i = new Image(getClass().getResourceAsStream(t));
         ball.setFill(new ImagePattern(i));
+    }
+    
+    public void setBallPowerSkin(String s) {
+    	String t = "BallPower_skin/"+s;
+    	Image i = new Image(getClass().getResourceAsStream(t));
+        ballPower.setFill(new ImagePattern(i));
     }
     
     public Button[] getButtonPause() {
