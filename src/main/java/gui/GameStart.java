@@ -1,10 +1,15 @@
 package gui;
 
 import java.awt.Dimension;
+import java.io.File;
+import java.net.SocketException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,7 +20,12 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.application.Platform;
 import model.Court;
+import model.OnlineCourt;
+import model.RacketController;
+import network.Network;
+import network.Requests;
 
 
 public class GameStart {
@@ -32,10 +42,21 @@ public class GameStart {
 	private int width;
 	private Pane startRoot;
 	private Pane gameRoot;
+	private Pane onlineRoot;
 	
 	private GameView gw;
+	private OnlineGameView ogv;
+	
 	private Court court;
+	private OnlineCourt oc;
+	
 	private Scene courtScene;
+	private Scene onlineCourtScene;
+	
+	private RacketController onlinePlayer;
+	
+	private Network n;
+	private Requests r;
 
 	//Boutton pour les parties en solo
 	private ImageView easy,medium,hard,insane;
@@ -70,17 +91,31 @@ public class GameStart {
     private ImageView start_button;
     private ProgressBar progressBar;
     
+    private LoadView load;
+    private Curseur curseur;
+    private boolean onlineParty = false;
+    
+    private String onlineBallSkin;
+    private Scene startScene;
+    
 
-	public GameStart (Pane startRoot,Pane root,Scene courtScene, GameView gw,Court court) {
+	public GameStart (Pane startRoot,Pane root,Scene courtScene, 
+			GameView gw,Court court, Pane onlineRoot, Scene onlineScene, 
+			RacketController onlinePlayer, LoadView load, Scene startScene) {
 		
 		this.startRoot = startRoot;
 		this.gameRoot = root;
 		this.gw = gw;
 		this.court = court;
 		this.courtScene = courtScene;
-		
+		this.onlineRoot = onlineRoot;
+		this.onlineCourtScene = onlineScene;
+		this.onlinePlayer = onlinePlayer;
+		this.load = load;
+		this.startScene = startScene;
 		
 		gameRoot.setId("choix_galaxie");
+		onlineRoot.setId("choix_galaxie");
 		
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		height = (int)dimension.getHeight();
@@ -118,8 +153,8 @@ public class GameStart {
 		imagePseudo = new ImageView();
 		pseudoInput = new TextField();
 		valider = new ImageView();
-		ip = new Label("Spacepong.fr");
-		pseudo = new Label("Votre pseudo ?");
+		ip = new Label("spacepong.fr");
+		pseudo = new Label("Pseudo");
 		validePseudo = new ImageView();
 		valideIp = new ImageView();
 		
@@ -382,6 +417,7 @@ public class GameStart {
 	
 	public void setBackground(String s) {
 		gameRoot.setId(s);
+		onlineRoot.setId(s);
 	}
 	
 	
@@ -400,6 +436,7 @@ public class GameStart {
 		pseudo.setVisible(false);
 		titleOnline.setVisible(false);
 		title.setVisible(true);
+		onlineParty = false;
 	}
 	
 	public void chose_difficulty() {
@@ -610,7 +647,7 @@ public class GameStart {
 	public void valideIp() {
 		String s = ipInput.getText();
 		if(s.equals("")) {
-			ip.setText("Spacepong.fr");
+			ip.setText("spacepong.fr");
 		}
 		else {
 			ip.setText(s);
@@ -629,10 +666,10 @@ public class GameStart {
 	public void validePseudo() {
 		String s = pseudoInput.getText();
 		if(s.equals("")) {
-			pseudo.setText("Votre pseudo ?");
+			pseudo.setText("Anonyme");
 		}
 		else {
-			pseudo.setText(s);
+			pseudo.setText(s.replace(" ", "_"));
 		}
 		validePseudo.setVisible(false);
 		pseudoInput.setVisible(false);
@@ -647,6 +684,98 @@ public class GameStart {
 		visible_change(getButtonOnline(),true);
 		ip.setVisible(true);
 		pseudo.setVisible(true);
+	}
+	
+	public void runOnline() {
+		String ipServer = ip.getText();
+		String ps = pseudo.getText();
+		
+		onlineParty = true;
+		
+		try {
+			/* à chaque fois que le joueur veut jouer en ligne,
+			 * on crée une nouvelle connexion,
+			 * un nouvel objet Requests,
+			 * un nouveau terrain (visuel et modélisé).
+			 * Cela facilite les opérations et la gestion des bugs.
+			 */
+			
+			ip.setVisible(false);
+			pseudo.setVisible(false);
+			
+			App.getStage().setFullScreen(true);
+			
+			n = new Network();
+			r = new Requests(n, ipServer, load, curseur, onlineCourtScene);
+
+			oc = new OnlineCourt(onlinePlayer, width, height, r, ps);
+			r.setOnlineCourt(oc);			
+
+			ogv = new OnlineGameView(oc, onlineRoot, onlineCourtScene);
+			if (onlineBallSkin != null) ogv.setBallSkin(onlineBallSkin);
+			ogv.startAnimation();
+
+			// On crée un nouveau thread chargé d'écouter les messages réseau
+			Thread t = new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub	
+						
+						boolean received = r.sendMessage(oc.getIdPlayer(), "PLAYER_JOINED", 0.0, 0.0, pseudo.getText(), true);
+						if (received == false) { // problème de connexion : on le signale au joueur par le biais d'un bip
+							sound("NoConnection.wav");
+							ip.setVisible(true);
+							pseudo.setVisible(true);
+							return;
+							
+						}
+																		
+						while(onlineParty && oc.getFinished() == false) {
+							String[] response = n.listen(2);
+							if (response != null) {
+								r.onMessageReceived(response);
+							}
+						}
+						
+						r.sendMessage(oc.getIdPlayer(), "PLAYER_QUITED", 0.0, 0.0, "null", true);
+						
+						n = null;
+						r = null;
+						oc = null;
+						ogv = null;
+						
+						onlineParty = false;
+						// Fin de partie :
+						Platform.runLater(new Runnable() {
+
+							@Override
+							public void run() {						
+								title.setVisible(true);
+								titleOnline.setVisible(false);
+								visible_change(getButtonMulti(),true);
+								visible_change(getButtonOnline(),false);
+								ip.setVisible(false);
+								pseudo.setVisible(false);
+								
+								curseur.setCurrentButton(getButtonMulti());
+								retour.setVisible(true);
+								
+								App.getStage().setScene(startScene);
+								App.getStage().setFullScreen(true);								
+							}
+							
+						});
+					}			
+				});
+				t.start();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			sound("NoConnection.wav");
+			
+			// on revient en arrière car problème connexion
+			e.printStackTrace();
+		}		
 	}
 	
 	public void VisibleMiseAJourMultiButton() {
@@ -763,6 +892,29 @@ public class GameStart {
 			}
 		}
 		return true;
+	}
+	
+	public void setCurseur(Curseur c) {
+		this.curseur = c;
+	}
+	
+	public void sound(String s) {
+        // On joue le son
+        try
+        {
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
+            clip.start();
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
+    }
+
+	public void setBallSkin(String string) {
+		// TODO Auto-generated method stub
+		this.onlineBallSkin = string;
 	}
 }
 

@@ -1,7 +1,5 @@
 package gui;
 
-
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
@@ -44,6 +42,9 @@ public class App extends Application {
         var gameScene = new Scene(root);
         gameScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
         
+        var online = new Pane();
+        var onlineScene = new Scene(online);
+        onlineScene.getStylesheets().addAll(this.getClass().getResource("style_setting.css").toExternalForm());
         
         
         class Player implements RacketController {
@@ -73,20 +74,29 @@ public class App extends Application {
         var playerC = new Player();
         var playerD = new Player();
         		
+        var playerOnline = new Player();
         
         var court = new Court(playerA, playerB, playerC, playerD, longueur, hauteur);
         var gameView = new GameView(court, root, 1.0,startScene);
-        var gameStart = new GameStart(start,root,gameScene,gameView,court);
+        
+        LoadView load = new LoadView(start);
+        load.init();
+        
+        var gameStart = new GameStart(start,root,gameScene,gameView,court, online,onlineScene, playerOnline, load, startScene);
         
         Curseur curseur = new Curseur(start,gameStart.getStartButton());
         SettingView settingView = new SettingView(start,gameView);
         settingView.init();
         
+        gameStart.setCurseur(curseur);
+        
         TouchView touchView = new TouchView(start,curseur);
         touchView.init();
         
-        LoadView load = new LoadView(start);
-        load.init();
+        TouchView touchViewOnline = new TouchView(online, curseur);
+        touchViewOnline.init();
+        
+        
              
         startScene.setOnKeyPressed(ev ->{
         	switch (ev.getCode()) {
@@ -129,7 +139,7 @@ public class App extends Application {
                 	
                 	case "pseudo":gameStart.choisirPseudo();curseur.setCurrentButton(gameStart.getButtonPseudo());break;
                 	case "Validepseudo" :gameStart.validePseudo();curseur.setCurrentButton(gameStart.getButtonOnline());break;
-                	case "ValiderOnline":load.affiche(curseur.getCurrentButton());curseur.setCurrentButton(load.getCurrentButton());break;
+                	case "ValiderOnline":gameStart.runOnline();break;
                 	
                 	
                 	case "return":load.close();gameStart.retour(curseur.getCurrentButton());curseur.setCurrentButton(gameStart.getMenuButton());break;
@@ -141,13 +151,13 @@ public class App extends Application {
                 	case "middle_bar_no":gameStart.VisibleMiddleBar(false);curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	case "middle_bar_yes":gameStart.VisibleMiddleBar(true);curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	
-                	case "choix_ball_sun":gameView.setBallSkin("sun_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
-                	case "choix_ball_green":gameView.setBallSkin("green_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
-                	case "choix_ball_moon":gameView.setBallSkin("moon_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
-                	case "choix_ball_jupiter":gameView.setBallSkin("jupiter_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
-                	case "choix_ball_saturne":gameView.setBallSkin("saturne_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
-                	case "choix_ball_lila":gameView.setBallSkin("lila_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
-                	case "choix_ball_earth":gameView.setBallSkin("earth_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_sun":gameStart.setBallSkin("sun_ball.png"); gameView.setBallSkin("sun_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_green":gameStart.setBallSkin("green_ball.png"); gameView.setBallSkin("green_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_moon":gameStart.setBallSkin("moon_ball.png"); gameView.setBallSkin("moon_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_jupiter":gameStart.setBallSkin("jupiter_ball.png"); gameView.setBallSkin("jupiter_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_saturne":gameStart.setBallSkin("saturne_ball.png"); gameView.setBallSkin("saturne_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_lila":gameStart.setBallSkin("lila_ball.png"); gameView.setBallSkin("lila_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
+                	case "choix_ball_earth":gameStart.setBallSkin("earth_ball.png"); gameView.setBallSkin("earth_ball.png");curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	
                 	case "choix_galaxie":gameStart.setBackground("choix_galaxie");curseur.setCurrentButton(settingView.getButtonParametre());break;
                 	case "choix_earth":gameStart.setBackground("choix_earth");curseur.setCurrentButton(settingView.getButtonParametre());break;
@@ -184,6 +194,32 @@ public class App extends Application {
         
         TouchView touchView1 = new TouchView(root,curseur);
         touchView1.init();
+        
+        onlineScene.setOnKeyPressed(ev -> {
+        	switch (ev.getCode()) {
+            case Z:
+                playerOnline.state = RacketController.State.GOING_UP;
+                break;
+            case X:
+            	playerOnline.state = RacketController.State.GOING_DOWN;
+                break;
+			default:
+				break;
+        	}
+        });
+        
+        onlineScene.setOnKeyReleased(ev -> {
+            switch (ev.getCode()) {
+                case Z:
+                    if (playerOnline.state == RacketController.State.GOING_UP) playerOnline.state = RacketController.State.IDLE;
+                    break;
+                case X:
+                    if (playerOnline.state == RacketController.State.GOING_DOWN) playerOnline.state = RacketController.State.IDLE;
+                    break;
+			default:
+				break;
+            }
+        });
         
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
