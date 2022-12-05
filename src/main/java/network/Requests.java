@@ -1,8 +1,12 @@
 package network;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -97,6 +101,7 @@ public class Requests {
 		case "FINISHED":
 			// A faire : inviter l'utilisateur à rejouer ou à revenir à l'accueil
 			oc.finish();
+			sound("lost.wav");
 			break;			
 					
 		case "BALL_UPDATE": // mettre à jour la position de la balle dans le jeu
@@ -155,4 +160,18 @@ public class Requests {
 			return false;
 		}
 	}	
+	
+	public void sound(String s) {
+        // On joue le son
+        try
+        {
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(new File("src/main/resources/"+s)));
+            clip.start();
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
+    }
 }
