@@ -389,7 +389,7 @@ public class SettingView {
 		
 		button_no = new ImageView();
 		button_no.setId("RD_no");
-		Image imageNo = new Image(getClass().getResourceAsStream("No_button.png"));
+		Image imageNo = new Image(getClass().getResourceAsStream("no_button.png"));
 		button_no.setImage(imageNo);
 		button_no.setFitWidth(width*(6.4714/100));
 		button_no.setFitHeight(width*(6.0417/100));
