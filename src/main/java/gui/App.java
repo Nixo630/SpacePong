@@ -241,11 +241,16 @@ public class App extends Application {
                     break;
                 case I:gameView.pause();gameView.setVisiblePause(false);touchView1.affiche(curseur.getCurrentButton());break;
                 case ESCAPE:primaryStage.setFullScreen(true);break;
-                case P:if(!touchView1.estAffiche()) {
+                case P:
+                	if(!touchView1.estAffiche()) {
 		                	gameView.pause();
-		                	gameView.menu();
 		                	break;
                 }
+                case M:
+                	if(!touchView1.estAffiche()) {
+	                	gameView.menu();
+	                	break;
+            }
                 case R:
                 	if(!touchView1.estAffiche()) {
 	                	gameView.resume();
