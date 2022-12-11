@@ -304,13 +304,13 @@ public class GameView {
                 powerUsedB = court.powerUsedB;
 
                 court.time = now;
-                if (now >= court.nowTimerA && powerUsedA && court.getPlayerA().getPower() != RacketController.Power.STRENGHTACTIVATED) {//pour verifier quand nous avons
+                if (now >= court.nowTimerA && powerUsedA && court.getPlayerA().getPower() != RacketController.Power.STRENGHTACTIVATE && court.getPlayerA().getPower() != RacketController.Power.STRENGHTACTIVATED) {//pour verifier quand nous avons
                     court.endPowerA();//dépasser le timer alors on met fin au pouvoir
                     powerUsedA = false;
                     court.powerUsedA = false;
                 }
 
-                if (now >= court.nowTimerB && powerUsedB && court.getPlayerB().getPower() != RacketController.Power.STRENGHTACTIVATED) {//exclure STRENGHTACTIVATED du cas car il faut
+                if (now >= court.nowTimerB && powerUsedB && court.getPlayerB().getPower() != RacketController.Power.STRENGHTACTIVATE && court.getPlayerB().getPower() != RacketController.Power.STRENGHTACTIVATED) {//exclure STRENGHTACTIVATED du cas car il faut
                     court.endPowerB();//garder ce pouvoir meme si on ne l'utilise pas tout de suite car il n'a aucun timer
                     powerUsedB = false;
                     court.powerUsedB = false;

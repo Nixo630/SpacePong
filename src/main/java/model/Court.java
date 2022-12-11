@@ -19,7 +19,7 @@ public class Court {
     // instance parameters
     private final RacketController playerA, playerB, playerC, playerD,playerE;// player E deviendra un pbstacle dans une future MAJ
     private final double width, height; // m
-    private final double racketSpeed = 500.0; // m/s//350
+    private double racketSpeed = 500.0; // m/s//350
     private double ballRadius = 15.0; // m et est devenu non final pour pouvoir rendre la balle en invisible
     private final double ballPowerRadius = 75.0;//m
     // instance state
@@ -47,6 +47,8 @@ public class Court {
     private RacketController.Power currentPower = RacketController.Power.IDLE;//pouvoir courant de la ballPower
     public boolean powerUsedA = false;//pour savoir quand les pouvoirs sont utilises
     public boolean powerUsedB = false;
+    private boolean aLastWin = false;//variable pour savoir qui a gagne le dernier point
+    private boolean bLastWin = false;//deuxieme variable utile pour savoir quand on lance la première partie
 
     private Scene lostScene;
     private boolean ballTouched = false;
@@ -74,6 +76,7 @@ public class Court {
         this.playerE = null;
         this.width = width;
         this.height = height;
+        this.racketSize = 150.0;
         
         reset();
     }
@@ -346,8 +349,6 @@ public class Court {
                 //si la ballPower n'a pas déjà été prise
                 if (ballSpeedX > 0) {//si la balle va de gauche à droite alors c le joueur A qui a le pouvoir
                     playerA.setPower(currentPower);
-                    System.out.print("Player A got ");
-                    System.out.println(currentPower);
                     switch (currentPower) {
                     case SMALLER: useCurrentPowerA();this.powerUsedA = true;break;
                     case SLOWER: useCurrentPowerA();this.powerUsedA = true;break;
@@ -356,8 +357,6 @@ public class Court {
                 }
                 else {//idem si la balle va de droite à gauche
                     playerB.setPower(currentPower);
-                    System.out.print("Player B got ");
-                    System.out.println(currentPower);
                     switch (currentPower) {
                     case SMALLER: useCurrentPowerB();this.powerUsedB = true;break;
                     case SLOWER: useCurrentPowerB();this.powerUsedB = true;break;
@@ -372,27 +371,89 @@ public class Court {
         if ((nextBallX < 0 && nextBallY > racketA && nextBallY < racketA + racketSizeA)
                 || (nextBallX > width && nextBallY > racketB && nextBallY < racketB + racketSizeB)) {
             if (nextBallX > width) {
-                if (playerB.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+                if (playerB.getPower() == RacketController.Power.STRENGHTACTIVATE) {
                     ballSpeedX *= 2;
                 }
+                else if (playerA.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+                    ballSpeedX /= 2;
+                }
+                else if (!isFun) {//pour ne pas augmenter la vitesse de la balle ou des raquettes quand la balle augmente subitement sa vitesse du au pouvoir STRENGHT
+                    if (ballSpeedX < 1150) {//vitesse maximal de la balle
+                        ballSpeedX = -(ballSpeedX + 35);//augmentation de la vitesse de la balle a chaque contact de la raquette
+                    }
+                    else {
+                        ballSpeedX = -ballSpeedX;
+                    }
+                    if (racketSpeed < 800) {//pour ne pas que la vitesse doit trop grande
+                        racketSpeed *= 1.07;//augmentation de la vitesse de la raquette a chaque contact de la raquette
+                        racketSpeedA *= 1.07;
+                        racketSpeedB *= 1.07;
+                    }
+                }
+                else if (isFun) {
+                    if (ballSpeedX < 800 && playerA.getPower() != RacketController.Power.STRENGHTACTIVATED) {//vitesse maximal de la balle
+                        ballSpeedX = -(ballSpeedX + 35);
+                    }
+                    else {
+                        ballSpeedX = -ballSpeedX;
+                    }
+                    if (racketSpeed < 675) {//pour ne pas que la vitesse soit trop grande
+                        racketSpeed *= 1.05;
+                        racketSpeedA *= 1.05;
+                        racketSpeedB *= 1.05;
+                    }
+                }
+                if (playerA.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+                    playerA.setPower(RacketController.Power.IDLE);
+                }
                 botDirection = RacketController.State.IDLE;
-                ballSpeedX = -(ballSpeedX + 75); //25
                 sound("RacketSound.wav");
             } // MAJ vitesse de la balle après avoir touché la raquette
             if (nextBallX < 0) {
-                if (playerA.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+                if (playerA.getPower() == RacketController.Power.STRENGHTACTIVATE) {
                     ballSpeedX *= 2;
                 }
-                ballSpeedX = -(ballSpeedX - 75);//25
+                else if (playerB.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+                    ballSpeedX /= 2;
+                }
+                else if (!isFun) {//avancement de balle et des raquettes different en mode normal ou en mode fun pour pouvoir mieux se concentrer sur les pouvoirs
+                    if (ballSpeedX > -1150) {//vitesse maximal de la balle
+                        ballSpeedX = -(ballSpeedX - 35);//25
+                    }
+                    else {
+                        ballSpeedX = -ballSpeedX;
+                    }
+                    if (racketSpeed < 750) {//pour ne pas que la vitesse soit trop grande
+                        racketSpeed *= 1.07;
+                        racketSpeedA *= 1.07;
+                        racketSpeedB *= 1.07;
+                    }
+                }
+                else if (isFun) {
+                    if (ballSpeedX > -800 && playerB.getPower() != RacketController.Power.STRENGHTACTIVATED) {//vitesse maximal de la balle
+                        ballSpeedX = -(ballSpeedX - 35);
+                    }
+                    else {
+                        ballSpeedX = -ballSpeedX;
+                    }
+                    if (racketSpeed < 675) {//pour ne pas que la vitesse soit trop grande
+                        racketSpeed *= 1.05;
+                        racketSpeedA *= 1.05;
+                        racketSpeedB *= 1.05;
+                    }
+                }
+                if (playerB.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+                    playerB.setPower(RacketController.Power.IDLE);
+                }
                 sound("RacketSound.wav");
             }
-            if (nextBallX < 0 && playerA.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+            if (nextBallX < 0 && playerA.getPower() == RacketController.Power.STRENGHTACTIVATE) {
                 ballSpeedY = 0;
-                playerA.setPower(RacketController.Power.IDLE);
+                playerA.setPower(RacketController.Power.STRENGHTACTIVATED);
             }
-            else if (nextBallX > width && playerB.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+            else if (nextBallX > width && playerB.getPower() == RacketController.Power.STRENGHTACTIVATE) {
                 ballSpeedY = 0;
-                playerB.setPower(RacketController.Power.IDLE);
+                playerB.setPower(RacketController.Power.STRENGHTACTIVATED);
             }
             else if (ballSpeedY > 0) {
         // ballY - ((racketsize/2)+ballX) //rapport entre le milieu de la raquette et la position de la balle
@@ -401,6 +462,27 @@ public class Court {
                 }
                 else {
                     ballSpeedY = Math.abs(ballSpeedX) + (Math.abs(ballY - ((racketSize/2)+racketB))*7);
+                }
+            }
+            else if (ballSpeedY == 0) {//a l'engagement et quand le pouvoir STRENGHT est activé ce cas est utile
+                //pour pouvoir envoyer la balle en bas ou en haut en fonction de la position de la raquette par rapport à la balle
+                if (nextBallX < 0 && playerA.getPower() != RacketController.Power.STRENGHTACTIVATED) {
+                    double tmp = (ballY - ((racketSize/2)+racketA));//rapport entre le centre de la raquette et la balle
+                    if (tmp > 0) {
+                        ballSpeedY = Math.abs(ballSpeedX) + (tmp*7);
+                    }
+                    else {
+                        ballSpeedY = -(Math.abs(ballSpeedX) + (tmp*-7));
+                    }
+                }
+                else if (nextBallX > width && playerB.getPower() != RacketController.Power.STRENGHTACTIVATED) {
+                    double tmp = (ballY - ((racketSize/2)+racketB));
+                    if (tmp > 0) {
+                        ballSpeedY = Math.abs(ballSpeedX) + (tmp*7);
+                    }
+                    else {
+                        ballSpeedY = -(Math.abs(ballSpeedX) + (tmp*-7));
+                    }
                 }
             }
             else {
@@ -414,11 +496,15 @@ public class Court {
             ballTouched = true;
             nextBallX = ballX + deltaT * ballSpeedX;
         } else if (nextBallX < 0) {
+            this.bLastWin = true;
+            this.aLastWin = false;
             setScoreB(scoreB+1);
             playerLost();
             sound("LoseSound.wav");
             return true;
         } else if (nextBallX > width) {
+            this.bLastWin = false;
+            this.aLastWin = true;
             setScoreA(scoreA+1);
             playerLost();
             sound("LoseSound.wav");
@@ -604,7 +690,10 @@ public class Court {
         // On joue le son
             partiEnCours = false;
             sound("lost.wav");
-            
+            endPowerA();
+            endPowerB();
+            this.aLastWin = false;
+            this.bLastWin = false;
             lost = true;
         }
     }
@@ -645,7 +734,8 @@ public class Court {
     public void endPowerA() {
         switch (playerA.getPower()) {
         case STRENGHT : break;
-        case STRENGHTACTIVATED : break;
+        case STRENGHTACTIVATE : playerA.setPower(RacketController.Power.IDLE);
+        case STRENGHTACTIVATED : playerA.setPower(RacketController.Power.IDLE);
         case ELECTRICAL : playerB.setState(RacketController.State.IDLE);break;
         case WIND : ballSpeedY = -ballSpeedY;break;
         case INVISIBLE : this.ballRadius = 15.0;break;
@@ -662,7 +752,8 @@ public class Court {
     public void endPowerB() {
         switch (playerB.getPower()) {
         case STRENGHT : break;
-        case STRENGHTACTIVATED : break;
+        case STRENGHTACTIVATE : playerB.setPower(RacketController.Power.IDLE);
+        case STRENGHTACTIVATED : playerB.setPower(RacketController.Power.IDLE);
         case ELECTRICAL : playerA.setState(RacketController.State.IDLE);break;
         case WIND : break;
         case INVISIBLE : this.ballRadius = 15.0;break;
@@ -679,52 +770,80 @@ public class Court {
     public void useCurrentPowerA() {
         //le player A active son pouvoir
         switch (playerA.getPower()) {
-        case STRENGHT : playerA.setPower(RacketController.Power.STRENGHTACTIVATED);break;
+        case STRENGHT : playerA.setPower(RacketController.Power.STRENGHTACTIVATE);break;
         case ELECTRICAL : playerB.setState(RacketController.State.PARALYSED);this.nowTimerA = this.time+1.5e+9;break;
         case WIND : ballSpeedY = -ballSpeedY;playerA.setPower(RacketController.Power.IDLE);break;
         case INVISIBLE : this.ballRadius = 0;this.nowTimerA = this.time+2.0e+9;break;
-        case BIGGER : racketSizeA += 300;this.nowTimerA = this.time+2.0e+9;break;
-        case SMALLER : racketSizeB /= 4;this.nowTimerA = this.time+3.0e+9;break;
-        case SLOWER : racketSpeedB /= 4;this.nowTimerA = this.time+3.0e+9;break;
-        case FASTER : racketSpeedA *= 6;this.nowTimerA = this.time+5.0e+9;break;
+        case BIGGER : racketSizeA += 125;this.nowTimerA = this.time+4.0e+9;break;
+        case SMALLER : racketSizeA /= 2;this.nowTimerA = this.time+3.0e+9;break;
+        case SLOWER : racketSpeedA /= 2;this.nowTimerA = this.time+3.0e+9;break;
+        case FASTER : racketSpeedA *= 1.5;this.nowTimerA = this.time+5.0e+9;break;
         default : break;//pour la gestion d'erreurs et pour le pouvoir STRENGHTACTIVATED
         }
     }
 
     public void useCurrentPowerB() {
         switch (playerB.getPower()) {
-        case STRENGHT : playerB.setPower(RacketController.Power.STRENGHTACTIVATED);break;
+        case STRENGHT : playerB.setPower(RacketController.Power.STRENGHTACTIVATE);break;
         case ELECTRICAL : playerA.setState(RacketController.State.PARALYSED);this.nowTimerB = this.time+1.5e+9;break;
         case WIND : ballSpeedY = -ballSpeedY;playerB.setPower(RacketController.Power.IDLE);break;
         case INVISIBLE : this.ballRadius = 0;this.nowTimerB = this.time+2.0e+9;break;
-        case BIGGER : racketSizeB += 300;this.nowTimerB = this.time+2.0e+9;break;
-        case SMALLER : racketSizeA /= 4;this.nowTimerB = this.time+3.0e+9;break;
-        case SLOWER : racketSpeedA /= 4;this.nowTimerB = this.time+3.0e+9;break;
-        case FASTER : racketSpeedB *= 6;this.nowTimerB = this.time+5.0e+9;break;
+        case BIGGER : racketSizeB += 125;this.nowTimerB = this.time+4.0e+9;break;
+        case SMALLER : racketSizeB /= 2;this.nowTimerB = this.time+3.0e+9;break;
+        case SLOWER : racketSpeedB /= 2;this.nowTimerB = this.time+3.0e+9;break;
+        case FASTER : racketSpeedB *= 1.5;this.nowTimerB = this.time+3.0e+9;break;
         default : break;//pour la gestion d'erreurs et pour tous le pouvoir STRENGHTACTIVATED
         }
     }
 
     public void reset() {
-        this.racketA = height / 2;
-        this.racketB = height / 2;
-        this.racketC = width / 2;
-        this.racketE = width / 2;
+        this.racketA = height / 2-(racketSize/2);
+        this.racketB = height / 2-(racketSize/2);
+        this.racketC = height / 2.5;
+        this.racketE = height / 2.5;
         this.racketD = height / 2;
-        endPowerA();
-        endPowerB();
+
         nowTimerA = 0;
         nowTimerB = 0;
 
-        playerA.setPower(RacketController.Power.IDLE);
-        playerB.setPower(RacketController.Power.IDLE);
+        if (playerA.getPower() == RacketController.Power.STRENGHTACTIVATE || playerA.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+            playerA.setPower(RacketController.Power.IDLE);//si on vient d'activer la STRENGHT mais qu'une manche se termine avant
+        }//alors on enleve son ponvoir lors de la manche suivante sinon le premier coup qu'il donnera sera surpuissant
+
+        if (playerB.getPower() == RacketController.Power.STRENGHTACTIVATE || playerB.getPower() == RacketController.Power.STRENGHTACTIVATED) {
+            playerB.setPower(RacketController.Power.IDLE);
+        }
+
         currentPower = null;
         ballPowerY = -1;
         ballPowerX = -1;
 
-        this.ballSpeedX = -550.0;
-        this.ballSpeedY = 0;//rajouter un composant aléatoire pour la direction de l'engagement si on est en solo ou non
+        if (isBot) {
+            this.ballSpeedX = -550.0;//si on joue contre un bot le vrai joueur a tout le temps la balle
+        }
+        else {//si deux humains jouent alors l'engagement se fait aléatoirement pour le joueur A ou B
+            if (aLastWin == bLastWin) {//au tout debut quand nous n'avons pas encore fait de premier point on selectionne aleatoirement
+                if ((int) (Math.random()*2) == 1) {
+                    this.ballSpeedX = 550.0;
+                }
+                else {
+                    this.ballSpeedX = -550.0;
+                }
+            }
+            else {
+                if (bLastWin) {
+                    this.ballSpeedX = 550.0;
+                }
+                else {
+                    this.ballSpeedX = -550.0;
+                }
+            }
+        }
 
+        this.ballSpeedY = 0;//rajouter un composant aléatoire pour la direction de l'engagement si on est en solo ou non
+        this.racketSpeed = 500;
+        this.racketSpeedA = 500;
+        this.racketSpeedB = 500;
         this.ballX = width / 2;
         this.ballY = height / 2;
         this.racketSize = 150.0;

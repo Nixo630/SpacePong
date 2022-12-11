@@ -224,18 +224,22 @@ public class App extends Application {
         gameScene.setOnKeyPressed(ev -> {
             switch (ev.getCode()) {
                 case Z:
-                    playerA.state = RacketController.State.GOING_UP;
+                    if (playerA.getState() != RacketController.State.PARALYSED) {
+                        playerA.state = RacketController.State.GOING_UP;
+                    }
                     break;
                 case X:
-                    playerA.state = RacketController.State.GOING_DOWN;
+                    if (playerA.getState() != RacketController.State.PARALYSED) {
+                        playerA.state = RacketController.State.GOING_DOWN;
+                    }
                     break;
                 case UP:
-                    if (!court.getIsBot()){
+                    if (!court.getIsBot() && playerB.getState() != RacketController.State.PARALYSED) {
                         playerB.state = RacketController.State.GOING_UP;
                     }
                     break;
                 case DOWN :
-                	if (!court.getIsBot()){
+                	if (!court.getIsBot() && playerB.getState() != RacketController.State.PARALYSED){
                         playerB.state = RacketController.State.GOING_DOWN;
                     }
                     break;
