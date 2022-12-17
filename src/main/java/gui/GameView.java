@@ -7,8 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 
 import java.awt.Dimension;
-import java.util.HexFormat;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
@@ -306,12 +307,14 @@ public class GameView {
                 court.time = now;
                 if (now >= court.nowTimerA && powerUsedA && court.getPlayerA().getPower() != RacketController.Power.STRENGHTACTIVATE && court.getPlayerA().getPower() != RacketController.Power.STRENGHTACTIVATED) {//pour verifier quand nous avons
                     court.endPowerA();//dépasser le timer alors on met fin au pouvoir
+                    resetStyleRacketA();
                     powerUsedA = false;
                     court.powerUsedA = false;
                 }
 
                 if (now >= court.nowTimerB && powerUsedB && court.getPlayerB().getPower() != RacketController.Power.STRENGHTACTIVATE && court.getPlayerB().getPower() != RacketController.Power.STRENGHTACTIVATED) {//exclure STRENGHTACTIVATED du cas car il faut
                     court.endPowerB();//garder ce pouvoir meme si on ne l'utilise pas tout de suite car il n'a aucun timer
+                    resetStyleRacketB();
                     powerUsedB = false;
                     court.powerUsedB = false;
                 }
@@ -651,4 +654,55 @@ public class GameView {
     	resume.setVisible(b);
     	quit.setVisible(b);
     }
+    
+    public void setStyleRacketA() {
+    	racketA.setFill(Color.RED);
+    	
+    }
+    
+    public void setStyleRacketB() {
+    	racketB.setFill(Color.RED);
+    }
+    
+    public void resetStyleRacketA() {
+    	racketA.setFill(Color.DARKGREY);
+    }
+    
+    public void resetStyleRacketB() {
+    	racketB.setFill(Color.DARKGREY);
+    }
+    
+    
+    //Cette focntion affiche un message lorsqu'une persone essaie d'activer un pouvoir alors qu'il en a pas
+    //Il prend en paramètre les coordonnées où il doit s'afficher
+    
+    public void messageErreur(int x,int y) {
+    	
+    	Label error = new Label("Aucun pouvoir disponible");
+		error.setLayoutX(x);
+		error.setLayoutY(y);
+		error.setFont(new Font("Serif", 20));
+		error.setTextFill(Color.web("#FF0000"));
+		error.setMinHeight(10);
+		error.setMinWidth(30);
+		gameRoot.getChildren().add(error);
+    	
+		Timer chrono = new Timer();
+		chrono.schedule(new TimerTask() {
+
+			int time = 50;
+			@Override
+			public void run() {
+				
+				if (time ==0) {
+					error.setVisible(false);
+		        	chrono.cancel();
+				}
+				time--;
+			}
+			
+		}, 100,15);
+		
+	}
+	
 }

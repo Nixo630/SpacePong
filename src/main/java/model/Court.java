@@ -50,7 +50,7 @@ public class Court {
     private boolean aLastWin = false;//variable pour savoir qui a gagne le dernier point
     private boolean bLastWin = false;//deuxieme variable utile pour savoir quand on lance la première partie
 
-    private Scene lostScene;
+
     private boolean ballTouched = false;
     private boolean scored = false;
 

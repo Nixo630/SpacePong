@@ -268,14 +268,22 @@ public class App extends Application {
                 	}
                 case D:
                     if (court.nowTimerA == 0 && court.getPlayerA().getPower() != RacketController.Power.IDLE) {
+                    	gameView.setStyleRacketA();
                         court.useCurrentPowerA();//pour ne pas permettre à l'utilisateur de cliquer plusieurs fois pour avoir le meme pouvoir quand
                         court.powerUsedA = true;
                     }//il en a qui est actif
+                    else {
+                    	gameView.messageErreur(longueur*1/4, hauteur*1/4);
+                    }break;
                 case K:
                     if (court.nowTimerB == 0 && court.getPlayerB().getPower() != RacketController.Power.IDLE) {
+                    	gameView.setStyleRacketB();
                         court.useCurrentPowerB();
                         court.powerUsedB = true;
                     }
+                    else {
+                    	gameView.messageErreur(longueur*3/4, hauteur*1/4);
+                    }break;
                 default: // Ajout d'un cas default pour éviter les warnings et être exhaustif
                 	break;
             }
