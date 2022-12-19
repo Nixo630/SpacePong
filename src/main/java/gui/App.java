@@ -245,12 +245,12 @@ public class App extends Application {
                 	if(!touchView1.estAffiche()) {
 		                	gameView.pause();
 		                	break;
-                }
+                	}
                 case M:
                 	if(!touchView1.estAffiche()) {
 	                	gameView.menu();
 	                	break;
-            }
+                	}
                 case R:
                 	if(!touchView1.estAffiche()) {
 	                	gameView.resume();

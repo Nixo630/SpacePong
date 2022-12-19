@@ -29,7 +29,7 @@ public class GameView {
     		murThickness = 10.0; // pixels
 
     // children of the game main node
-    private final Rectangle racketA, racketB, racketC, racketD, murA, murB, murC, murD, murE;
+    private final Rectangle racketA, racketB, racketC, racketD, murA, murB, murC, murD, murE,score_rect;
     private final Circle ball;
     private final Circle ballPower;
     
@@ -188,14 +188,21 @@ public class GameView {
         affScoreA = new Label(""+court.getScoreA());
         affScoreA.setFont(Font.font("Cambria", height*(23.1482/100)));
         affScoreA.setTextFill(Color.DARKGREY);
-        affScoreA.setTranslateX((court.getBallX() * scale + xMargin)/2);
+        affScoreA.setTranslateX(court.getWidth()/3);
         
         affScoreB = new Label(""+court.getScoreB());
         affScoreB.setFont(Font.font("Cambria",height*(23.1482/100)));
         affScoreB.setTextFill(Color.DARKGREY);
-        affScoreB.setTranslateX((court.getBallX() * scale + xMargin)*1.25);
+        affScoreB.setTranslateX(court.getWidth()/3 * 2 - affScoreB.getMaxWidth());
         
-        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD, murA, murB, murC, murD,murE, affScoreA, affScoreB, ball,ballPower);
+        score_rect= new Rectangle();
+        score_rect.setX(affScoreA.getTranslateX());
+        score_rect.setY(0);
+        score_rect.setFill(Color.WHITE);
+        score_rect.setWidth(affScoreB.getTranslateX()-affScoreA.getTranslateX());
+        score_rect.setHeight(100);
+        
+        gameRoot.getChildren().addAll(racketA, racketB, racketC, racketD, murA, murB, murC, murD,murE, affScoreA, affScoreB, score_rect, ball,ballPower);
         
         //Mise en place de l'affichage de la fin de partie
     	
