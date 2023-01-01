@@ -763,6 +763,7 @@ public class GameStart {
 								titleOnline.setVisible(false);
 								visible_change(getButtonMulti(),true);
 								visible_change(getButtonOnline(),false);
+								visible_change(getMenuButton(),false);
 								ip.setVisible(false);
 								pseudo.setVisible(false);
 								
