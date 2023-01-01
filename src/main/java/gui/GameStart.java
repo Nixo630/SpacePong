@@ -722,8 +722,16 @@ public class GameStart {
 					public void run() {
 						// TODO Auto-generated method stub	
 						
-						boolean received = r.sendMessage(oc.getIdPlayer(), "PLAYER_JOINED", 0.0, 0.0, pseudo.getText(), true);
-						if (received == false) { // problème de connexion : on le signale au joueur par le biais d'un bip
+						boolean receivedQuit = true; //r.sendMessage(oc.getIdPlayer(), "PLAYER_QUITED", 0.0, 0.0, "null", true);
+						boolean receivedJoin = false;
+						
+						if (receivedQuit) {
+							receivedJoin = r.sendMessage(oc.getIdPlayer(), "PLAYER_JOINED", 0.0, 0.0, "null", true);
+						}
+						 
+						System.out.println(receivedQuit + "; " + receivedJoin);
+						
+						if (receivedJoin == false || receivedQuit == false) { // problème de connexion : on le signale au joueur par le biais d'un bip
 							sound("NoConnection.wav");
 							ip.setVisible(true);
 							pseudo.setVisible(true);
@@ -772,6 +780,10 @@ public class GameStart {
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			sound("NoConnection.wav");
+			n = null;
+			r = null;
+			oc = null;
+			ogv = null;
 			
 			// on revient en arrière car problème connexion
 			e.printStackTrace();
