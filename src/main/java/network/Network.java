@@ -79,7 +79,7 @@ public class Network {
 		try {
 			for (int i = 0; i < 5; i++) { // 5 essais pour recevoir l'AR avec 100 de timeout
 				ds.send(packet);
-				String[] accRec = listen(100);
+				String[] accRec = listen(200);
 				if (accRec != null && accRec[3].equals("AR") && accRec[4].equals(String.valueOf(Double.valueOf(nbMsg)))) {
 					nbMsg++;
 					return true;
