@@ -49,8 +49,8 @@ public class TouchView {
     
     ImageView touche_r;
     ImageView touche_r1;
+    ImageView touche_m;
     ImageView touche_p;
-    ImageView touche_p1;
     ImageView touche_q;
     
     ImageView touche_z;
@@ -166,14 +166,14 @@ public class TouchView {
 		menu.setLayoutY(height*(4.63/100)*9);
 		canvas.getChildren().addAll(menu);
 		
-		touche_p = new ImageView();
-		Image imageP = new Image(getClass().getResourceAsStream("Image_Info/touche-p.png"));
-        touche_p.setImage(imageP);
-		touche_p.setFitHeight(height*(5.26/100));
-		touche_p.setFitWidth(height*(5.26/100));
-		touche_p.setLayoutX(milieu.getX()/2 + touche_p.getFitWidth());
-		touche_p.setLayoutY(menu.getLayoutY() + menu.getFitHeight()/2 - touche_p.getFitHeight()/2);
-		canvas.getChildren().addAll(touche_p);
+		touche_m = new ImageView();
+		Image imageM = new Image(getClass().getResourceAsStream("Image_Info/touche-m.png"));
+        touche_m.setImage(imageM);
+		touche_m.setFitHeight(height*(5.26/100));
+		touche_m.setFitWidth(height*(5.26/100));
+		touche_m.setLayoutX(milieu.getX()/2 + touche_m.getFitWidth());
+		touche_m.setLayoutY(menu.getLayoutY() + menu.getFitHeight()/2 - touche_m.getFitHeight()/2);
+		canvas.getChildren().addAll(touche_m);
 		
 		pause = new ImageView();
 		pause.setFitWidth(width*(14.8334/100));
@@ -184,13 +184,14 @@ public class TouchView {
 		pause.setLayoutY(height*(4.63/100)*11);
 		canvas.getChildren().addAll(pause);
 		
-		touche_p1 = new ImageView();
-		touche_p1.setImage(imageP);
-		touche_p1.setFitHeight(height*(5.26/100));
-		touche_p1.setFitWidth(height*(5.26/100));
-		touche_p1.setLayoutX(milieu.getX()/2 + touche_r.getFitWidth());
-		touche_p1.setLayoutY(pause.getLayoutY() + pause.getFitHeight()/2 - touche_p1.getFitHeight()/2);
-		canvas.getChildren().addAll(touche_p1);
+		touche_p = new ImageView();
+		Image imageP = new Image(getClass().getResourceAsStream("Image_Info/touche-p.png"));
+		touche_p.setImage(imageP);
+		touche_p.setFitHeight(height*(5.26/100));
+		touche_p.setFitWidth(height*(5.26/100));
+		touche_p.setLayoutX(milieu.getX()/2 + touche_r.getFitWidth());
+		touche_p.setLayoutY(pause.getLayoutY() + pause.getFitHeight()/2 - touche_p.getFitHeight()/2);
+		canvas.getChildren().addAll(touche_p);
 		
 		initJoueurTouche();
 		
