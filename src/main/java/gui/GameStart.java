@@ -32,6 +32,11 @@ public class GameStart {
 	//Boolean pour savoir si la barre de chargement à deja été charge
 	private boolean charge= false;
 	
+	//Ce boolean permet de savoir si la barre de chargement est en cours de chargement, 
+	//cela évite que l'utilisateur span la touche entree pendant le chargement
+	
+	private boolean incharge = false;
+	
 	//Boolean pour savoir si le jeu a déjà été lancé une première fois
 	private boolean start = false;
 	
@@ -275,10 +280,14 @@ public class GameStart {
 			
 	}
 	
+	public boolean inCharge() {
+		return incharge;
+	}
 	
 	// Cette focntion start est lancé lorsqu'on appuie pour la premiere sur le bouton start afficher à l'écran, il permet de faire charger les sons
 	public void start(Curseur c) {
 		if (!start) {
+			incharge = true;
 			c.setVisible(false);
 			start = true;
 			court.sound("starting.wav");
@@ -304,6 +313,7 @@ public class GameStart {
 							visible_change(getMenuButton(),true);
 							c.setVisible(true);
 							afficheNavigation.setVisible(false);
+							incharge=false;
 				        	chrono.cancel();
 						}
 						time--;
