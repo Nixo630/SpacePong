@@ -20,7 +20,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.application.Platform;
 import model.Court;
 import model.OnlineCourt;
 import model.RacketController;
@@ -33,6 +32,7 @@ public class GameStart {
 	//Boolean pour savoir si la barre de chargement à deja été charge
 	private boolean charge= false;
 	
+	//Boolean pour savoir si le jeu a déjà été lancé une première fois
 	private boolean start = false;
 	
 	private Pane afficheNavigation;
@@ -91,6 +91,8 @@ public class GameStart {
     private ImageView start_button;
     private ProgressBar progressBar;
     
+    
+    //Attribut pour la mise en place du mode en reseau
     private LoadView load;
     private Curseur curseur;
     private boolean onlineParty = false;
@@ -99,6 +101,8 @@ public class GameStart {
     private Scene startScene;
     
 
+    // Cette classe est la représentation de la page d'accueil, elle fait le lien entre tous les modes de jeu.
+    
 	public GameStart (Pane startRoot,Pane root,Scene courtScene, 
 			GameView gw,Court court, Pane onlineRoot, Scene onlineScene, 
 			RacketController onlinePlayer, LoadView load, Scene startScene) {
@@ -271,6 +275,8 @@ public class GameStart {
 			
 	}
 	
+	
+	// Cette focntion start est lancé lorsqu'on appuie pour la premiere sur le bouton start afficher à l'écran, il permet de faire charger les sons
 	public void start(Curseur c) {
 		if (!start) {
 			c.setVisible(false);
@@ -325,6 +331,8 @@ public class GameStart {
 		}
 	}
 	
+	
+	//Cette fonction affiche les touches principales pour manipuler le jeu, elle affcihe un canvas au début du jeu
 	public void initAfficheNavigation() {
 		ImageView monter = new ImageView();
 		Image imageMonter = new Image(getClass().getResourceAsStream("Image_Info/monter.png"));
@@ -420,7 +428,7 @@ public class GameStart {
 		onlineRoot.setId(s);
 	}
 	
-	
+	//Cette fonction modifie la visibilité de la barre qui se situe au milieu du terrain lors d'une partie
 	public void VisibleMiddleBar(boolean b) {
 		gw.Visible_middle_bar(b);
 	}
@@ -439,6 +447,7 @@ public class GameStart {
 		onlineParty = false;
 	}
 	
+	//Cette fonction fait la transition entre le bouton de menu et le bouton pour choisir la difficulté dans le mode solo
 	public void chose_difficulty() {
 		title.setVisible(true);
 		visible_change(getMenuButton(),false);
@@ -446,6 +455,8 @@ public class GameStart {
 		retour.setVisible(true);	
 	}
 	
+	
+	//Cette fonction est appelé dans le constructeur, elle permet d'initialiser les boutons pour les différentes difficultés pour le mode solo
 	public void initButtonDifficulty() {
 
 		easy.setId("button_easy");
@@ -489,6 +500,8 @@ public class GameStart {
 		startRoot.getChildren().addAll(easy,medium,hard,insane);
 	}
 	
+	
+	//Cette fonction permet de jouer en mode solo, elle prend en paramètre un entier qui représente la difficulté choisi
 	public void jouer_solo(int i) {
 		title.setVisible(true);
 		court.setDifficulty(i);
@@ -497,13 +510,12 @@ public class GameStart {
 		visible_change(getMenuButton(),true);
 		court.setPartiEnCours(true);
 		court.setIsBot(true);
-		App.getStage().setFullScreen(true);
 		App.getStage().setScene(courtScene);
 		App.getStage().setFullScreen(true);
 		gw.startAnimation();
 	}
 
-		//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
+	//Cette fonction permet de choisir à l'utilisateur si il veut jouer en 1 vs 1 ou en 2 vs 2 robots
 	public void initChooseMultiplay() {
 		button_1vs1.setId("button_1vs1");
 		Image image1vs1 = new Image(getClass().getResourceAsStream("button_1vs1.png"));
@@ -535,12 +547,14 @@ public class GameStart {
 		startRoot.getChildren().addAll(button_1vs1,button_2vs2,online);
 	}
 	
+	//Cette fonction permet de faire la transition pour afficher les boutons lié au jeu en multijoueur
 	public void choose_multiplay() {
 		retour.setVisible(true);
 		visible_change(getMenuButton(),false);
 		visible_change(getButtonMulti(),true);
 	}
 	
+	//Cette fonction initialise les attributs necessaires à la mise en place du mode réseau
 	public void initButtonOnline() {
 		Image imageTitleOnline = new Image(getClass().getResourceAsStream("online.png"));
 		titleOnline.setImage(imageTitleOnline);
@@ -849,6 +863,9 @@ public class GameStart {
 		jouer_multi(false);
 	}
 	
+	
+	//Ici on peut retrouver tous les getters qui renvoient un tableau d'Image necessaire au bon fonctionnement du curseur
+	
 	public ImageView[] getMenuButton() {
 		ImageView[] tab = {setting_button,play,multiplay,quit};
 		return tab;
@@ -889,7 +906,6 @@ public class GameStart {
 		return tab;
 	}
 	
-	//Mise en place de la fonction pour placer les curseur en fonction d'un bouton
 	
 	
 	
