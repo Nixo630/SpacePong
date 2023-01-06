@@ -841,19 +841,19 @@ public class GameStart {
 		normalMode.setId("normal");
 		Image imageNormal = new Image(getClass().getResourceAsStream("normal.png"));
 		normalMode.setImage(imageNormal);
-		normalMode.setFitWidth(imageNormal.getWidth()/3);
-		normalMode.setFitHeight(imageNormal.getHeight()/3);
+		normalMode.setFitWidth(imageNormal.getWidth()/2);
+		normalMode.setFitHeight(imageNormal.getHeight()/2);
 		normalMode.setLayoutX(width/2 - normalMode.getFitWidth()/2);
-		normalMode.setLayoutY(button_2vs2.getLayoutY()-50-button_1vs1.getFitHeight());
+		normalMode.setLayoutY(height/2 - normalMode.getFitHeight()/2);
 		normalMode.setVisible(false);
 		
 		funMode.setId("fun");
 		Image imagefun = new Image(getClass().getResourceAsStream("fun.png"));
 		funMode.setImage(imagefun);
-		funMode.setFitWidth(imagefun.getWidth()/3);
-		funMode.setFitHeight(imagefun.getHeight()/3);
+		funMode.setFitWidth(imagefun.getWidth()/2);
+		funMode.setFitHeight(imagefun.getHeight()/2);
 		funMode.setLayoutX(width/2 - funMode.getFitWidth()/2);
-		funMode.setLayoutY(height/2 - funMode.getFitHeight()/2);
+		funMode.setLayoutY(height/2 + funMode.getFitHeight());
 		funMode.setVisible(false);
 		
 		startRoot.getChildren().addAll(normalMode,funMode);	
