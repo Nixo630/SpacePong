@@ -16,6 +16,9 @@ Le jeu contient à l'heure actuelle 2 raquettes contrôlées par 2 paires de tou
 
 Vous trouverez tous les renseignements nécessaires sur notre site : https://spacepong.fr
 
+### Vidéo de présentation du projet Space Pong
+https://youtu.be/rIk0BnI_ejA
+
 ## Jouer
 
 La raquette de gauche est contrôlée par les touches Z et X, tandis que celle de droite est contrôlée par les flèches HAUT et BAS.
