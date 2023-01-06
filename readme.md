@@ -12,9 +12,9 @@ Une page d'accueil vous permettra de sélectionner votre mode de jeu, la difficu
 Le jeu contient à l'heure actuelle 2 raquettes contrôlées par 2 paires de touches sur le clavier.
 
 
-### Télécharger Pong
+### Informations complètes et lien de téléchargement
 
-Un site web sera ultérieurement mis en place afin de consulter la fiche produit et de télécharger le jeu (sous forme portable, ou par le biais d'un installateur).
+Vous trouverez tous les renseignements nécessaires sur notre site : https://spacepong.fr
 
 ## Jouer
 
