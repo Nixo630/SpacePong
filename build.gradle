@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'edu.sc.seis.launch4j' version '2.5.4'
 }
 
 configurations {
@@ -21,7 +22,7 @@ dependencies {
 
 javafx {
     version = "17"
-    modules = [ 'javafx.controls' ]
+    modules = [ 'javafx.controls' , 'javafx.fxml', 'javafx.media']
 }
 
 sourceSets{
@@ -35,4 +36,22 @@ sourceSets{
 	}
 }
 
-mainClassName = 'gui.App'
+
+launch4j {
+    outfile = "SpacePong.exe"
+    mainClassName = 'gui.Launcher'
+    icon = "${projectDir}/src/main/resources/gui/title.png"
+}
+
+mainClassName = 'gui.Launcher'
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+    attributes "Main-Class": 'gui.Launcher'
+    }
+    from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+    archiveBaseName = '../../SpacePong'
+}

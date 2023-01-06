@@ -72,7 +72,7 @@ public class TouchView {
 		curseur = c;
 		this.startRoot = startRoot;
 		canvas = new Pane();
-	    canvas.setStyle("-fx-background-color: pink;");
+	    canvas.setStyle("-fx-background-color: darkblue;");
 	    canvas.setPrefSize(longueur*3/4,hauteur*3/4);
 	    
 	    canvas.setLayoutX(longueur/2-canvas.getPrefWidth()/2);
